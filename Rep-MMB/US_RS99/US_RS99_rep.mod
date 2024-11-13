@@ -1,3 +1,14 @@
+% US_RS99
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+
 //**************************************************************************
 // A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
 //
@@ -6,7 +17,6 @@
 //
 // Working Paper, 2009
 //**************************************************************************
-
 // Model: US_RS99
 
 // Further references:
@@ -16,20 +26,19 @@
 // Last edited: 2010/09/07
 
 
+
+//Define endogenous variables
 var pi y i pibar ibar;
 
-
-
+//Define exogenous variables
 varexo eps eta;
 
-
-
+//Define parameters
 parameters
-
 alphapi1 alphapi2 alphapi3 alphapi4 alphay betay1 betay2 betar;
 
 
-
+//Parameter values
 alphapi1 = .7;
 alphapi2 = -.1;
 alphapi3 = .28;
@@ -40,10 +49,8 @@ betay2 = -.25;
 betar = .10;
 
 
-
+//Model block
 model(linear);
-
-
 
 // Original Model Code:
 
@@ -58,10 +65,13 @@ ibar=(1/4)*(i + i(-1) + i(-2) + i(-3));
 end;
 
 
+//Shocks
 shocks;
 var eps = 1.009^2;
 var eta = 0.819^2;
 end;
 
+
+//Simulation
 stoch_simul (AR=100,IRF=0, noprint,nograph);
 //stoch_simul (irf = 60);
