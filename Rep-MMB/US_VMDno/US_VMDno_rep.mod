@@ -1,3 +1,13 @@
+% US_VMDno
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //**************************************************************************
 // A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
 //
@@ -6,7 +16,6 @@
 //
 // Working Paper, 2009
 //**************************************************************************
-
 // Model: US_VMDno ("normal times")
 
 // Further references:
@@ -16,8 +25,7 @@
 // implemented by Fabio Verona (in September 2012), email: fabio.verona@bof.fi
 // Last edited: 12/10/22 by M. Burgert
 
-// Variables
-
+// Define endogenous variables
 var piU, iU, omegabarSU, RkSXU, nSU, qU,
          cU, wU,rkSU,kbarBU, hU, kbarSU, ReXU,
         FpXU, FwXU,  RcouponXU,uSU,uBU,
@@ -30,17 +38,14 @@ var piU, iU, omegabarSU, RkSXU, nSU, qU,
           KwXflexU, KpXflexU,chiflexU,KtotflexU,YflexU,eps_analystflexU,eps_couponflexU,RanalystXflexU,nBflexU,stockcapitalflexU,ntotflexU,RkBXflexU,
             btotAflexU,btotBflexU,btotSflexU,levAflexU,levBflexU,levSflexU,CostFinancingSflexU,SpreadflexU, lambdanflexU,PextSflexU;
 
-
-
+//Define exogenous variables
 varexo e_xpU;
 
+//Define parameters
 parameters  KtotUU, ntotUU,KwXUU,KpXUU, RcouponXUU, eps_couponUU,levBUU,btotBUU,btotSUU,levSUU,
             piUU, sUU, rkSUU,rkBUU, iUU, uSUU,uBUU, omegabarSUU, RkSXUU,RkBXUU, nSUU,nBUU, qUU, lambdanUU, cUU, wUU, hUU,
             kbarSUU,kbarBUU, ReXUU,  FpXUU, FwXUU, PextSUU,YUU,eps_analystUU, RanalystXUU, chiUU, eps_biasedUU, RbiasedXUU ,
               gammaSUU,gammaBUU,  sigmaSUU,  sigmaCUU,levAUU,btotAUU,CostFinancingSUU,SpreadUU,stockcapitalUU,gUU;
-
-
-//PARAMETERS
 
 parameters lambdawUU, sigmaLXUU, betaUU, xiwUU, bUU,lambdafUU,
       psiLXUU, iotaw1UU,  weSUU,weBUU, sigmaaSUU,sigmaaBUU, SdouprXUU,
@@ -49,7 +54,7 @@ parameters lambdawUU, sigmaLXUU, betaUU, xiwUU, bUU,lambdafUU,
       rhoEIS,etaSE, rho_chi, alpha3, alpha4,KwXflexUU,KpXflexUU,FpXflexUU, FwXflexUU, %OMEGA,
 		std1_xpU;
 
-
+// Parameter values
 std1_xpU=0.25;
 
 alpha3=0;
@@ -75,7 +80,7 @@ end;
 
 
 
-
+// Model block
 model;
 
 
@@ -256,7 +261,7 @@ PextSflexU=PextSUU;
 
 end;
 
-
+//shocks
 shocks;
 var e_xpU; stderr std1_xpU;
 
