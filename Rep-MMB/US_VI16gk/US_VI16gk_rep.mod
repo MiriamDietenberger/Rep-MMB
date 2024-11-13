@@ -1,3 +1,13 @@
+% US_VI16gk
+%
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 % Financial frictions in the Euro Area and the United States: a Bayesian assessment
 % Macroeconomic Dynamics, 20 (05), p. 1313-1340, 2016
 % Stefania Villa
@@ -12,19 +22,23 @@
 % note 3: In eq 19, capital is forward looking in the original code [k(+1)]. 
 % Here, I have changed this is changed to a static variable [k] to make the notation consistent with the rest of the code 
 
+//Define endogenous variables
 var 
 y  i   ext_pr  c  lev  q  Lambda  l  d  v  rk  x  z  nn  mu  n  ne  k  u  w  r  zk  rn pi 
 yf i_f ext_prf cf levf qf Lambdaf lf df vf rkf xf zf nnf muf nf nef kf uf wf rf zkf
 a g eps_p eps_w eps_k eps_r eps_x
 hobsgm robs piobs dy dc dfi dw; 
 
+//Define exogenous variables
 varexo e_x e_r e_k e_g e_a e_w e_p;
 
+//Define parameters
 parameters 
 beta phi chi alpha delta epsilon epsilon_w G_Y h lambda theta zeta ksi sig_p sig_pi sig_w sig_wi M  
 rho_r rho_ri rho_PI rho_Y rho_A rho_G rho_X rho_k rho_W rho_P THETA  rho_DY 
 RK constelab picbar trend;
- 
+
+//Parameter values
 alpha       = 0.33;       %capital share
 beta        = 0.99;       %Discount rate
 delta       = 0.025;      %Steady state depreciation rate
@@ -63,7 +77,8 @@ rho_ri      = 0.23;
 % Steady State declared as parameters:
 RK          = 1.013860066271978;
 constelab   = 0;
- 
+
+//Model block
 model (linear);
 
 %%%%%%transformed parameters%%%%%
@@ -202,6 +217,7 @@ steady;
 
 check;
 
+//Shocks
 shocks;
 var e_a; stderr 0.639;
 var e_x; stderr 0.8913;
@@ -257,6 +273,7 @@ options_.plot_priors=0;
 % mh_drop=0.25,moments_varendo) y i c pi rn ext_pr n;
 
 %it gives IRF and variance decomposition,,conditional_variance_decomposition=[1 4 8 40 80]
+//Simulation
 %stoch_simul(irf=20,nograph) y i pi n ext_pr;
 %stoch_simul(irf=20) y i pi c robs q n ext_pr;
 stoch_simul (AR=100,IRF=0, noprint,nograph);
