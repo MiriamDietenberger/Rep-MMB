@@ -19,6 +19,7 @@
 //Adaptive Learning version
 //Last edited: 13/12/2013 by Sergey Slobodyan
 //**********************************************************************
+// Model: US_YR13
 
 //Define endogenous variables
 var ewma epinfma  mc zcap rk k pk
