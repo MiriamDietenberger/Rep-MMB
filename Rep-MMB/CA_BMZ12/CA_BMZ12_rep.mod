@@ -1,3 +1,12 @@
+% BRA_SAMBA08
+%
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
 //this is the program for simulation for BMZ, July 07, 2010
 //values based on results from estimation_bmz
@@ -6,8 +15,9 @@
 
 close all
 // global Gamma_y
-// Define 20 variables
 
+
+// Define variables
 var  auxt, bigXt, bigZt, ct, eqti, et, ht, it, kt, lambdat, llt, mct, nt, pit, pref, pstart, qt, 
 rkt, rnt, st, xt, yt, zt,
 auxtfp, ctfp,   htfp, itfp, ktfp, lambdatfp, lltfp, mctfp, 
@@ -85,6 +95,7 @@ rho_x = 0.8810;
 rho_p = 0.9546;
 //mub   = 1.0025;
 mub   = 1.005;
+
 
 // Compute SS
 
