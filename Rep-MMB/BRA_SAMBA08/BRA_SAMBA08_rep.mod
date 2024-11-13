@@ -1,15 +1,29 @@
+% BRA_SAMBA08
+%
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // BRA_SAMBA08 replication
 
+// Define endogenous variables
 var co crot c no nrot n q wr k u fii qi i x m rk mc pi bystar nxy r gy syhat 
 bby g y yva piva pibar sgbar zc zn zi zfiistar zfii a zr zg  mstar pistar rstar; //endogenous variables
 
+// Define exogenous variables (innovations)
 varexo pibar_ gbar_ c_ n_ i_ fiistar_ fii_ a_ r_ g_ mstar_ pistar_ rstar_; //exogenous variables (innovations)
 
+// Define parameters
 parameters beta alpha sigma pessi kappa h omegabarb tet nuu kuu vi del dela 
 dels sc si sg sm sx sva sd omegabarc omegabarn iok fiistar rstarC bystarC rC 
 byC gamar gamapi gamay gamag gamas gamab rhoa rhoc rhoi rhon rhoq rhor rhog 
 rhosbar rhopi rhofii rhofiistar rhomstar rhorstar rhopistar;
 
+// Parameter values
 beta = 0.98;
 alpha = 0.4;
 sigma = 0.823;
@@ -62,6 +76,7 @@ rhomstar = 0.257;
 rhorstar = 0.848;
 rhopistar = -0.139;
 
+// Model block
 model(linear);
 co = (1/(1+h))*co(+1)+(h/(1+h))*co(-1)-sigma^(-1)*((1-h)/(1+h))*(r-pi(+1))+sigma^(-1)*((1-h)/(1+h))*(1-rhoc)*zc;
 crot = wr+nrot;
@@ -107,6 +122,7 @@ pistar = rhopistar*pistar(-1) + pistar_;
 rstar = rhorstar*rstar(-1) + rstar_;
 end;
 
+// Shocks
 shocks;
 var c_ = 1;    //0.081^2;
 var r_ = 1; // 0.25^2;    //0.003^2;
@@ -126,4 +142,5 @@ var c_, mstar_ =0;
 var r_, mstar_ =0;
 end;
 
+// Simulation
 stoch_simul (AR=100,IRF=0, noprint,nograph);
