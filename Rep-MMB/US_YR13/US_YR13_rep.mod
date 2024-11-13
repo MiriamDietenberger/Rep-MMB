@@ -1,13 +1,3 @@
-% US_YR13
-% 
-%  Rep-MMB of the Macroeconomic Model Data Base (MMB)
-% https://www.macromodelbase.com/rep-mmb
-%
-% This is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-
 //**********************************************************************
 //The Implications of Financial Frictions and Imperfect Knowledge in
 //the Estimated Model of the US Economy
