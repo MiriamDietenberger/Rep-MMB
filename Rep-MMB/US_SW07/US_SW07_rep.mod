@@ -8,7 +8,6 @@
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 
-
 // Title: Shocks and Frictions in US Business Cycles: A Bayesian DSGE-Approach
 // Authors: Smets, Frank and Raf Wouters
 // Publication: The American Economic Review, June 2007, 97(3), 586-606.
