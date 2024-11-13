@@ -261,7 +261,7 @@ PextSflexU=PextSUU;
 
 end;
 
-//shocks
+//Shocks
 shocks;
 var e_xpU; stderr std1_xpU;
 
@@ -270,6 +270,7 @@ end;
 //check;
 //steady(solve_algo=4);
 
+//Simulation
 //stoch_simul(order=1,irf=20) YU cU iU hU ReXU piU nSU btotAU RkXU;
 
 //stoch_simul(order=1,irf=40) YU cU iU YflexU cflexU iflexU ReXU piU piflexU;
