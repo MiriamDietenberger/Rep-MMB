@@ -1,33 +1,37 @@
+% US_VI16bgg
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 % Financial frictions in the Euro Area and the United States: a Bayesian assessment
 % Macroeconomic Dynamics, 20 (05), p. 1313-1340, 2016
 % Stefania Villa
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % SMETS-WOUTERS & BGG MODEL   [US]
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% ////////////////////////////////////////////////////////////////////////
-% 1. Defining variables and parameters
-% ////////////////////////////////////////////////////////////////////////
 
+// Define endogenous variables
 var        y  c  i  w  l  pi r rn zk  u  k  q  rk   ext_pr   n             % Variables under nominal rigidities (15)
            yf cf if wf lf    rf   zkf uf kf qf rkf  ext_prf  nf            % Variables under flexible prices (13)
            a g eps_x eps_r eps_p eps_w eps_k;                              % Shocks (7)
       
- 
+ //Define exogenous variables
 varexo     e_a e_g e_x e_r e_p e_w e_k;                                    % (7) 
 
+//Define parameters
 parameters alpha beta delta  epsilon epsilon_w M G_Y kappa theta  N_K      % Calibrated Parameters
            ksi h  sigma_w sigma_p sigma_wi sigma_pi zeta  Theta            % Estimated Parameters
            rho_pi rho_dy rho_y rho_r                                       % Taylor rule parameters
            rho_a rho_k rho_g rho_x rho_ri rho_p rho_w                      % Shock persistence parematers
            phi  bas_point s_coef;
 
-% ////////////////////////////////////////////////////////////////////////
-% 2. Calibrated Parameters and Initialisations
-% ////////////////////////////////////////////////////////////////////////
-
-% Calibrated Parameters
+// Calibrated parameter values
 alpha     = 0.330;    % Capital income share
 beta      = 0.990;    % Discount factor
 delta     = 0.025;    % Steady state depreciation rate
@@ -38,7 +42,7 @@ G_Y       = 0.200;    % G/Y
 N_K       = 0.500;    % N/K, net worth-to-capital
 theta     = 0.972;   % Probability the firm survives next period
                       
-% Estimated Parameters (Initialisation)
+// Estimated parameter values (Initialisation)
 phi       = 1.69;      % Inverse Frisch elasticity of L supply
 Theta     = 1.28;      % FCP: fixed costs in production (in Villa)
 ksi       = 4.75;      % 2nd derivative of Inv adjustment cost
@@ -64,16 +68,12 @@ rho_ri    = 0.27;
 rho_p     = 0.32;
 rho_w     = 0.17;
 
-% Derived from steady state
+// Derived from steady state
 bas_point = 150;                         % Steady state spread
 s_coef    = (bas_point + 40000)/40000;   % Transformation to decimal form and quarterly basis
 
 
-% ////////////////////////////////////////////////////////////////////////
-% 3. Model
-% ////////////////////////////////////////////////////////////////////////
-
-
+//Model block
 model(linear); 
 #R     = 1/beta;
 #ZK    = R - (1-delta);
@@ -88,8 +88,8 @@ model(linear);
 #K_N   = 1/N_K;
 #RK    = s_coef*R; 
 
-%%%%% Sticky Price Model %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+// Sticky Price Model
 % 1 % Euler Equation
 c = (1/(1+h))*c(+1)+(h/(1+h))*c(-1)- ((1-h)/(1+h))*r ;
 
@@ -153,9 +153,7 @@ eps_w = rho_w * eps_w(-1) + e_w;     % Wage mark-up shock
 eps_k = rho_k * eps_k(-1) - e_k;     % Capital quality shock
 
 
-
-%%% Flexible Price Model %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+//Flexible Price Model 
 % 9
 alpha * zkf = a-(1-alpha)*wf ;
 % 4
@@ -190,7 +188,8 @@ kf = (1-delta)*(kf(-1)+eps_k) + I_K*if + I_K*ksi*eps_x ;
 
 end;
 
-%%% Shocks %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+//Shocks
 shocks;
 var e_a; stderr 1.0;       %0.42;
 var e_k; stderr 1.0;       %0.25;
@@ -202,8 +201,6 @@ var e_w; stderr 1.0;       %0.29;
 end;
  
 
-% ////////////////////////////////////////////////////////////////////////
-% 6. Simulation
-% ////////////////////////////////////////////////////////////////////////
+//Simulation
 %stoch_simul(irf=21, nograph ) y i pi n ext_pr  ;                           % All shocks without a chart 
 stoch_simul (AR=100,IRF=0, noprint,nograph);
