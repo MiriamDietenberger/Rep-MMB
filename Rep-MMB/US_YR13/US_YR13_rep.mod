@@ -1,3 +1,13 @@
+% US_YR13
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //**********************************************************************
 //The Implications of Financial Frictions and Imperfect Knowledge in
 //the Estimated Model of the US Economy
@@ -9,21 +19,19 @@
 //Adaptive Learning version
 //Last edited: 13/12/2013 by Sergey Slobodyan
 //**********************************************************************
-//Model: US_YR13
 
+//Define endogenous variables
 var ewma epinfma  mc zcap rk k pk
     c inve y lab pinf w r a  b g qs spinf sw kp
     rr er ec nw prem pinf4 eg ms;
 	//cl invel labl pinfl pkl rkl wl   ms
 
-
+//Define exogenous variables
 varexo  ea eb eqs  epinf ew
 em;
 
-
+//Define parameters
 parameters
-
-
             curvw cgy curvp constelab constepinf constebeta   calfa
             czcap cbeta csadjcost ctou csigma chabb ccs cinvs cfc
             cindw cprobw cindp cprobp csigl clandaw
@@ -31,16 +39,14 @@ parameters
             crhoa crhoas crhob crhog crhols crhoqs crhoms crhopinf crhow cmaw cmap
             ctrendy ctrendc ctrendinv ctrend ctrendw conster cg cgamma clandap cbetabar cr cpie crk cw cikbar cik clk cky ciy ccy crkky cwhlc cwly ro;
 
-// fixed parameters
-
+//Fixed parameter values
 ctou=       0.025;
 clandaw=    1.5;
 cg=         0.5787;
 curvp=     10.0;
 curvw=     10.0;
 
-// estimated parameters
-
+// Estimated parameter values
 ctrendy =    0.4416;
 ctrendc =    0.5026;
 ctrendinv =    0.3696;
@@ -83,7 +89,7 @@ cv=0.9447;
 elast=0.0197;
 ro = 0.9881;
 
-
+// Steady state values
 // derived parameters from steady state : see stst_f19.m
 ctrend=(ctrendy+ctrendc+ctrendinv+ctrendw)/4;
 cpie=     1+constepinf/100;
@@ -106,7 +112,7 @@ cwhlc=    (1/clandaw)*(1-calfa)/calfa*crk*cky/ccy;
 cwly=     1-crk*cky;
 cff=crk+1-ctou;
 
-
+//Model block
 model(linear);
 
 //Annual inflation:
@@ -165,7 +171,7 @@ prem=ec-(r-pinf(1)+b);
             //wl = w(-1);
 
            end;
-
+//Shocks
 shocks;
 var ea;
 stderr 0.4853;
@@ -181,6 +187,7 @@ var ew;
 stderr 0.2277;
 end;
 
+//Simulation
 stoch_simul (AR=100,IRF=0, noprint,nograph);
 //stoch_simul(irf = 0, ar=100, periods=10000);
 
