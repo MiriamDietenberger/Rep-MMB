@@ -1,16 +1,30 @@
+% US_RA07
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //Implementation of Pau Rabanal paper (2007) by Martina Jancokova
 //NEW: p eliminated, only left pi=p-p(-1)(hence only 15 endog.var.s and 15 equat.s)
 //n=l as additional equation to solve the model (due to inconsistency in notation of labor)
 
-var pi mc rk w r a u n c l q i k y g; //15 endogenous variables (lambda disregarded, not needed for further calculations)
+
+//Define 15 endogenous variables
+var pi mc rk w r a u n c l q i k y g; //lambda disregarded, not needed for further calculations
+
+//Define exogenous variables
 varexo epsp epsz epsa epsg;    //shocks or innovations
 
+//Define 25 parameters
 parameters gammab gammaf kappap beta omegap thetap lambdaSS alpha gamma psi omegaw kappaw sigma
-    b eta phi delta vaphi rhor gammap gammay ISS GSS thetaw rhoa rhog;  //25 parameters 
+    b eta phi delta vaphi rhor gammap gammay ISS GSS thetaw rhoa rhog;  
 
-//*****************************************************************
+//Parameter values
 //figure 4: estimated Baseline model
-//*****************************************************************
 beta= 0.9926;       //discount factor
 omegap=0.99;      //price indexation
 thetap=0.83;      //Calvo prob. of not being able to reset the price
@@ -40,6 +54,8 @@ kappaw=(1-thetaw*beta)*(1-thetaw)/((1+phi*(eta-1))*thetaw);
 ISS=delta*alpha*lambdaSS/((lambdaSS-1)*(1/beta-(1-delta))); //steady state value of investment-output ratio
 
 
+
+//Model block
 model(linear);
 //*****************************************************************
 //Phillips Curve
@@ -340,9 +356,12 @@ ISS=delta*alpha*lambdaSS/((lambdaSS-1)*(1/beta-(1-delta))); //steady state value
 
     @#endif
     
-
+//Simulation
 stoch_simul (AR=100,IRF=0, noprint,nograph);
     %stoch_simul(irf = 25,nograph);
+
+
+
 /*
     // figure 1: Baseline
     @#if i==1
