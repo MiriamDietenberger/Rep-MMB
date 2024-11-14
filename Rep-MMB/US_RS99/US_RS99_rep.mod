@@ -16,7 +16,7 @@
 // Maik Wolters
 //
 // Working Paper, 2009
-//**************************************************************************
+
 // Model: US_RS99
 
 // Further references:
@@ -24,9 +24,12 @@
 // in: John B. Taylor (ed.), Monetary Policy Rules. Chicago: University of Chicago Press for NBER.
 
 // Last edited: 2010/09/07
+//**************************************************************************
 
 
-
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 //Define endogenous variables
 var pi y i pibar ibar;
 
@@ -37,7 +40,9 @@ varexo eps eta;
 parameters
 alphapi1 alphapi2 alphapi3 alphapi4 alphay betay1 betay2 betar;
 
-
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 //Parameter values
 alphapi1 = .7;
 alphapi2 = -.1;
@@ -49,7 +54,9 @@ betay2 = -.25;
 betar = .10;
 
 
-//Model block
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
 
 // Original Model Code:
