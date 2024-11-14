@@ -19,8 +19,11 @@
 //Adaptive Learning version
 //Last edited: 13/12/2013 by Sergey Slobodyan
 //**********************************************************************
-// Model: US_YR13
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 //Define endogenous variables
 var ewma epinfma  mc zcap rk k pk
     c inve y lab pinf w r a  b g qs spinf sw kp
@@ -40,6 +43,10 @@ parameters
             crhoa crhoas crhob crhog crhols crhoqs crhoms crhopinf crhow cmaw cmap
             ctrendy ctrendc ctrendinv ctrend ctrendw conster cg cgamma clandap cbetabar cr cpie crk cw cikbar cik clk cky ciy ccy crkky cwhlc cwly ro;
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 //Fixed parameter values
 ctou=       0.025;
 clandaw=    1.5;
@@ -113,7 +120,10 @@ cwhlc=    (1/clandaw)*(1-calfa)/calfa*crk*cky/ccy;
 cwly=     1-crk*cky;
 cff=crk+1-ctou;
 
-//Model block
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
 
 //Annual inflation:
