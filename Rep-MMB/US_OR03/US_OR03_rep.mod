@@ -1,3 +1,13 @@
+% US_OR03
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //**************************************************************************
 // A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
 //
@@ -5,32 +15,35 @@
 // Maik Wolters
 //
 // Working Paper, 2009
-//**************************************************************************
-
+//
 // Model: ORP03
-
+//
 // Further references:
 // Orphanides, A. 2003. "The quest for prosperity without inflation."
 // Journal of Monetary Economics 50 (2003) 633-663
-
+//
 // Last edited: 10/09/07 by S. Schmidt
+//**************************************************************************
 
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var y pi f;
 
-
-
+//Define exogenous variables
 varexo e u interest_;
 
-
-
-
+//Define parameters
 parameters
 
 b0 bpi1 bpi2 bpi3 bpi4 by1 by2 by3 by4 bf1 bf2 bf3 bf4 api1 api2 api3 api4 ay0 ay1 ay2 ay3 ay4;
 
 
-
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 b0 = 0.175638173; //intercept; has to be dropped possibly
 bpi1 = 0.023509403;
 bpi2 = -0.018273476;
@@ -56,7 +69,9 @@ ay3 = 0.2986;
 ay4 = -0.1245;
 
 
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
 
 
@@ -73,12 +88,13 @@ f = 2 + pi + 0.5*(pi - 2) + 0.5*y + interest_; //Taylor rule
 
 end;
 
-
+//Shocks
 shocks;
 var u = 0.771025149^2;
 var e = 1.4069906748^2;
 var interest_ = 0;
 end;
 
+//Simulation
 stoch_simul (AR=100,IRF=0, noprint,nograph);
 //stoch_simul (irf = 60);
