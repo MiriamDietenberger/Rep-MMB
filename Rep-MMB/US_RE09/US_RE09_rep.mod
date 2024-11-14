@@ -8,6 +8,7 @@
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 
+//**********************************************************************
 // Ricardo Reis
 // A Sticky-Information General-Equilibrium Model for Policy Analysis.
 // In: Monetary Policy under Uncertainty and Learning, edited by K. Schmidt-Heubel, C. Walsh and N. Loayza, Central Bank of Chile, Santiago, 2009
@@ -18,8 +19,12 @@
 
 //Allows for 16 lagged information sets to restrict computational time, adjust as desired (note: if so also adjust the parameter value of T in line 51)
 @#define lags = 1:16
+//**********************************************************************
 
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 //Define endogenous variables
 var y a l p w yinfn i R pi outputgap yclas deltaa g nuu gam eps z zwage zoutput;
 //y: output, a: productivity, l: labor, p: price, w: wage, yinfn: output 100 periods ahead (steady state output)
@@ -29,7 +34,6 @@ var y a l p w yinfn i R pi outputgap yclas deltaa g nuu gam eps z zwage zoutput;
 //z: generic variable to compute the price under sticky information (sticky information Phillips curve)
 //zwage: generic variable to compute the wage under sticky information (sticky information wage curve)
 //zoutput: generic variable to compute output under sticky information (sticky information IS curve)
-
 
 //Define exogenous variables
 varexo e_deltaa e_g e_nuu e_gam e_eps;
@@ -42,6 +46,10 @@ varexo e_deltaa e_g e_nuu e_gam e_eps;
 //Define parameters
 parameters beta nu lambda theta delta omega gamma psi phi_pi phi_y rho_deltaa rho_eps rho_g rho_nuu rho_gam T;
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 //Parameter values
 // POSTERIOR MEAN, see Table 2 in paper
 theta      =   1.00000000000000;
@@ -62,7 +70,9 @@ lambda     =   0.516437987152365;
 T=16;
 
 
-//Model block
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
 //production function
 y = a + beta*l;
