@@ -15,7 +15,7 @@
 // Maik Wolters
 //
 // Working Paper, 2009
-//**************************************************************************
+
 // Model: US_VMDno ("normal times")
 
 // Further references:
@@ -24,7 +24,12 @@
 
 // implemented by Fabio Verona (in September 2012), email: fabio.verona@bof.fi
 // Last edited: 12/10/22 by M. Burgert
+//**************************************************************************
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 // Define endogenous variables
 var piU, iU, omegabarSU, RkSXU, nSU, qU,
          cU, wU,rkSU,kbarBU, hU, kbarSU, ReXU,
@@ -54,6 +59,10 @@ parameters lambdawUU, sigmaLXUU, betaUU, xiwUU, bUU,lambdafUU,
       rhoEIS,etaSE, rho_chi, alpha3, alpha4,KwXflexUU,KpXflexUU,FpXflexUU, FwXflexUU, %OMEGA,
 		std1_xpU;
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 // Parameter values
 std1_xpU=0.25;
 
@@ -80,7 +89,9 @@ end;
 
 
 
-// Model block
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model;
 
 
