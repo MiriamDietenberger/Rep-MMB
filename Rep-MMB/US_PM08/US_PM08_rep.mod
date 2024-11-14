@@ -1,15 +1,32 @@
+% US_PM08
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+//**********************************************************************
 //Replication file US_PM08fl_rep.mod
-
+//
 // Model: US_PM08fl stationary version (with financial-real linkages)
-
+//
 // Further references:
 // Carabenciov, Ioan, Igor Ermolaev, Charles Freedman, Michel Juillard, 
 // Ondra Kamenik, Dmitry Korshunov, and Douglas Laxton (2008).
 // �A Small Quarterly Projection Model of the US Economy� 
 // IMF Working Paper 08/278.
-
+//
 // Last edited: March 16, 2010 by E. Afanasyeva
+//**********************************************************************
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var RR_USh RR_US_BARh
     UNR_US_GAP 
     PIE_USh PIE_US4h Y_US RS_USh  
@@ -17,19 +34,25 @@ var RR_USh RR_US_BARh
     E E2 
     //eg
     ;
- 
+
+//Define exogenous variables
 varexo RES_RR_US_BAR RES_UNR_US_GAP 
         RES_Y_US  RES_PIE_US      
         RES_BLT_US RES_RS_US
         ;
-  
+
+//Define parameters
 parameters rho_us rr_us_bar_ss alpha_us1 alpha_us2
            tau_us growth_us_ss beta_us1 beta_us2 beta_us3 lambda_us1 
            lambda_us2 gamma_us1 gamma_us2 gamma_us4 pietar_us_ss alpha_us3
            kappa_us theta 
            ;
 
-// estimated and fixed parameters, set at mode value (table 4, p. 38)
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+//Estimated and fixed parameters, set at mode value (table 4, p. 38)
 alpha_us1    = 0.8710;
 alpha_us2    = 0.1688;
 alpha_us3    = 0.5175;
@@ -50,6 +73,9 @@ kappa_us    = 19.9943;
 theta       = 1.2824;
 
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear); // original model has been stationarized
 
 // Model Code (stationarized):
@@ -85,6 +111,7 @@ end;
 steady;
 check;
 
+//Shocks
 shocks; 
 var RES_RR_US_BAR; stderr 0.0934;  // replaced with estimated values (table 5, p. 39)
 var RES_UNR_US_GAP; stderr 0.0989;
@@ -94,6 +121,6 @@ var RES_BLT_US; stderr 0.8082;
 var RES_RS_US; stderr 0.4712;
 end;
 
-
+//Simulation
 %stoch_simul(irf=40, nograph, noprint) Y_US PIE_US4h RS_USh ; 
 stoch_simul (AR=100,IRF=0, noprint,nograph);
