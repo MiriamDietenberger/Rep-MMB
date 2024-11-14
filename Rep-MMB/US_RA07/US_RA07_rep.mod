@@ -8,11 +8,16 @@
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 
+//**********************************************************************
 //Implementation of Pau Rabanal paper (2007) by Martina Jancokova
 //NEW: p eliminated, only left pi=p-p(-1)(hence only 15 endog.var.s and 15 equat.s)
 //n=l as additional equation to solve the model (due to inconsistency in notation of labor)
+//**********************************************************************
 
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 //Define 15 endogenous variables
 var pi mc rk w r a u n c l q i k y g; //lambda disregarded, not needed for further calculations
 
@@ -23,6 +28,10 @@ varexo epsp epsz epsa epsg;    //shocks or innovations
 parameters gammab gammaf kappap beta omegap thetap lambdaSS alpha gamma psi omegaw kappaw sigma
     b eta phi delta vaphi rhor gammap gammay ISS GSS thetaw rhoa rhog;  
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 //Parameter values
 //figure 4: estimated Baseline model
 beta= 0.9926;       //discount factor
@@ -54,8 +63,9 @@ kappaw=(1-thetaw*beta)*(1-thetaw)/((1+phi*(eta-1))*thetaw);
 ISS=delta*alpha*lambdaSS/((lambdaSS-1)*(1/beta-(1-delta))); //steady state value of investment-output ratio
 
 
-
-//Model block
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
 //*****************************************************************
 //Phillips Curve
