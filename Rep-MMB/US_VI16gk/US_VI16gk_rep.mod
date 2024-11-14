@@ -8,10 +8,11 @@
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 
-% Financial frictions in the Euro Area and the United States: a Bayesian assessment
-% Macroeconomic Dynamics, 20 (05), p. 1313-1340, 2016
-% Stefania Villa
-
+//**********************************************************************
+//Financial frictions in the Euro Area and the United States: a Bayesian assessment
+//Macroeconomic Dynamics, 20 (05), p. 1313-1340, 2016
+//Stefania Villa
+//**********************************************************************
 
 % note 1: as in the original code of the author, eq. 13 is shifted one period backwards. (this is consistent with the notation in Gertler/Karadi (2011))
 
@@ -22,6 +23,10 @@
 % note 3: In eq 19, capital is forward looking in the original code [k(+1)]. 
 % Here, I have changed this is changed to a static variable [k] to make the notation consistent with the rest of the code 
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 //Define endogenous variables
 var 
 y  i   ext_pr  c  lev  q  Lambda  l  d  v  rk  x  z  nn  mu  n  ne  k  u  w  r  zk  rn pi 
@@ -38,6 +43,10 @@ beta phi chi alpha delta epsilon epsilon_w G_Y h lambda theta zeta ksi sig_p sig
 rho_r rho_ri rho_PI rho_Y rho_A rho_G rho_X rho_k rho_W rho_P THETA  rho_DY 
 RK constelab picbar trend;
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 //Parameter values
 alpha       = 0.33;       %capital share
 beta        = 0.99;       %Discount rate
@@ -74,11 +83,14 @@ rho_P       = 0.31;
 rho_k       = 0.99;
 rho_ri      = 0.23;
 
-% Steady State declared as parameters:
+// Steady State declared as parameters:
 RK          = 1.013860066271978;
 constelab   = 0;
 
-//Model block
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model (linear);
 
 %%%%%%transformed parameters%%%%%
@@ -273,6 +285,7 @@ options_.plot_priors=0;
 % mh_drop=0.25,moments_varendo) y i c pi rn ext_pr n;
 
 %it gives IRF and variance decomposition,,conditional_variance_decomposition=[1 4 8 40 80]
+
 //Simulation
 %stoch_simul(irf=20,nograph) y i pi n ext_pr;
 %stoch_simul(irf=20) y i pi c robs q n ext_pr;
