@@ -15,7 +15,7 @@
 // Maik Wolters
 //
 // Working Paper, 2009
-//**************************************************************************
+
 // Model: US_VMDop ("optimistic times")
 
 // Further references:
@@ -24,7 +24,12 @@
 
 // implemented by Fabio Verona (in September 2012), email: fabio.verona@bof.fi
 // Last edited: 12/10/22 by M. Burgert
+//**************************************************************************
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 // Define endogenous variables
 var piU, iU, omegabarSU, RkSXU, nSU, qU,
          cU, wU,rkSU,kbarBU, hU, kbarSU, ReXU,
@@ -37,7 +42,6 @@ var piU, iU, omegabarSU, RkSXU, nSU, qU,
         FpXflexU, FwXflexU,  RcouponXflexU,uSflexU,uBflexU,
           KwXflexU, KpXflexU,chiflexU,KtotflexU,YflexU,eps_analystflexU,eps_couponflexU,RanalystXflexU,nBflexU,stockcapitalflexU,ntotflexU,RkBXflexU,
             btotAflexU,btotBflexU,btotSflexU,levAflexU,levBflexU,levSflexU,CostFinancingSflexU,SpreadflexU, lambdanflexU,PextSflexU;
-
 
 // Define exogenous variables
 varexo e_xpU;
@@ -55,8 +59,10 @@ parameters lambdawUU, sigmaLXUU, betaUU, xiwUU, bUU,lambdafUU,
       rhoEIS,etaSE, rho_chi, alpha3, alpha4,KwXflexUU,KpXflexUU,FpXflexUU, FwXflexUU %,OMEGA
 	  std1_xpU;
 
-
-//Define parameter values
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+//Parameter values
 std1_xpU=0.25;
 
 alpha3=24;
@@ -84,7 +90,10 @@ for jj=1:length(M_.param_names)
 set_param_value(M_.param_names{jj},eval(M_.param_names{jj})); 
 end;
 
-//Model block
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model;
 
 
