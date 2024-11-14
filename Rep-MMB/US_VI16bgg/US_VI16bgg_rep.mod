@@ -8,14 +8,18 @@
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 
-% Financial frictions in the Euro Area and the United States: a Bayesian assessment
-% Macroeconomic Dynamics, 20 (05), p. 1313-1340, 2016
-% Stefania Villa
+//**********************************************************************
+//Financial frictions in the Euro Area and the United States: a Bayesian assessment
+//Macroeconomic Dynamics, 20 (05), p. 1313-1340, 2016
+//Stefania Villa
+
+//SMETS-WOUTERS & BGG MODEL   [US]
+//**********************************************************************
 
 
-% SMETS-WOUTERS & BGG MODEL   [US]
-
-
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 // Define endogenous variables
 var        y  c  i  w  l  pi r rn zk  u  k  q  rk   ext_pr   n             % Variables under nominal rigidities (15)
            yf cf if wf lf    rf   zkf uf kf qf rkf  ext_prf  nf            % Variables under flexible prices (13)
@@ -31,6 +35,10 @@ parameters alpha beta delta  epsilon epsilon_w M G_Y kappa theta  N_K      % Cal
            rho_a rho_k rho_g rho_x rho_ri rho_p rho_w                      % Shock persistence parematers
            phi  bas_point s_coef;
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 // Calibrated parameter values
 alpha     = 0.330;    % Capital income share
 beta      = 0.990;    % Discount factor
@@ -73,7 +81,9 @@ bas_point = 150;                         % Steady state spread
 s_coef    = (bas_point + 40000)/40000;   % Transformation to decimal form and quarterly basis
 
 
-//Model block
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear); 
 #R     = 1/beta;
 #ZK    = R - (1-delta);
