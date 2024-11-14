@@ -8,6 +8,7 @@
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 
+//**********************************************************************
 // Further references:
 // Poutineau, J. C., & Vermandel, G. (2015). Financial frictions and the extensive margin of activity.
 // Research in Economics, 69(4), 525-554.
@@ -18,8 +19,9 @@
 
 // The model with financial frictions
 // Flexible counterpart of the model (necessary to produce the output gap) has been added 
-
+//**********************************************************************
 close all;
+
 
 %----------------------------------------------------------------
 % 1. Defining variables
@@ -40,11 +42,11 @@ parameters	beta alpha delta mu sigmaL chi Fe kappa_P xi_P epsilon gy hh chi_I ch
 			L_QK R eta_d H RL sigmaC obsFactor theta gamma wmin ka TT phi N_K varkappa kappa_L mu_B mu_L mu_P mu_W kappa_W xi_W u_p u_w 
 			rho_a rho_g rho_b rho_i rho_l rho_n rho_p rho_w rho_e rho_r rho_ag  mkn Psin rn pin picn mut_pn;
 
+
 %----------------------------------------------------------------
 % 2. Calibration and Estimation
 %----------------------------------------------------------------
 % Paper calibrated in the parameter (see page 538)
-
 //Calibrated parameter values
 beta 		= 0.992; 				% Discount Factor
 delta 		= 0.025;				% Exit rate
@@ -71,7 +73,6 @@ rn=R-1;
 pin=1;
 picn=1;
 mut_pn=mu_P;
-
 
 //Estimated parameter values
 % AR(1) root value
@@ -108,12 +109,9 @@ psi			= 0.865371316948408;		% Utilization elasticity
 chi_E 		= 0.911043517537755;		% Free entry cost
 
 
-
 %----------------------------------------------------------------
 % 3. Model
 %----------------------------------------------------------------
-
-//Model block
 steady_state_model;
 	q 		= 1;	%	Steady state Tobin's q normalized to one
 	r 		= R-1;	%	nominal rate
