@@ -8,6 +8,7 @@
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 
+//**********************************************************************
 // Title: Shocks and Frictions in US Business Cycles: A Bayesian DSGE-Approach
 // Authors: Smets, Frank and Raf Wouters
 // Publication: The American Economic Review, June 2007, 97(3), 586-606.
@@ -16,9 +17,12 @@
 // This file simulates the dynamic response of the model to specific shocks
 
 // Replication of IRF to monetary policy shock (one standard deviation)
+//**********************************************************************
 
 
-
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 //Define endogenous variables
 var labobs robs pinfobs dy dc dinve dw ewma epinfma zcapf rkf kf pkf cf invef 
     yf labf wf rrf mc zcap rk k pk c inve y lab pinf w r a  b g qs  ms  spinf 
@@ -34,6 +38,10 @@ parameters curvw cgy curvp constelab constepinf constebeta cmaw cmap calfa
            crhog crhoqs crhoms crhopinf crhow ctrend cg cgamma clandap cbetabar 
            cr cpie crk cw cikbar cik clk cky ciy ccy crkky cwhlc cwly; 
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 // Fixed parameter values
 ctou=.025; //depreciation rate
 clandaw=1.5; // SS markup labor market
@@ -96,7 +104,9 @@ cwhlc=(1/clandaw)*(1-calfa)/calfa*crk*cky/ccy;
 cwly=1-crk*cky;
 
 
-//Model block
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear); 
 
 // Original Model Code:
