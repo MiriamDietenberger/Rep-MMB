@@ -1,3 +1,13 @@
+% US_OW98
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //**************************************************************************
 // A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
 //
@@ -5,8 +15,6 @@
 // Maik Wolters
 //
 // Working Paper, 2009
-//**************************************************************************
-
 // Model: US_OW98
 
 // Replication of IRF to monetary policy shock
@@ -16,8 +24,16 @@
 // Finance and Economics Discussion Series 98-35, Board of Governors of the Federal Reserve System.
 // Levin, A., V. Wieland, and J. Williams. 2003. "The Performance of Forecast-Based Monetary Policy Rules under Model Uncertainty."
 // American Economic Review 93(3), pp. 622-645.
+//**************************************************************************
+
+
 
 options_.solve_tolf=1e-5;
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var  ygap pdot rff drff	pinf plevel rl rrl ec efi eii eg ex yp cwage vindex
      pitarg rho1 rho16 rho28 rho40 dygap cwage1 cwage2 plevel1 plevel2 plevel3 
      rff1 efi1 efi2 eii1 eii2 ygap1 ygap2
@@ -27,17 +43,17 @@ var  ygap pdot rff drff	pinf plevel rl rrl ec efi eii eg ex yp cwage vindex
    interest inflation inflationq outputgap output;                       //*
 //**************************************************************************
 
-
+//Define exogenous variables
 varexo ecsh efish eiish exsh cwsh egsh interest_;
 
-
-
-
+//Define parameters
 parameters
 ecbar efibar eiibar exbar egbar pinfbar rffbar rrlbar;
 
 
-
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 ecbar	=     6.8355548687555923e-01;
 efibar	=   1.4661885394578772e-01;
 eiibar	=   3.9412501642005875e-03;
@@ -49,6 +65,10 @@ pinfbar= 1.7383970534932569e-02; //0;
 rffbar= 2.7673575521404148e-02; //  0;
 rrlbar	= 1.0289616884640973e-02;
 
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
 
 //**************************************************************************
@@ -158,6 +178,8 @@ eg	=    1.8672901279611806e-01;
 end;
 %options_.solve_tolf=1e-3;
 steady;
+
+//Shocks
 shocks;
 var interest_          =  1; // for IRF replication 
 var interest_, ecsh    =  0;
@@ -190,4 +212,6 @@ var cwsh               =  10000*(3.04717660977982e-07);
 end; 
 
 options_.Schur_vec_tol = 1e-6;  
+
+//Simulation
 stoch_simul (irf = 0,AR=100, noprint, nograph);
