@@ -24,7 +24,7 @@ bby g y yva piva pibar sgbar zc zn zi zfiistar zfii a zr zg  mstar pistar rstar;
 varexo pibar_ gbar_ c_ n_ i_ fiistar_ fii_ a_ r_ g_ mstar_ pistar_ rstar_; //exogenous variables (innovations)
 
 %----------------------------------------------------------------
-% 1. Parameters
+% 3. Define parameters
 %----------------------------------------------------------------
 
 parameters beta alpha sigma pessi kappa h omegabarb tet nuu kuu vi del dela 
@@ -32,7 +32,10 @@ dels sc si sg sm sx sva sd omegabarc omegabarn iok fiistar rstarC bystarC rC
 byC gamar gamapi gamay gamag gamas gamab rhoa rhoc rhoi rhon rhoq rhor rhog 
 rhosbar rhopi rhofii rhofiistar rhomstar rhorstar rhopistar;
 
-// Parameter values
+%----------------------------------------------------------------
+% 4. Parameter values
+%----------------------------------------------------------------
+
 beta = 0.98;
 alpha = 0.4;
 sigma = 0.823;
@@ -85,7 +88,10 @@ rhomstar = 0.257;
 rhorstar = 0.848;
 rhopistar = -0.139;
 
-// Model block
+%----------------------------------------------------------------
+% 5. Model block
+%----------------------------------------------------------------
+
 model(linear);
 co = (1/(1+h))*co(+1)+(h/(1+h))*co(-1)-sigma^(-1)*((1-h)/(1+h))*(r-pi(+1))+sigma^(-1)*((1-h)/(1+h))*(1-rhoc)*zc;
 crot = wr+nrot;
@@ -131,7 +137,10 @@ pistar = rhopistar*pistar(-1) + pistar_;
 rstar = rhorstar*rstar(-1) + rstar_;
 end;
 
-// Shocks
+%----------------------------------------------------------------
+% 6. Shocks
+%----------------------------------------------------------------
+
 shocks;
 var c_ = 1;    //0.081^2;
 var r_ = 1; // 0.25^2;    //0.003^2;
@@ -151,5 +160,8 @@ var c_, mstar_ =0;
 var r_, mstar_ =0;
 end;
 
-// Simulation
+%----------------------------------------------------------------
+% 7. Simulation
+%----------------------------------------------------------------
+
 stoch_simul (AR=100,IRF=0, noprint,nograph);
