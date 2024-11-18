@@ -16,9 +16,10 @@
 close all
 // global Gamma_y
 
+%----------------------------------------------------------------
+% 1. Define variables
+%----------------------------------------------------------------
 
-
-// Define variables
 var  auxt, bigXt, bigZt, ct, eqti, et, ht, it, kt, lambdat, llt, mct, nt, pit, pref, pstart, qt, 
 rkt, rnt, st, xt, yt, zt,
 auxtfp, ctfp,   htfp, itfp, ktfp, lambdatfp, lltfp, mctfp, 
@@ -27,16 +28,16 @@ rktfp, rntfp, ytfp, ygap, lnyt, lnit, lnygap, uu, vf, ft,
 taut, bt, cgn, cg, mpl, kl, mpk, rw, mcl, mck, mcb, mcc, mcd, mce, htb, qgap, expi, lev, kc, ce,
 ste,efc;
 
+%----------------------------------------------------------------
+% 2. Define 4 exogenous shocks (technology, monetary, investment, preference)
+%----------------------------------------------------------------
 
-
-
-// Define 4 exogenous shocks (technology, monetary, investment, preference)
 varexo epszt, epset, epsxt, epspt, epsft;
 
+%----------------------------------------------------------------
+% 3. Define 14 structural parameters and STEADY STATE values
+%----------------------------------------------------------------
 
-
-
-// Define 14 structural parameters and STEADY STATE values
 parameters b, a, chi, d,  g, te, veps, xi, nu, tau, r_p, r_r, r_y, rho_z, rho_e, rho_x, mub, tau1,  rho_p, 
            aux_ss, pi_ss, q_ss, z_ss, e_ss, mc_ss, rn_ss, rk_ss, s_ss, ik_ss, eqti_ss, 
            yk_ss, ck_ss, yc_ss, h_ss, k_ss, n_ss, c_ss, i_ss, y_ss, 
@@ -51,10 +52,10 @@ parameters b, a, chi, d,  g, te, veps, xi, nu, tau, r_p, r_r, r_y, rho_z, rho_e,
            lnyt_ss lnit_ss qgap_ss
            ; //nk, auxfp_ss,ygapfp_ss, chib,tau2,
 
-
-
-
-// Define parameter and STEADY STATE Values
+%----------------------------------------------------------------
+% 4. Define parameter and STEADY STATE Values
+%----------------------------------------------------------------
+ 
 ca    = 1;//cases
 
 //////policy experiment parameters
@@ -102,9 +103,10 @@ rho_p = 0.9546;
 //mub   = 1.0025;
 mub   = 1.005;
 
-
-
-// Compute STEADY STATE
+%----------------------------------------------------------------
+% 5. Compute STEADY STATE
+%----------------------------------------------------------------
+ 
 pi_ss     = mub;
 z_ss      = 1;
 e_ss      = 1;
@@ -184,12 +186,11 @@ lnyt_ss     = 0;
 lnit_ss     = 0; 
 qgap_ss     = q_ss-qfp_ss;
 
-
-
-
 model;
 
-// Model block
+%----------------------------------------------------------------
+% 6. Model block
+%----------------------------------------------------------------
 
 //equations for sticky price model
 lambdat     = pref/ct;
@@ -301,9 +302,10 @@ rntfp/rn_ss  = ((rntfp(-1)/rn_ss)^r_r)*(((pitfp/pi_ss)^r_p)*((bt/bt(-1)*pit)^r_c
 pstartfp = (veps/(veps-1))*mctfp;
 pstartfp = 1;
 
+%----------------------------------------------------------------
+% 7. Shocks
+%----------------------------------------------------------------
 
-
-// Shocks
 log(zt)   = rho_z*log(zt(-1)) + epszt;
 log(et)   = rho_e*log(et(-1)) + epset;
 log(xt)   = rho_x*log(xt(-1)) + epsxt;
@@ -405,7 +407,10 @@ end;
 
 
 
-// Simulation
+%----------------------------------------------------------------
+% 8. Simulation
+%----------------------------------------------------------------
+
 //stoch_simul(dr_algo=0,order=1, irf=40) yt pit cgn nt rnt ft zt qt st it ;
 //stoch_simul(order=2,irf=0) vf yt pit qt rnt st it ct ht ygap ;
 
