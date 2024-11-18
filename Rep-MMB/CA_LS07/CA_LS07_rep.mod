@@ -1,3 +1,13 @@
+% CA_LS07
+%
+%  Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //Replication file
 //Lubik, T.A. and Schorfheide, F. (2007): Do central banks respond to exchange rate movements?
 //        A structural investigation, Journal of Monetary Economics 54. 1069-1087.
@@ -14,9 +24,21 @@
 //    for the technology shock (epsz)
 //*************************************************************************
 
+%----------------------------------------------------------------
+% 1. Define endogenous variables
+%----------------------------------------------------------------
+
 var y R pi z deltaq deltay_star y_bar y_star deltae pi_star inflationq interest; //A output;
 
+%----------------------------------------------------------------
+% 2. Define exogenous variables
+%----------------------------------------------------------------
+
 varexo epsR epsq epsy_star epspi_star epsz;
+
+%----------------------------------------------------------------
+% 3. Define parameters
+%----------------------------------------------------------------
 
 parameters tau alfa rhoz beta kappa rhoR psi1 psi2 psi3 rhoq rhoy_star rhopi_star rss;
 
@@ -35,6 +57,9 @@ rhoq=0.31;                          //persistence in TOT growth rate
 rhoy_star=0.97;                     //persistence in exogenous world output
 rhopi_star=0.46;                    //persistence in world inflation shock
 
+%----------------------------------------------------------------
+% 4. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -75,6 +100,10 @@ end;
 steady;
 check;
 
+%----------------------------------------------------------------
+% 5. Shocks
+%----------------------------------------------------------------
+
 shocks;
 var epsR=0.36^2;
 var epsq=1.25^2;
@@ -83,6 +112,10 @@ var epsy_star=1.29^2;
 var epspi_star=2.00^2;
 
 end;
+
+%----------------------------------------------------------------
+% 6. Simulation
+%----------------------------------------------------------------
 
 %stoch_simul(irf=12) y inflationq interest deltae;
 stoch_simul (AR=100,IRF=0, noprint,nograph);
