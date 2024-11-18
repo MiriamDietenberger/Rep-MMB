@@ -1,3 +1,13 @@
+% EACZ_GEM03
+%
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // Replicates the 2nd row of Table 4 in Laxton, D., and P. Pesenti, 2003,
 // "Monetary Policy Rules for Small, Open, Emerging Economies." Journal 
 //  of Monetary Economics 50, July, pp. 1109-1146.
@@ -8,6 +18,9 @@
 // Notice that the OSR-section is uncommented, however the policy parameters
 // XR1H, XR2H and XR3H are set equal to their OSR values of the original file.
 
+%----------------------------------------------------------------
+% 1. Define endogenous variables
+%----------------------------------------------------------------
 
 var AF AH BIGGAMF BIGGAMH BIGGAMIMPF BIGGAMIMPH BIGGAMMF BIGGAMMH BIGGAMNF 
     BIGGAMNH BIGGAMQF BIGGAMQH BIGGAM_MONF BIGGAM_MONH BIGGAM_MOTF BIGGAM_MOTH 
@@ -39,7 +52,11 @@ var AF AH BIGGAMF BIGGAMH BIGGAMIMPF BIGGAMIMPH BIGGAMMF BIGGAMMH BIGGAMNF
 // Modelbase Variables                                                   //*                      
     interest inflation inflationq outputgap output;                      //*
 //**************************************************************************
- 
+
+%----------------------------------------------------------------
+% 2. Define exogenous variables
+%----------------------------------------------------------------
+
 varexo E_ZBH E_ZUH E_ZUF E_ZEYEH E_ZEYEF E_GAMMAH E_GAMMAF E_LANDH E_LANDF E_GAF 
        E_CAPAH E_CAPAF
 
@@ -48,6 +65,9 @@ varexo E_ZBH E_ZUH E_ZUF E_ZEYEH E_ZEYEF E_GAMMAH E_GAMMAF E_LANDH E_LANDF E_GAF
         interest_ fiscal_;                                               //*
 //************************************************************************** 
 
+%----------------------------------------------------------------
+% 3. Define parameters
+%----------------------------------------------------------------
  
 parameters COSTLF COSTLH EPSF EPSH EPSQMF EPSQMH GLAMBDAF GLAMBDAH SIGMAF SIGMAH 
            SSF SSH XR1F XR1H XR2F XR2H XR3F XR3H XR4F XR4H ALPHANF ALPHANH ALPHATF 
@@ -264,6 +284,9 @@ output           = GDPF*100;                                             //*
 //           + std_r_ *interest_;                                          //* 
 //**************************************************************************
 
+%----------------------------------------------------------------
+% 4. Model block
+%----------------------------------------------------------------
 
 // Original Model Code:
           ZZ_UTILITYH = (ZUH*(CH-HH)^(1-SIGMAH)-1)/(1-SIGMAH)-CAPAH*LH^(1+ZEDH)/(1+ZEDH) ;
@@ -846,6 +869,10 @@ end;
 //ZZ_DRNOMH .5;
 
 //end;
+
+%----------------------------------------------------------------
+% 5. Simulation
+%----------------------------------------------------------------
 
 //osr_params XR1H XR2H XR3H;
 
