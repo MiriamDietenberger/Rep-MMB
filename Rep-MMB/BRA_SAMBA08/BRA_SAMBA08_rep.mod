@@ -10,14 +10,23 @@
 
 // BRA_SAMBA08 replication
 
-// Define endogenous variables
+%----------------------------------------------------------------
+% 1. Define endogenous variables
+%----------------------------------------------------------------
+
 var co crot c no nrot n q wr k u fii qi i x m rk mc pi bystar nxy r gy syhat 
 bby g y yva piva pibar sgbar zc zn zi zfiistar zfii a zr zg  mstar pistar rstar; //endogenous variables
 
-// Define exogenous variables (innovations)
+%----------------------------------------------------------------
+% 2. Define exogenous variables
+%----------------------------------------------------------------
+
 varexo pibar_ gbar_ c_ n_ i_ fiistar_ fii_ a_ r_ g_ mstar_ pistar_ rstar_; //exogenous variables (innovations)
 
-// Define parameters
+%----------------------------------------------------------------
+% 1. Parameters
+%----------------------------------------------------------------
+
 parameters beta alpha sigma pessi kappa h omegabarb tet nuu kuu vi del dela 
 dels sc si sg sm sx sva sd omegabarc omegabarn iok fiistar rstarC bystarC rC 
 byC gamar gamapi gamay gamag gamas gamab rhoa rhoc rhoi rhon rhoq rhor rhog 
