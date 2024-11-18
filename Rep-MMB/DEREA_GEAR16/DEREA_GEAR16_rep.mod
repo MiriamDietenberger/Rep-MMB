@@ -1,3 +1,17 @@
+% DEREA_GEAR16
+%
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+%----------------------------------------------------------------
+% 1. Define endogenous variables
+%----------------------------------------------------------------
+
 var              
   i_a_t            i_b_t            i_c_t                             // Interest Rate
   i_Ga_t           i_Gb_t                                             // Government bond rate
@@ -92,6 +106,10 @@ var
   
 ;
 
+%----------------------------------------------------------------
+% 2. Define exogenous variables
+%----------------------------------------------------------------
+
 varexo  
   nua_a       nub_a                // Technology shock
   nua_etheta  nub_etheta           // Price markup shock
@@ -117,6 +135,10 @@ varexo
   eps_z_g                          // Global technology shock
   nua_eM                           // Monetary policy shock
 ;
+
+%----------------------------------------------------------------
+% 3. Define parameters  
+%----------------------------------------------------------------
 
 parameters  
   //***************************************************************************************
@@ -280,6 +302,10 @@ parameters
 ;
 
 set_params_31_08_aw1;
+
+%----------------------------------------------------------------
+% 4. Model block
+%----------------------------------------------------------------
 
 model;
 //*************************************************************************
@@ -801,5 +827,9 @@ shocks;
   var eps_z_g = 0;//0.01^2;
   var nua_eM        = 0.0008^2;
 end;
+
+%----------------------------------------------------------------
+% 5. Simulation
+%----------------------------------------------------------------
 
 stoch_simul(order=1,irf_shocks=(nua_eM),irf=40) y_a_t c_a_t i_policy_t pi_a_t;
