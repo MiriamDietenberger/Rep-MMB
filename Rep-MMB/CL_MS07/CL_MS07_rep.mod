@@ -1,3 +1,13 @@
+% CL_MS07
+%
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //**************************************************************************
 // This file has been transformed from its MMB version to be a replication 
 // .mod file in June 2022.
@@ -21,6 +31,10 @@
 // Created by Sebastian Kripfganz
 // Last edited: 10/08/26 by S. Schmidt
 
+%----------------------------------------------------------------
+% 1. Define endogenous variables
+%----------------------------------------------------------------
+
 var ah_hat, bF_hat, bg_hat, c_hat, ca_y_hat, cf_hat, ch_hat, chF_hat,
     dc_hat, de_hat, dinv_hat, dwr_hat, dy_hat, dyF_hat, dys_hat, g_hat,
     gex_hat, i_hat, iF_hat, iFax_hat, inv_hat, invf_hat, invh_hat, k_hat,
@@ -39,11 +53,16 @@ var ah_hat, bF_hat, bg_hat, c_hat, ca_y_hat, cf_hat, ch_hat, chF_hat,
     r_flex, rer_flex, Rk_flex, tau_flex, u_flex, wr_flex, x_flex, y_flex,
     yFa_flex, yh_flex, ysa_flex, zr_flex, sh_m_hat;
 
+%----------------------------------------------------------------
+% 2. Define exogenous variables
+%----------------------------------------------------------------
 
 varexo eps_ah, eps_ys, eps_prsF, eps_yF, eps_iF, eps_piF, eps_sh_w,
     eps_sh_c, eps_sh_i, eps_prfF, eps_proF, eps_st, eps_sh_m, eps_gex;
 
-parameters
+%----------------------------------------------------------------
+% 3. Define parameters
+%----------------------------------------------------------------
 
     sigma_L, h, phi_L, xi_L, eta_C, theta_I, S_I, phi_Hd, xi_Hd,
     phi_Hf, xi_Hf, phi_F, xi_F, omega_C, omega_H, mvarphi_i1, mvarphi_pi1,
@@ -199,7 +218,9 @@ BalG_Y      = 0.01;
 Tau_Y       = 0.092;
 bG_Y        = (Gh_Y-Tau_Y-chi*Ys_Y+BalG_Y)*((1+pi_C)*(1+g_y)*(1+n))/(1-1/((1+iF)*Theta_ss));
 
-
+%----------------------------------------------------------------
+% 4. Model block
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -645,6 +666,10 @@ end;
 steady;
 check;
 
+%----------------------------------------------------------------
+% 5. Shocks
+%----------------------------------------------------------------
+
 shocks;
 
 var eps_ah; stderr sd_ah;
@@ -664,6 +689,10 @@ var eps_piF; stderr sd_piF;
 var eps_prfF; stderr sd_prfF;
 
 end;
+
+%----------------------------------------------------------------
+% 6. Shocks
+%----------------------------------------------------------------
 
 %stoch_simul(irf=20) dy_hat, picz_hat, rer_hat, l_hat, ca_y_hat;
 stoch_simul (AR=100,IRF=0, noprint,nograph);
