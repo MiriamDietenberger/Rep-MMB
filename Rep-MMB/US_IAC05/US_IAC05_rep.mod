@@ -1,11 +1,26 @@
+% US_IAC05
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+//**************************************************************************
 //% The calibrated parameters below match the impulse responses of the estimated full model
 //% of Iacoviello (AER, 2005)
-
 //% We replicate the IRF to a monetary policy shock
+//**************************************************************************
 
-//% Declaration of endogenous variable
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 Var 
-//% basic endogeneous variables
+// basic endogeneous variables
 Yhat, 
 chat,
 c1hat,
@@ -21,24 +36,22 @@ h2hat,
 pihat,
 Rhat,
 
-//% Defined variable(s)
+// Defined variable(s)
 rrhat,
 
-//% Endogenous variables with exogenous dynamics
-
+// Endogenous variables with exogenous dynamics
 jhat,
 Ahat,
 uhat;
 
-
-//% Declaration of exogeneous variables (shocks)
+//Define exogenous variables
 Varexo
 ejhat,
 euhat,
 eAhat,
 eRhat;
 
-
+//Define parameters
 parameters
 //% deep parameters
 beta,
@@ -90,7 +103,9 @@ jota,
 jota2,
 R;
 
-
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 //% Setting of numerical values for parameters
 beta = 0.99;
 beta2 = 0.95;
@@ -123,7 +138,6 @@ rY = 0.13;
 //%alfa=0.99999;
 //%my=0;
 
-
 //% Defined parameters
 gammae = (1-m)*gamma + m*beta;
 gammah = beta2+m2*(beta-beta2);
@@ -154,8 +168,9 @@ jota2 = (1-beta)*h2toh1;
 R = 1/beta;
 
 
-
-//% Model equations
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model;
 Yhat = ctoY*chat+c1toY*c1hat+c2toY*c2hat+ItoY*Ihat;
 
@@ -203,13 +218,11 @@ end;
 
 
 //% calculation of steady state
-
-
 //steady;
 
 //check;
 
-
+//Shocks
 shocks;
 var eRhat;
 stderr sigmaR;
@@ -221,6 +234,7 @@ var eAhat;
 stderr sigmaA;
 end;
 
+//Simulation
 %stoch_simul(irf=20, nograph, noprint) Rhat pihat qhat Yhat;
 stoch_simul (AR=100,IRF=0, noprint,nograph);
 
