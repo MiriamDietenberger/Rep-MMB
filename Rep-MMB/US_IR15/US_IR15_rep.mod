@@ -1,12 +1,30 @@
+%  US_IR15
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 close all;
 warning off;
+
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var g_r g_pi g_y tau v r pi g_y_obs y_4 y_8 y_12 y_16 y_20
     P_y_4 P_y_8 P_y_12 P_y_16 P_y_20
 y_4_a P_y_4_a g_pi_a y_8_a P_y_8_a r_a y_12_a P_y_12_a y_16_a P_y_16_a y_20_a P_y_20_a
 output inflation;
 
+//Define exogenous variables
 varexo epsilon_r epsilon_pi epsilon_y epsilon_tau epsilon_v eta_4 eta_8 eta_16;
 
+//Define parameters
 parameters rhor rhopi rhoy rhov rhotau rhopir rhopipi rhopiy rhopiv rhoyr rhoypi rhoyy rhoyv rhovv
            sigtau sigr sigpi sigy sigv sigpitau sigypi sigytau sigvr sigvpi sigvy sigvtau
            Lambdar Lambdapi Lambday Lambdatau Lambdav
@@ -39,6 +57,10 @@ parameters rhor rhopi rhoy rhov rhotau rhopir rhopipi rhopiy rhopiv rhoyr rhoypi
            S41 S42 S43 S44 S45
            S51 S52 S53 S54 S55;
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 piSS=.89;rSS=5.47; tauSS=piSS;grSS=rSS-piSS; gySS=-.526;
 y_4SS=5.96; y_8SS=6.166; y_12SS=6.337; y_16SS=6.4683; y_20SS=6.5447;
 rhor    = 0.6211;
@@ -76,6 +98,10 @@ sig4    = 0.0004;
 sig8    = 0.0002; 
 sig16   = 0.0001;
 
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
 
 r    = U11*g_r + U12*g_pi + U13*g_y + U14*tau + U15*v;
@@ -124,6 +150,8 @@ P_y_20_a=4*(Q51*g_r+ Q52*g_pi+ Q53*g_y+ Q54*tau+ Q55*v);
 end; 
 resid; 
 //check;
+
+//Shocks
 shocks;
 var epsilon_r  = (10000);
 var epsilon_pi = (10000);
@@ -135,6 +163,6 @@ var eta_8      = (10000);
 var eta_16     = (10000);  
 end;
 
-
+//Simulation
 stoch_simul (AR=100,IRF=0, noprint,nograph);
 %stoch_simul(order=1, irf=20,irf_shocks=(epsilon_r),nograph) output y_4_a P_y_4_a inflation y_8_a P_y_8_a r_a y_12_a P_y_12_a v y_16_a P_y_16_a tau y_20_a P_y_20_a;   
