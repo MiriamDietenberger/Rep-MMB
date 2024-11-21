@@ -1,10 +1,25 @@
-// Model: US_KS15
+% US_KS15
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
+//**************************************************************************
 // Literatur: A. Kriwoluzky and C. Stoltenberg (2015): Monetary Policy and 
 // the Transaction Role of Money in the US. Economic Journal, Vol 125, 1452-1473 
-
+//
 // Last edited by: Felix Strobel (24.05.2019)
+//**************************************************************************
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var 
 lambda // marginal utility of consumption
 c   // consumption
@@ -23,11 +38,17 @@ y   // output
 RR  // real interest rate
 ;
 
+//Define exogenous variables
 varexo eps_z eps_nu eps_mu eps_a eps_g eps_m;
 
+//Define parameters
 parameters eta_cc eta_ch eta_hc_sigma_h sigma_c gamma omega betta alpha
 rho_pi rho_y g_o_y rho_z rho_nu rho_mu rho_a rho_g eta_R rho_R;
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 gamma   = 0;    // habit formation
 betta   = 0.99; // discount factor
 omega   = 3.5;  //
@@ -49,6 +70,9 @@ rho_a   = 0.5; // persistence parameter for technology shock
 rho_g   = 0.5; // persistence parameter for gov. spending shock
 
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
 
 lambda=-(eta_cc+sigma_c)*c+ eta_ch*(m(-1)-pit+z)+sigma_c*gamma*c(-1)+nu; // marginal utility of c
@@ -70,6 +94,7 @@ g=rho_g*g(-1)+eps_g;                            // government spending shock
 
 end;
 
+//Shocks
 shocks;                     //(posterior post-1982)
 var eps_g;  stderr 1;       // government spending shock
 var eps_a;  stderr 0.0044;  // technology shock
@@ -78,5 +103,7 @@ var eps_z;  stderr 0.0140;  // transaction cost shock
 var eps_nu; stderr 0.0152;  // preference shock
 var eps_m;  stderr 0.0055;  // interest rate shock
 end;
+
+//Simulation
 stoch_simul (AR=100,IRF=0, noprint,nograph);
 %stoch_simul(irf=20, nograph) c y m pit RR R;
