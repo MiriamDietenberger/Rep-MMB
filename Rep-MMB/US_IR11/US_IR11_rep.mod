@@ -1,20 +1,42 @@
-//Replication file
+% US_IR11
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.//Replication file
+
+//**************************************************************************
 //Ireland, Peter N. (2011): A New Keynesian Perspective on the Great Recession,
 //      Journal of Money, Credit and Banking, Vol.43, No.1, 31-54.
-
+//
 //small-scale New Keynesian model
-
+//
 //implemented by M.Jancokova
+//**************************************************************************
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var a lambda y z r pi e g q x inflationq interest output Z_au;
 
+//Define exogenous variables
 varexo epsa epse epsz epsr;
 
+//Define parameterse
 parameters gamma alfa rhopi rhog rhoa rhoe zeta beta psi; 
 
 //Note: the cost-push shock and some related parameters are renormalized to make the 
-//          innovation normally distributed with mean zero (see page 40 in the paper)
+// innovation normally distributed with mean zero (see page 40 in the paper)
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 //estimated parameters (maximum likelihood estimates)
 gamma=0.3904;       //habit formation parameter
 alfa=0;             //indexation parameter, for alfa=0 the price setting is purely forward looking
@@ -28,6 +50,10 @@ zeta=1.0046;        //drift of the AR(1) technology process
 beta=0.9987;        //discount factor
 psi=0.10;           //Phillips Curve parameter; equals the original model parameters (theta-1)/phi
 
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model (linear);
 
 //c=y;
@@ -76,12 +102,15 @@ end;
 steady;
 check;
 
+
+//Shocks
 shocks;
 var epsa=(0.0868*100)^2;      //preference shock
 var epse=(0.0017*100)^2;      //renormalized cost-push shock
 var epsz=(0.0095*100)^2;      //technology shock
 var epsr=(0.0014*100)^2;      //monetary policy shock
-
 end;
+
+//Simulation
 stoch_simul (AR=100,IRF=0, noprint,nograph);
 %stoch_simul(irf=20, nograph, noprint) output inflationq interest x;
