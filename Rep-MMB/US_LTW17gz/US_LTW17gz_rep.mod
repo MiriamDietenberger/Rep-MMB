@@ -1,22 +1,32 @@
- //**************************************************************************
+% US_LTW17gz
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+//**************************************************************************
 // A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
 //
 // Clearing Up the Fiscal Multiplier Morass, American Economic Review 2017, 107(8): 2409–2454
 // Eric M. Leeper, Nora Traum, and Todd B. Walker
 //
-					  
-//**************************************************************************
-
-// Model: USLTW17gz
-
 // The version of model where instead of government consumption response to debt, there are changes in transfers (gammgc=0 gammz=0.2)
-
-//Edited by: Balint Tatar 
+//
+//Edited by: Balint Tatar 	  
+//**************************************************************************
 
 //Ncs Ncn NR Ni Nk Nv Nl Ny Ngc Nc Nq Nrk Nw Npi Nb Nsb Ntauk Ntaul Ntauc Nr Nz Nmc Nkbar Nlambda NPb Ncstar Nugc Nuz Nua Nub Num Nui Nuw Nup;
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var  
-            // Endogenous Variables:
             cs        // 1 consumption: Savers
             cn        // 2 consumption: Non-Savers
             R         // 3 nominal interest rate
@@ -79,10 +89,7 @@ var
             uw        //57 price markup shock
             up        //58 monetary policy shock
 
-
 //Flexprice Economy
-
-            // Endogenous Variables:
             csf        // 1 consumption: Savers
             cnf        // 2 consumption: Non-Savers
             //Rf         // 3 nominal interest rate
@@ -126,10 +133,7 @@ var
             //Piobsf     //40 inflation
             Lobsf;      //41 hours worked
 
-
-
-
-
+//Define exogenous variables
 varexo 
             //eugc       //1 gc shock 
             euz        //2 z shock
@@ -140,19 +144,13 @@ varexo
             euw        //7 price markup shock
             eup;        //8 monetary policy shock
 
-
-
-
+//Define parameters
 parameters 
-
-
-
 AD bet delt alph etaw etap gamm100 xi muHH omegaw omegap gpsi s chiw chip phipi phiy gammgc gammtk gammtl gammz 
 rhoa rhob rhor rhoi rhow rhop rhogc rhotk rhotl rhotc rhoz siga sigb sigm sigi sigw sigp siggc sigz thet alphag rhoem rhoeg rhoez Lbar Pibar 
 lamprice lamwage 
 
 //steady state parameters
-
 sbss taulss taukss taucss Rhoss gammss expgss Rss Rbarss Pbss Rkss psi1ss mcss wss KLss OmegLss YLss ILss CLss rkss ZLss ZnLss CnLss CsLss CstarLss lss csss cnss yss kss Omegss css invss 
 zss bss gcss kyss cyss lyss TKss TLss TCss Sss
 
@@ -161,8 +159,9 @@ sgcss
 lampricef lamwagef;
 
 
-
-
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 // Calibrated parameters
 AD = 20;                // average duration of government debt
 bet = 0.99;           	// discount factor
@@ -176,88 +175,37 @@ taulss = 0.186;           // steady state labor tax rate
 taukss = 0.218;           // steady state capital tax rate
 taucss = 0.023;           // steady state consumption tax rate
 
-
-
-// Estimated parameter No. 01: steady state growth rate of technology, multiplied by 100 
-gamm100 = 0.242968973360760;
-
-// Estimated parameter No. 02: inverse Frisch elasticity
-xi =  1.540098680199818;
-
-// fraction of non-savers in population
-muHH = 0;
-
-// Estimated parameter No. 03: prob. of unions not resetting price
-omegaw =  0.873633441786572;
-
-// Estimated parameter No. 04: prob. of firms not resetting price
-omegap =  0.889634877904653;
-
-// Estimated parameter No. 05: K utilization cost parameter
-gpsi =  0.126297919145076; 
-
-// Estimated parameter No. 06: s" in the investment adjustment cost function
-s =  5.213147230492578;
-
-// Estimated parameter No. 07: percentage of unions' wage adjustment when they cannot optimize
-chiw =  0.089393160044567;
-
-// Estimated parameter No. 08: percentage of intermediate firms' price adjustment when they cannot optimize
-chip =  0.060355303068460;
-
-// Estimated parameter No. 09: Taylor rule inflation coefficient
-phipi =  1.142492263502070;
-
-// Estimated parameter No. 10: Taylor rule output coefficient
-phiy =  0.178225311630840;
-
-// Estimated parameter No. 11: response of government consumption to debt
+//Estimated parameters
+gamm100 = 0.242968973360760;	 // No. 01: steady state growth rate of technology, multiplied by 100 
+xi =  1.540098680199818;	// No. 02: inverse Frisch elasticity
+muHH = 0;			// fraction of non-savers in population
+omegaw =  0.873633441786572;	// No. 03: prob. of unions not resetting price
+omegap =  0.889634877904653;	// No. 04: prob. of firms not resetting price
+gpsi =  0.126297919145076; 	// No. 05: K utilization cost parameter
+s =  5.213147230492578;		// No. 06: s" in the investment adjustment cost function
+chiw =  0.089393160044567;	// No. 07: percentage of unions' wage adjustment when they cannot optimize
+chip =  0.060355303068460;	// No. 08: percentage of intermediate firms' price adjustment when they cannot optimize
+phipi =  1.142492263502070;	// No. 09: Taylor rule inflation coefficient
+phiy =  0.178225311630840;	//  No. 10: Taylor rule output coefficient
+gammgc =  0; 			// No. 11: response of government consumption to debt
 //gammgc =  0.214956274043740;
-gammgc =  0;
-
-//// response of capital tax to debt
-gammtk = 0;
-
-//// response of labor tax to debt
-gammtl = 0;
-
-// Estimated parameter No. 12: response of saver transfers to debt
+gammtk = 0;			// response of capital tax to debt
+gammtl = 0;			// response of labor tax to debt
+gammz =  0.2;			// No. 12: response of saver transfers to debt
 //gammz =  -0.028247874637231;
-gammz =  0.2;
+rhoa =  0.251431768280169;	// No. 13: serial correlation on technological productiviety growth
+rhob =  0.314713788054350;	// No. 14: serial correlation on preference shock
+rhor =  0.756483804459602;	//  No. 15: serial correlation on interest rate in Taylor rule
+rhoi =  0.511411853483883;	// No. 16: serial correlation on investment preference shock
+rhow =  0.326894727384245;	// No. 17: serial correlation on wage markup shock
+rhop =  0.724249353191094;	//No. 18: serial correlation on price markup shock
+rhogc =  0.984047962915516;	// No. 19: serial correlation on gov. consumption shock
+rhotk = 0; 			// serial correlation on capital tax shock
+rhotl = 0;			// serial correlation on labor tax shock
+rhotc = 0;			// serial correlation on consumption tax shock
 
-// Estimated parameter No. 13: serial correlation on technological productiviety growth
-rhoa =  0.251431768280169;
-
-// Estimated parameter No. 14: serial correlation on preference shock
-rhob =  0.314713788054350;
-
-// Estimated parameter No. 15: serial correlation on interest rate in Taylor rule
-rhor =  0.756483804459602;
-
-// Estimated parameter No. 16: serial correlation on investment preference shock
-rhoi =  0.511411853483883;
-
-// Estimated parameter No. 17: serial correlation on wage markup shock
-rhow =  0.326894727384245;
-
-// Estimated parameter No. 18: serial correlation on price markup shock
-rhop =  0.724249353191094;
-
-// Estimated parameter No. 19: serial correlation on gov. consumption shock
-rhogc =  0.984047962915516;
-
-//// serial correlation on capital tax shock
-rhotk = 0;
-
-//// serial correlation on labor tax shock
-rhotl = 0;
-
-//// serial correlation on consumption tax shock
-rhotc = 0;
-
-// serial correlation on savers transfers shock
+rhoz = 0.98; 			// serial correlation on savers transfers shock
 //if RegimeM_I == 1
-rhoz = 0.98; 
 /*
 else
     param_index = param_index + 1;
@@ -265,43 +213,19 @@ else
 end
 */
 
-// Estimated parameter No. 20: technology shock standard deviation
-siga =  1.03292319884557;
-
-// Estimated parameter No. 21: preference shock standard deviation
-sigb =  42.6559249998644;
-
-// Estimated parameter No. 22: monetary policy shock standard deviation
-sigm =  0.231187433032408;
-
-// Estimated parameter No. 23: investment preference shock standard deviation
-sigi =  0.978941599253400;
-
-// Estimated parameter No. 24: wage markup shock standard deviation
-sigw =  0.250356962066959;
-
-// Estimated parameter No. 25: price markup shock standard deviation
-sigp =  0.0988174659346631;
-
-// Estimated parameter No. 26: gov. consumption shock standard deviation
-siggc =  1.83235871273796;
-
-// Estimated parameter No. 27: saver transfer shock standard deviation
-sigz =  2.68115974402062;
-
-// Estimated parameter No. 28: habit formation
-thet =  0.989468754445726;
-
-// Estimated parameter No. 29: substitutability (>0) or complementarity (< 0) of private and public consumption              
-alphag = -0.185909020087479;    
-
-// Estimated parameter No. 30: AR coefficients on policy shocks
-rhoem = 0.336277752958210;
+siga =  1.03292319884557;	// No. 20: technology shock standard deviation
+sigb =  42.6559249998644;	// No. 21: preference shock standard deviation
+sigm =  0.231187433032408;	// No. 22: monetary policy shock standard deviation
+sigi =  0.978941599253400;	// No. 23: investment preference shock standard deviation
+sigw =  0.250356962066959;	// No. 24: wage markup shock standard deviation
+sigp =  0.0988174659346631;	// No. 25: price markup shock standard deviation
+siggc =  1.83235871273796;	// No. 26: gov. consumption shock standard deviation
+sigz =  2.68115974402062;	// No. 27: saver transfer shock standard deviation
+thet =  0.989468754445726;	//  No. 28: habit formation
+alphag = -0.185909020087479; 	// No. 29: substitutability (>0) or complementarity (< 0) of private and public consumption              
+rhoem = 0.336277752958210;	//  No. 30: AR coefficients on policy shocks
 //rhoem = 0;
-
-// Estimated parameter No. 31:   
-rhoeg = 0.126568144141410; 
-
+rhoeg = 0.126568144141410; 	// No. 31   
 //if RegimeM_I == 1
 rhoez = 0.8; 
 /*
@@ -311,19 +235,17 @@ else
 end
 */
 
-// Estimated parameter No. 32 & No. 33: Mean values of observables
+				// No. 32 & No. 33: Mean values of observables
 Lbar = 475.202534563017;
 Pibar = 0.643991271663901;
 
 lamprice = ((1+bet*chip)*omegap)/((1-bet*omegap)*(1-omegap));
 lamwage = (omegaw*(1+bet)*(1+xi*(1+(1/etaw))))/((1-omegaw*bet)*(1-omegaw));
 
-
 lampricef=0;
 lamwagef=0;
 
-
-//// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // Computation of the steady state
 // -------------------------------------------------------------------------
 Rhoss = (1 - (1/AD))*(1/bet);
@@ -368,12 +290,10 @@ Sss = taukss*rkss*kss + taulss*lss*wss + taucss*css - gcss - zss;
 //ss = [Rss gc c y inv TK TL TC z bet expg Rho rhogc];
 
 
-
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model (linear);
-
-
-
 
 //--------------------------------------------
 //(1)	Production Function
@@ -420,14 +340,10 @@ mc-alph*rk + (alph-1)*w=0;
 //g1(Npi,Npi) = lamprice*chip/(1+bet*chip);
 //g0(Npi,Nmc) = -1;
 //g0(Npi,Nup) = -lamprice;        
-
-                          
+                      
 lamprice*pi -lamprice*bet/(1+bet*chip)*pi(+1) - mc -lamprice*up = lamprice*chip/(1+bet*chip)*pi(-1);
 
-
 //lamprice*Npi - (lamprice*bet/(1+bet*chip))*Npi(+1) - Nmc - lamprice*Nup = (lamprice*chip/(1+bet*chip))*Npi(-1);
-
-
 
 
 //--------------------------------------------
@@ -444,6 +360,7 @@ lambda + thet/(expgss-thet)*ua + expgss/(expgss-thet)*cstar -ub + (taucss/(1+tau
 
 //Nlambda + (thet/(expg-thet))*Nua + (expg/(expg-thet))*Ncstar - Nub + (tauc/(1+tauc))*Ntauc = (thet/(expg-thet))*Ncstar(-1);
 
+
 //--------------------------------------------
 //(6)	Long-Run Real Interest Rate
 //--------------------------------------------
@@ -454,6 +371,7 @@ lambda + thet/(expgss-thet)*ua + expgss/(expgss-thet)*cstar -ub + (taucss/(1+tau
 //g0(NrL,Nxpi) = 1;
 
 rL + Pb -bet*Rhoss/expgss*rL(+1) -bet*Rhoss/expgss*Pb(+1) +pi(+1)= 0;
+
 
 //--------------------------------------------
 //(7)	Long-Run Inflation Rate
@@ -475,7 +393,6 @@ piL + Pb + rL = 0;
 cstar -csss/(csss + alphag*gcss)*cs -alphag*gcss/(csss + alphag*gcss)*gc=0;
 
 //Ncstar - (cs/(cs + alphag*gc))*Ncs - (alphag*gc/(cs + alphag*gc))*Ngc = 0;
-
 
 
 //--------------------------------------------
@@ -517,7 +434,6 @@ lambda - R + pi(+1) - lambda(+1) + rhoa*ua=0;
 q + R - pi(+1) -bet*exp(-gammss)*(1-delt)*q(+1) -bet*exp(-gammss)*Rkss*(1-taukss)*rk(+1) + taukss*exp(-gammss)*bet*Rkss*tauk(+1)=0;
 
 //Nq + NR - Npi(+1) - bet*exp(-gamm)*(1-delt)*Nq(+1) - bet*exp(-gamm)*Rk*(1-tauk)*Nrk(+1) + tauk*exp(-gamm)*bet*Rk*Ntauk(+1) = 0;
-
 
 
 //--------------------------------------------
@@ -563,7 +479,6 @@ kbar -(1 - (1-delt)*exp(-gammss))*((1+bet)*s*(exp(2*gammss)))*ui  -(1 - (1-delt)
 //Nkbar - (1 - (1-delt)*exp(-gamm))*((1+bet)*s*(exp(2*gamm)))*Nui - (1 - (1-delt)*exp(-gamm))*Ni + (1-delt)*exp(-gamm)*Nua = (1-delt)*exp(-gamm)*Nkbar(-1);
 
 
-
 //--------------------------------------------
 //(15)	Wage Equation!!
 //--------------------------------------------
@@ -593,7 +508,6 @@ lamwage*((1 + bet*chiw - rhoa*bet)/(1+bet))*Nua - (taul/(1-taul))*Ntaul - lamwag
 */
 
 
-
 //--------------------------------------------
 //(16)	Monetary Policy Rule
 //--------------------------------------------
@@ -620,7 +534,6 @@ R -(1-rhor)*phipi*pi -(1-rhor)*phiy*y - um = rhor*R(-1);
 css*c + invss*i - yss*y + sgcss*yss*gc + psi1ss*kss*v = 0;
 
 //c*Nc + inv*Ni - y*Ny + sgc*y*Ngc + psi1*k*Nv = 0;
-
 
 
 //--------------------------------------------
@@ -789,7 +702,6 @@ sb + y - b = 0;
 Tc -tauc - c = 0;
 
 
-
 //--------------------------------------------
 //(30)	Capital Tax Revenue
 //--------------------------------------------
@@ -811,6 +723,7 @@ Tk - tauk - rk - k = 0;
 
 rb -Rhoss*bet/expgss*Pb + pi = -Pb(-1);
 
+
 //--------------------------------------------
 //(32)	S defined
 //--------------------------------------------
@@ -830,7 +743,8 @@ rb -Rhoss*bet/expgss*Pb + pi = -Pb(-1);
 S -taukss*rkss*kss/Sss*tauk    -taukss*rkss*kss/Sss*rk     -taukss*rkss*kss/Sss*k 
   -taulss*wss*lss/Sss*taul    -taulss*wss*lss/Sss*w      -taulss*wss*lss/Sss*l
   -taucss*css/Sss*tauc -taucss*css/Sss*c + zss/Sss*z + gcss/Sss*gc = 0;  
- 
+
+
 //--------------------------------------------
 //(33)	Labor Tax Revenue
 //--------------------------------------------
@@ -849,12 +763,14 @@ Tl - taul - w - l = 0;
 //g1(Nxpi,Nxpi)=1; 
 //Pie(Nxpi,1)=1;
 
+
 //--------------------------------------------
 //(35)	Define Xq
 //--------------------------------------------
 //g0(Nxq,Nq)=1; 
 //g1(Nxq,Nxq)=1; 
 //Pie(Nxq,2)=1;
+
 
 //--------------------------------------------
 //(36)	Define Xrk
@@ -863,12 +779,14 @@ Tl - taul - w - l = 0;
 //g1(Nxrk,Nxrk)=1; 
 //Pie(Nxrk,3)=1;
 
+
 //--------------------------------------------
 //(37)	Define XI
 //--------------------------------------------
 //g0(Nxi,Ni)=1; 
 //g1(Nxi,Nxi)=1; 
 //Pie(Nxi,4)=1;
+
 
 //--------------------------------------------
 //(38)	Define Xtauk
@@ -877,12 +795,14 @@ Tl - taul - w - l = 0;
 //g1(Nxtauk,Nxtauk)=1; 
 //Pie(Nxtauk,5)=1;
 
+
 //--------------------------------------------
 //(39)	Define Xw
 //--------------------------------------------
 //g0(Nxw,Nw)=1; 
 //g1(Nxw,Nxw)=1; 
 //Pie(Nxw,6)=1;
+
 
 //--------------------------------------------
 //(40)	Define Xlambda
@@ -891,6 +811,7 @@ Tl - taul - w - l = 0;
 //g1(Nxlambda,Nxlambda)=1; 
 //Pie(Nxlambda,7)=1;
 
+
 //--------------------------------------------
 //(41)	Define XPb
 //--------------------------------------------
@@ -898,12 +819,14 @@ Tl - taul - w - l = 0;
 //g1(NxPb,NxPb)=1; 
 //Pie(NxPb,8)=1;
 
+
 //--------------------------------------------
 //(42)	Define XrL
 //--------------------------------------------
 //g0(NxrL,NrL)=1; 
 //g1(NxrL,NxrL)=1; 
 //Pie(NxrL,9)=1;
+
 
 //--------------------------------------------
 //(43)	C Obs
@@ -914,6 +837,7 @@ Tl - taul - w - l = 0;
 //g0(Ncobs,Nua) = -100;
 
 cobs - 100*c -100*ua = -100*c(-1);
+
 
 //--------------------------------------------
 //(44)	I Obs
@@ -926,6 +850,7 @@ cobs - 100*c -100*ua = -100*c(-1);
 
 iobs - 100*i -100*ua = -100*i(-1);
 
+
 //--------------------------------------------
 //(45)	gc Obs
 //--------------------------------------------
@@ -935,6 +860,7 @@ iobs - 100*i -100*ua = -100*i(-1);
 //g0(Ngcobs,Nua) = -100;
 
 gcobs - 100*gc -100*ua = -100*gc(-1);
+
 
 //--------------------------------------------
 //(46)	w Obs
@@ -946,6 +872,7 @@ gcobs - 100*gc -100*ua = -100*gc(-1);
 
 wobs - 100*w -100*ua = -100*w(-1);
 
+
 //--------------------------------------------
 //(47)	b Obs
 //--------------------------------------------
@@ -956,6 +883,7 @@ wobs - 100*w -100*ua = -100*w(-1);
 
 bobs - 100*b -100*ua = -100*b(-1);
 
+
 //--------------------------------------------
 //(48)	R Obs
 //--------------------------------------------
@@ -963,6 +891,7 @@ bobs - 100*b -100*ua = -100*b(-1);
 //g0(NRobs,NR) = -100;
 
 Robs - 100*R = 0;
+
 
 //--------------------------------------------
 //(49)	Pi Obs
@@ -972,6 +901,7 @@ Robs - 100*R = 0;
 
 Piobs -100*pi =0;
 
+
 //--------------------------------------------
 //(50)	L Obs
 //--------------------------------------------
@@ -979,6 +909,8 @@ Piobs -100*pi =0;
 //g0(NLobs,Nl) = -100;
 
 Lobs -100*l = 0;
+
+
 //--------------------------------------------
 //(51)	gc Spending Shock
 //--------------------------------------------
@@ -1085,12 +1017,9 @@ up = rhop*up(-1) + eup;
 //Nup = rhop*Nup(-1) + eps_up;
 
 
-
-
 /////////////////////////////////////////////////////////////
 ////////////////////////Flexprice Economy////////////////////
 /////////////////////////////////////////////////////////////
-
 
 //--------------------------------------------
 //(1)	Production Function
@@ -1142,11 +1071,7 @@ mcf-alph*rkf + (alph-1)*wf=0;
 
 mcf =0 ;
 
-
-
 //lamprice*Npi - (lamprice*bet/(1+bet*chip))*Npi(+1) - Nmc - lamprice*Nup = (lamprice*chip/(1+bet*chip))*Npi(-1);
-
-
 
 
 //--------------------------------------------
@@ -1163,6 +1088,7 @@ lambdaf + thet/(expgss-thet)*ua + expgss/(expgss-thet)*cstarf -ub + (taucss/(1+t
 
 //Nlambda + (thet/(expg-thet))*Nua + (expg/(expg-thet))*Ncstar - Nub + (tauc/(1+tauc))*Ntauc = (thet/(expg-thet))*Ncstar(-1);
 
+
 //--------------------------------------------
 //(6)	Long-Run Real Interest Rate
 //--------------------------------------------
@@ -1173,6 +1099,7 @@ lambdaf + thet/(expgss-thet)*ua + expgss/(expgss-thet)*cstarf -ub + (taucss/(1+t
 //g0(NrL,Nxpi) = 1;
 
 //rLf + Pbf -bet*Rhoss/expgss*rLf(+1) -bet*Rhoss/expgss*Pbf(+1) +pif(+1)= 0;
+
 
 //--------------------------------------------
 //(7)	Long-Run Inflation Rate
@@ -1194,7 +1121,6 @@ lambdaf + thet/(expgss-thet)*ua + expgss/(expgss-thet)*cstarf -ub + (taucss/(1+t
 cstarf -csss/(csss + alphag*gcss)*csf -alphag*gcss/(csss + alphag*gcss)*gcf=0;
 
 //Ncstar - (cs/(cs + alphag*gc))*Ncs - (alphag*gc/(cs + alphag*gc))*Ngc = 0;
-
 
 
 //--------------------------------------------
@@ -1240,7 +1166,6 @@ qf + rf -bet*exp(-gammss)*(1-delt)*qf(+1) -bet*exp(-gammss)*Rkss*(1-taukss)*rkf(
 //Nq + NR - Npi(+1) - bet*exp(-gamm)*(1-delt)*Nq(+1) - bet*exp(-gamm)*Rk*(1-tauk)*Nrk(+1) + tauk*exp(-gamm)*bet*Rk*Ntauk(+1) = 0;
 
 
-
 //--------------------------------------------
 //(12)	Investment FOC
 //--------------------------------------------
@@ -1284,7 +1209,6 @@ kbarf -(1 - (1-delt)*exp(-gammss))*((1+bet)*s*(exp(2*gammss)))*ui  -(1 - (1-delt
 //Nkbar - (1 - (1-delt)*exp(-gamm))*((1+bet)*s*(exp(2*gamm)))*Nui - (1 - (1-delt)*exp(-gamm))*Ni + (1-delt)*exp(-gamm)*Nua = (1-delt)*exp(-gamm)*Nkbar(-1);
 
 
-
 //--------------------------------------------
 //(15)	Wage Equation!!
 //--------------------------------------------
@@ -1319,7 +1243,6 @@ lamwage*((1 + bet*chiw - rhoa*bet)/(1+bet))*Nua - (taul/(1-taul))*Ntaul - lamwag
 */
 
 
-
 //--------------------------------------------
 //(16)	Monetary Policy Rule
 //--------------------------------------------
@@ -1346,7 +1269,6 @@ lamwage*((1 + bet*chiw - rhoa*bet)/(1+bet))*Nua - (taul/(1-taul))*Ntaul - lamwag
 css*cf + invss*if - yss*yf + sgcss*yss*gcf + psi1ss*kss*vf = 0;
 
 //c*Nc + inv*Ni - y*Ny + sgc*y*Ngc + psi1*k*Nv = 0;
-
 
 
 //--------------------------------------------
@@ -1524,7 +1446,6 @@ sbf + yf - bf = 0;
 Tcf -taucf - cf = 0;
 
 
-
 //--------------------------------------------
 //(30)	Capital Tax Revenue
 //--------------------------------------------
@@ -1569,7 +1490,8 @@ rbf=rf;
 Sf -taukss*rkss*kss/Sss*taukf    -taukss*rkss*kss/Sss*rkf     -taukss*rkss*kss/Sss*kf 
   -taulss*wss*lss/Sss*taulf    -taulss*wss*lss/Sss*wf      -taulss*wss*lss/Sss*lf
   -taucss*css/Sss*taucf -taucss*css/Sss*cf + zss/Sss*zf + gcss/Sss*gcf = 0;  
- 
+
+
 //--------------------------------------------
 //(33)	Labor Tax Revenue
 //--------------------------------------------
@@ -1588,12 +1510,14 @@ Tlf - taulf - wf - lf = 0;
 //g1(Nxpi,Nxpi)=1; 
 //Pie(Nxpi,1)=1;
 
+
 //--------------------------------------------
 //(35)	Define Xq
 //--------------------------------------------
 //g0(Nxq,Nq)=1; 
 //g1(Nxq,Nxq)=1; 
 //Pie(Nxq,2)=1;
+
 
 //--------------------------------------------
 //(36)	Define Xrk
@@ -1602,12 +1526,14 @@ Tlf - taulf - wf - lf = 0;
 //g1(Nxrk,Nxrk)=1; 
 //Pie(Nxrk,3)=1;
 
+
 //--------------------------------------------
 //(37)	Define XI
 //--------------------------------------------
 //g0(Nxi,Ni)=1; 
 //g1(Nxi,Nxi)=1; 
 //Pie(Nxi,4)=1;
+
 
 //--------------------------------------------
 //(38)	Define Xtauk
@@ -1616,12 +1542,14 @@ Tlf - taulf - wf - lf = 0;
 //g1(Nxtauk,Nxtauk)=1; 
 //Pie(Nxtauk,5)=1;
 
+
 //--------------------------------------------
 //(39)	Define Xw
 //--------------------------------------------
 //g0(Nxw,Nw)=1; 
 //g1(Nxw,Nxw)=1; 
 //Pie(Nxw,6)=1;
+
 
 //--------------------------------------------
 //(40)	Define Xlambda
@@ -1630,6 +1558,7 @@ Tlf - taulf - wf - lf = 0;
 //g1(Nxlambda,Nxlambda)=1; 
 //Pie(Nxlambda,7)=1;
 
+
 //--------------------------------------------
 //(41)	Define XPb
 //--------------------------------------------
@@ -1637,12 +1566,14 @@ Tlf - taulf - wf - lf = 0;
 //g1(NxPb,NxPb)=1; 
 //Pie(NxPb,8)=1;
 
+
 //--------------------------------------------
 //(42)	Define XrL
 //--------------------------------------------
 //g0(NxrL,NrL)=1; 
 //g1(NxrL,NxrL)=1; 
 //Pie(NxrL,9)=1;
+
 
 //--------------------------------------------
 //(43)	C Obs
@@ -1653,6 +1584,7 @@ Tlf - taulf - wf - lf = 0;
 //g0(Ncobs,Nua) = -100;
 
 cobsf - 100*cf -100*ua = -100*cf(-1);
+
 
 //--------------------------------------------
 //(44)	I Obs
@@ -1665,6 +1597,7 @@ cobsf - 100*cf -100*ua = -100*cf(-1);
 
 iobsf - 100*if -100*ua = -100*if(-1);
 
+
 //--------------------------------------------
 //(45)	gc Obs
 //--------------------------------------------
@@ -1674,6 +1607,7 @@ iobsf - 100*if -100*ua = -100*if(-1);
 //g0(Ngcobs,Nua) = -100;
 
 gcobsf - 100*gcf -100*ua = -100*gcf(-1);
+
 
 //--------------------------------------------
 //(46)	w Obs
@@ -1685,6 +1619,7 @@ gcobsf - 100*gcf -100*ua = -100*gcf(-1);
 
 wobsf - 100*wf -100*ua = -100*wf(-1);
 
+
 //--------------------------------------------
 //(47)	b Obs
 //--------------------------------------------
@@ -1695,6 +1630,7 @@ wobsf - 100*wf -100*ua = -100*wf(-1);
 
 bobsf - 100*bf -100*ua = -100*bf(-1);
 
+
 //--------------------------------------------
 //(48)	R Obs
 //--------------------------------------------
@@ -1702,6 +1638,7 @@ bobsf - 100*bf -100*ua = -100*bf(-1);
 //g0(NRobs,NR) = -100;
 
 //Robsf - 100*Rf = 0;
+
 
 //--------------------------------------------
 //(49)	Pi Obs
@@ -1711,6 +1648,7 @@ bobsf - 100*bf -100*ua = -100*bf(-1);
 
 //Piobsf -100*pif =0;
 
+
 //--------------------------------------------
 //(50)	L Obs
 //--------------------------------------------
@@ -1718,6 +1656,8 @@ bobsf - 100*bf -100*ua = -100*bf(-1);
 //g0(NLobs,Nl) = -100;
 
 Lobsf -100*lf = 0;
+
+
 //--------------------------------------------
 //(51)	gc Spending Shock
 //--------------------------------------------
@@ -1823,18 +1763,12 @@ um = rhoem*um(-1) + 0.25*eum;
 
 //Nup = rhop*Nup(-1) + eps_up;
 
-
-
-
-
-
 end;
 
 %check;
 %steady;
 
-
-
+//Shocks
 shocks;
 
     //      var eugc = siggc^2 ;       //1 gc shock 
@@ -1846,10 +1780,10 @@ shocks;
           var  euw = sigw^2;       //7 wage markup shock
           var  eup = sigp^2;       //8 price markup shock
 
-
 //          var  eum = 0.25^2;       //5 monetary policy shock
-
 end;
+
+//Simulation
 stoch_simul (AR=100,IRF=0, noprint,nograph);
 //stoch_simul(irf = 40, nograph) ;
 //stoch_simul(irf = 40) y pi R l;
