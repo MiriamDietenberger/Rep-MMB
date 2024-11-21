@@ -203,9 +203,9 @@ rhogc =  0.984047962915516;	// No. 19: serial correlation on gov. consumption sh
 rhotk = 0; 			// serial correlation on capital tax shock
 rhotl = 0;			// serial correlation on labor tax shock
 rhotc = 0;			// serial correlation on consumption tax shock
-
-rhoz = 0.98; 			// serial correlation on savers transfers shock
+// serial correlation on savers transfers shock
 //if RegimeM_I == 1
+rhoz = 0.98; 		
 /*
 else
     param_index = param_index + 1;
