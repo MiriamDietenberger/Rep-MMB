@@ -1,20 +1,31 @@
+% US_LTW17nu
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //**************************************************************************
 // A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
 //
 // Clearing Up the Fiscal Multiplier Morass, American Economic Review 2017, 107(8): 2409–2454
 // Eric M. Leeper, Nora Traum, and Todd B. Walker
 //
-					  
-//**************************************************************************
-
-// Model: USLTW17nu
-
 //Edited by: Balint Tatar 
-
-// The version of model with no government spending in utility function and lower habits (alphag=0 and thet=0.8)
+//
+// The version of model with no government spending in utility function and lower habits (alphag=0 and thet=0.8)				  
+//**************************************************************************
 
 //Ncs Ncn NR Ni Nk Nv Nl Ny Ngc Nc Nq Nrk Nw Npi Nb Nsb Ntauk Ntaul Ntauc Nr Nz Nmc Nkbar Nlambda NPb Ncstar Nugc Nuz Nua Nub Num Nui Nuw Nup;
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var  
             // Endogenous Variables:
             cs        // 1 consumption: Savers
@@ -81,8 +92,6 @@ var
 
 
 //Flexprice Economy
-
-            // Endogenous Variables:
             csf        // 1 consumption: Savers
             cnf        // 2 consumption: Non-Savers
             //Rf         // 3 nominal interest rate
@@ -126,10 +135,7 @@ var
             //Piobsf     //40 inflation
             Lobsf;      //41 hours worked
 
-
-
-
-
+//Define exogenous variables
 varexo 
            eugc       //1 gc shock 
             euz        //2 z shock
@@ -140,18 +146,13 @@ varexo
             euw        //7 price markup shock
             eup;        //8 monetary policy shock
 
-
-
-
+//Define parameters
 parameters 
-
-
 AD bet delt alph etaw etap gamm100 xi muHH omegaw omegap gpsi s chiw chip phipi phiy gammgc gammtk gammtl gammz 
 rhoa rhob rhor rhoi rhow rhop rhogc rhotk rhotl rhotc rhoz siga sigb sigm sigi sigw sigp siggc sigz thet alphag rhoem rhoeg rhoez Lbar Pibar 
 lamprice lamwage 
 
 //steady state parameters
-
 sbss taulss taukss taucss Rhoss gammss expgss Rss Rbarss Pbss Rkss psi1ss mcss wss KLss OmegLss YLss ILss CLss rkss ZLss ZnLss CnLss CsLss CstarLss lss csss cnss yss kss Omegss css invss 
 zss bss gcss kyss cyss lyss TKss TLss TCss Sss
 
@@ -160,8 +161,9 @@ sgcss
 lampricef lamwagef;
 
 
-
-
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 // Calibrated parameters
 AD = 20;                // average duration of government debt
 bet = 0.99;           	// discount factor
@@ -174,8 +176,6 @@ sbss = 1.47;              // steady state government debt to model Y ratio
 taulss = 0.186;           // steady state labor tax rate
 taukss = 0.218;           // steady state capital tax rate
 taucss = 0.023;           // steady state consumption tax rate
-
-
 
 // Estimated parameter No. 01: steady state growth rate of technology, multiplied by 100 
 gamm100 = 0.242968973360760;
@@ -317,12 +317,11 @@ Pibar = 0.643991271663901;
 lamprice = ((1+bet*chip)*omegap)/((1-bet*omegap)*(1-omegap));
 lamwage = (omegaw*(1+bet)*(1+xi*(1+(1/etaw))))/((1-omegaw*bet)*(1-omegaw));
 
-
 lampricef=0;
 lamwagef=0;
 
 
-//// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // Computation of the steady state
 // -------------------------------------------------------------------------
 Rhoss = (1 - (1/AD))*(1/bet);
@@ -367,12 +366,10 @@ Sss = taukss*rkss*kss + taulss*lss*wss + taucss*css - gcss - zss;
 //ss = [Rss gc c y inv TK TL TC z bet expg Rho rhogc];
 
 
-
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model (linear);
-
-
-
 
 //--------------------------------------------
 //(1)	Production Function
@@ -1823,19 +1820,14 @@ um = rhoem*um(-1) + 0.25*eum;
 //Nup = rhop*Nup(-1) + eps_up;
 
 
-
-
-
-
 end;
 
 %check;
 %steady;
 
 
-
+//Shocks
 shocks;
-
 //          var eugc = siggc^2 ;       //1 gc shock 
           var  euz = sigz^2;       //2 z shock
           var  eua = siga^2;       //3 technology shock
@@ -1845,10 +1837,10 @@ shocks;
           var  euw = sigw^2;       //7 wage markup shock
           var  eup = sigp^2;       //8 price markup shock
 
-
           var  eum = 0.25^2;       //5 monetary policy shock
-
 end;
+
+//Simulation
 stoch_simul (AR=100,IRF=0, noprint,nograph);
 //stoch_simul(irf = 40, nograph) ;
 //stoch_simul(irf = 40) y pi R l;
