@@ -1,18 +1,35 @@
-// Endogenous variables 
+% US_KK14
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables 
 var  MUL,  MRS,  chi,   w,  q, y, inf_p, mc, u,Rb
     I, c, lp,  rk, R,  k, inf_w, tax,  b, tau_w, tau_k, 
      cg,  eps_i, eps_z, eps_q,tr GDP, tax_rev_tauw, tax_rev_tauk;
-   
+
+//Define exogenous variables
 varexo e_i, e_z, e_q, eps_m, eps_cg, eps_tr, eps_tauk, eps_tauw; 
 
-//PARAMETERS 
+//Define parameters
 parameters nbeta, nalpha, sigma_l, sigma_c, theta_w, theta_p, gamma_w, gamma_p, delta, nu, sigma_u, h,
             rho_R, rho_pi, rho_y, rho_w, rho_k, rho_cg,  rho_eps_i, rho_eps_z,rho_eps_q, rho_tr, 
             cgy, tau_k_SS, tau_w_SS, l_SS, R_SS, tr_o_y, rho_P, rho_L,
             etaWk, etaWb, etaWy, etaWc, etaWh,  etaWw, etaWI, etaWpi,etaWR,
             etaKk, etaKb, etaKy, etaKc, etaKh,  etaKw, etaKI, etaKpi,etaKR;
-            
- 
+
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%---------------------------------------------------------------- 
 tau_k_SS=0.1929;   // average trend of our data to our data 
 tau_w_SS=0.2088;   // average trend of our data to our data 
 R_SS=1.013;       // average trend of our data 
@@ -26,7 +43,6 @@ cg_SS2=0;
 
           
 // other Deep Model Parameter
- 
 sigma_c=2; 
 h=0.5;      
 sigma_l=4; 
@@ -34,12 +50,10 @@ sigma_u=2;
 nu=4;   
 
 // Calvo Pricing and Wages
-
 gamma_p=0.65;
 theta_p=6;
 gamma_w=0.65;
 theta_w=11;
-
 
 // Parameter Taylor Rule
 rho_R=0.8;   
@@ -56,7 +70,6 @@ rho_L=0;
 rho_P=0;
 
 // Fiscal feedback Rules
-
 rho_w=0.91; 
 etaWk=0; 
 etaWb=0.2; 
@@ -68,7 +81,6 @@ etaWI=0;
 etaWpi=0; 
 etaWR=0; 
 
-
 rho_k=0.95;    
 etaKk=0;  
 etaKb=0.2;  
@@ -79,7 +91,11 @@ etaKw=0;
 etaKI=0; 
 etaKpi=0; 
 etaKR=0; 
-   
+
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear); 
 #inf_p_SS=R_SS*nbeta;
 #mc_SS=(theta_p-1)/theta_p;
@@ -163,9 +179,9 @@ tau_w_SS*w_SS*lp_SS*tax_rev_tauw=tau_w_SS*w_SS*lp_SS*(tau_w+w+lp);
 
 tau_k_SS*rk_SS*k_SS*tax_rev_tauk=tau_k_SS*rk_SS*k_SS*(tau_k+rk+u+k(-1))+tau_k_SS*(y_SS*y-rk_SS*k_SS*(rk+u+k(-1))-w_SS*lp_SS*(w+lp));
 
-
 end; 
- 
+
+//Shocks
 shocks; 
 var e_i; stderr  2.614/100;
 var e_z; stderr 0.684/100;
@@ -177,13 +193,11 @@ var eps_tauk; stderr 0.03175;
 var eps_tauw; stderr 0.0152;
 end; 
 
-
-
 steady;
 check;
 
+//Simulation
 stoch_simul (AR=100,IRF=0, noprint,nograph);
-
 %stoch_simul( irf=300,order = 1, nograph,nomoments, noprint)lp, I, c, y, w, k, tax,Rb, R, b, tau_w, tau_k, tax_rev_tauw, tax_rev_tauk, cg, GDP;
 %
 %clc;
