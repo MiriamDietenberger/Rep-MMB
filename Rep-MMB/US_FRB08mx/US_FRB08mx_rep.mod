@@ -1,3 +1,13 @@
+% US_FRB08mx
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //**************************************************************************
 // A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
 //
@@ -5,16 +15,17 @@
 // Maik Wolters
 //
 // Working Paper, 2009
-//**************************************************************************
-
-// Model: US_FRB08mx
-
 // Last edited: 09/07/23 by M. Wolters with M. Burgert
-
+//
 //This model file contains the linearized Version of the FRB-US Model. 
 //The model equations and parameters are of February 2008 and kindly provided by Thomas Laubach.
+//**************************************************************************
 
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var xgap2 lur picnia picxfe pigdp drffe ec eco qec ecd qecd echsh ech eh qeh 
     ecnia kcd kh epdc qepdc epdo qepdo epd eps qeps ki kpdc kpdo kps hks ks 
     rpd rtpdc rtpdo rtps tapdda vpdc vpdo vps ex emo ceng emp em fcbnr fnicnr 
@@ -54,8 +65,7 @@ var xgap2 lur picnia picxfe pigdp drffe ec eco qec ecd qecd echsh ech eh qeh
     vpdol2 vpdol3 vpdol4 vpsl1 vpsl2 vpsl3 vpsl4 qynidl1 qynidl2 qynidl3 
     qynidl4 lurl2 lurl3 lurnal2 lurnal3;
 
-
-
+//Define exogenous variables
 varexo 
 ceng_ 
 dlpl_ 
@@ -116,7 +126,7 @@ ynidnr_
 yniish_
 egfi_ egfl_;
 
-
+//Define parameters
 parameters 
 
            fsector datet taxon qsector gsector dglprd rstar1  trfpt1  trfpt2  
@@ -286,7 +296,9 @@ parameters
            ptra8 ptra9 ptra10 ptra11 ptra12 ptra13 ptra14 rrtra1;
 
 
-
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 fsector =  1;
 datet   =  0; // datet=1: Model-Consistent solution based on time t expectations;
               // datet=0: Same timing as in VAR expectations
@@ -2099,14 +2111,13 @@ ptra14 =     0.01932690073569770;
 rrtra1 =     0.97000000000000000;
 
 
- 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
 
 
-
 // Original Model Code:
-
-
 rfftay =  (1-tayr1)*(rstar+.25*(picxfe+picxfe(-1)+picxfl1(-1)+picxfl2(-1)))+ tayr1*rffe(-1) + tayp0*(picxfe    ) + tayp1*(picxfe(-1) ) + tayp2*(picxfl1(-1) ) + tayp3*(picxfl2(-1) ) + tayx0*xgap2+ tayx1*xgap2(-1);
 
 xgap2   = 100*(xgdp - xgdpt);
@@ -2552,6 +2563,7 @@ lurnal2   =lurnal1(-1);
 lurnal3   =lurnal2(-1);
 end;
 
+//Shocks
 shocks;
 var ceng_ ; stderr 0.01;
 var dlpl_ ; stderr 0.01;
@@ -2592,4 +2604,7 @@ end;
 
 %M_.Sigma_e = Sigma_e_;
 %options_.Schur_vec_tol = 1e-6;
+
+
+//Simulation
 stoch_simul (AR=100,IRF=0, noprint,nograph);
