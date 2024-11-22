@@ -1,19 +1,36 @@
+% US_FU19
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+//**************************************************************************
 % Chiara Fratto
 % Catanzaro, May 20, 2015
-%-------------------------------------------
-% 0. Housekeeping
-%-------------------------------------------
+//**************************************************************************
+
 close all
-%-------------------------------------------
-% 1. Defining Variables
-%-------------------------------------------
+
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var mc w r_k pi c R L k u k_bar i Q y 
     w_flex r_k_flex c_flex R_flex L_flex k_flex u_flex 
     k_bar_flex i_flex y_flex Q_flex
     Z lambda_p lambda_w b2 mu g ms
     dy dc dinve dw pinfobs robs labobs;
+
+//Define exogenous variables
 varexo eZ ep ew eb2 emu 
     eg ems ;
+
+//Define parameters
 parameters h gamma sigma_c wLc beta beta_bar inv_adj_cost r_kSS delta 
     invest_ratioSS 
     Phi alpha zeta_p iota_p lambda_pSS 
@@ -24,17 +41,17 @@ parameters h gamma sigma_c wLc beta beta_bar inv_adj_cost r_kSS delta
     rhoZ rhob2 rhog rhogZ rhomu rhop thetap rhow thetaw rhoms czcap
     curvp curvw invest_to_capitalbarSS;
 
-%-------------------------------------------
-% 2. Parameters
-%-------------------------------------------
-%--------------------- fixed parameters -------------------------%
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+// fixed parameters
 delta =         .025;
 lambda_wSS =    0.5;
 gSS =           0.18;
 curvp =         10;
 curvw =         10;
 
-%-------------- estimated parameters initialization -----------%
+// Estimated parameters (Initialization) 
 alpha =         .27;
 gamma =         1.0048;
 constebeta =    0.25;
@@ -68,7 +85,7 @@ thetaw  =       0.57;
 
 const_L =           1.04;
 
-%------------------- derived parameters -------------------------%
+// Derived parameters
 beta =              1/(1+constebeta/100);
 beta_bar =          beta*gamma^(-sigma_c);
 ctrend =            (gamma-1)*100;
@@ -88,11 +105,12 @@ const_R =           (cr-1)*100;
 const_pi =          (cpie-1)*100;
 
 
-%-------------------------------------------
+%----------------------------------------------------------------
 % 3. Model
-%-------------------------------------------
+%----------------------------------------------------------------
 model(linear);
-%------------------ stiky prices and wages ---------------------%
+
+//Stiky prices and wages
 c =         (h/gamma)/(1+h/gamma)*c(-1) + (1/(1+h/gamma))*c(+1) +((sigma_c-1)*wLc/(sigma_c*(1+h/gamma)))*(L-L(+1)) - (1-h/gamma)/(sigma_c*(1+h/gamma))*(R-pi(+1) ) +b2 ;
 i =         (1/(1+beta_bar*gamma))* (i(-1) + beta_bar*gamma*i(1)+(1/(gamma^2*inv_adj_cost))*Q ) +mu ;
 Q =         1/((1 - h/gamma)/(sigma_c*(1 + h/gamma)))*b2 -( R - pi(+1))+r_kSS/(r_kSS + 1 - delta)*r_k(+1) + (1 - delta)/(r_kSS + 1 - delta)*Q(+1);
@@ -111,8 +129,7 @@ w =         (1/(1 + beta_bar*gamma))*(w(-1) + beta_bar*gamma*w(+1) +
 R =         rhoR*R(-1) + (1-rhoR)*(psi1*pi + psi2*(y - y_flex)) + psi3*(y - y(-1) - (y_flex -y_flex(-1)))+ms;
 y =         consumpt_ratioSS*c + invest_ratioSS*i + g + r_kSS*capital_ratioSS*u ;
 
-
-%-------------------------- flex economy ------------------------%
+// Flex economy
 c_flex =    (h/gamma)/(1+h/gamma)*c_flex(-1) + (1/(1+h/gamma))*c_flex(+1) +((sigma_c-1)*wLc/(sigma_c*(1+h/gamma)))*(L_flex-L_flex(+1)) - (1-h/gamma)/(sigma_c*(1+h/gamma))*(R_flex ) +b2 ;
 i_flex =    1/(1 + beta_bar*gamma)*(i_flex(-1) + beta_bar*gamma*i_flex(+1)+1/(gamma^2*inv_adj_cost)*(Q_flex ))+ mu;
 Q_flex =    1/((1 - h/gamma)/(sigma_c*(1 + h/gamma)))*b2 -( R_flex )+r_kSS/(r_kSS + 1 - delta)*r_k_flex(+1) + (1 - delta)/(r_kSS + 1 - delta)*Q_flex(+1);
@@ -126,8 +143,7 @@ k_flex =    w_flex - r_k_flex + L_flex;
 w_flex =    1/(1 - h/gamma)*c_flex - h/gamma/(1 - h/gamma)*c_flex(-1)+ nu_L*L_flex;
 y_flex =    consumpt_ratioSS*c_flex + invest_ratioSS*i_flex + g + r_kSS*capital_ratioSS*u_flex ;
 
-
-%------------------ exogenous processes -------------------------%
+// Exogenous processes
 Z =         rhoZ*Z(-1) + eZ;
 b2 =        rhob2*b2(-1)+eb2;
 g =         rhog*g(-1) + eg + rhogZ*eZ;
@@ -136,7 +152,7 @@ lambda_p =  rhop*lambda_p(-1)+ ep - thetap*ep(-1);
 lambda_w =  rhow*lambda_w(-1)+ ew - thetaw*ew(-1);
 ms =        rhoms*ms(-1) + ems;
 
-%------------------ measurement equations -----------------------%
+// Measurement equations
 dy =        y-y(-1);%+ctrend;
 dc =        c-c(-1);%+ctrend;
 dinve =     i-i(-1);%+ctrend;
@@ -145,10 +161,9 @@ pinfobs =   pi;% + const_pi;
 robs =      R;% + const_R;
 labobs =    L;% + const_L;
 end; 
-%-------------------------------------------
-% 4. Computation
-%-------------------------------------------
 
+
+//Shocks
 shocks;
 var eZ;
 stderr 0.35;
@@ -165,7 +180,6 @@ stderr 0.08;
 var ew;
 stderr 0.29;
 end;
-
 
 
 estimated_params;
@@ -215,8 +229,9 @@ end;
 
 %estimation(optim=('MaxIter',200),datafile=usmodel_data2015,mode_compute=0, mode_file=usmodel1984_2007_mh_mode  ,first_obs=1,  presample=4,lik_init=2,prefilter=0,mh_replic=0,mh_nblocks=2,mh_jscale=0.20,mh_drop=0.2);
 
-%stoch_simul(irf=20,nomoments, nograph) pinfobs dy robs dc dinve labobs dw;
 
+//Simulation
+%stoch_simul(irf=20,nomoments, nograph) pinfobs dy robs dc dinve labobs dw;
 stoch_simul (AR=100,IRF=0, noprint,nograph);
 %shock_decomposition pinfobs dy robs dc dinve labobs dw;
 
