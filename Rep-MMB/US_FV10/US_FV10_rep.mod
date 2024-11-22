@@ -1,23 +1,38 @@
-/*
- * This file implements the Baseline New Keynesian DSGE model described in 
- * much detail in Jes�s Fern�ndez-Villaverde and Juan F. Rubio-Ram�rez (2006): "A Baseline DSGE 
- * Model", available at http://economics.sas.upenn.edu/~jesusfv/benchmark_DSGE.pdf
- *
- * The parametrization is based on the estimated version of this model in 
- * Jes�s Fern�ndez-Villaverde (2010): "The econometrics of DSGE models", 
- * SERIEs, Vol. 1, pp. 3-49, DOI 10.1007/s13209-009-0014-7
- *
- * This implementation was written by Benjamin Born and Johannes Pfeifer. 
- * This file is part of Dynare.
+% US_FV10
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
- * Please note that the following copyright notice only applies to this Dynare 
- * implementation of the model.
- * Copyright (C) 2013-2016 Dynare Team
+//**************************************************************************
+// This file implements the Baseline New Keynesian DSGE model described in 
+// much detail in Jes�s Fern�ndez-Villaverde and Juan F. Rubio-Ram�rez (2006): "A Baseline DSGE 
+// Model", available at http://economics.sas.upenn.edu/~jesusfv/benchmark_DSGE.pdf
+//
+// The parametrization is based on the estimated version of this model in 
+// Jes�s Fern�ndez-Villaverde (2010): "The econometrics of DSGE models", 
+// SERIEs, Vol. 1, pp. 3-49, DOI 10.1007/s13209-009-0014-7
+// 
+// This implementation was written by Benjamin Born and Johannes Pfeifer. 
+// This file is part of Dynare.
+//
+// Please note that the following copyright notice only applies to this Dynare 
+// implementation of the model.
+// Copyright (C) 2013-2016 Dynare Team
+//
+// The implementation by Born and Pfeifer was slightly modified, by including the shock standard errors
+// directly into equations (15) and (24)-(27), instead of specifying them in the shock - block. 
+//**************************************************************************
 
- * The implementation by Born and Pfeifer was slightly modified, by including the shock standard errors
- * directly into equations (15) and (24)-(27), instead of specifying them in the shock - block. 
-*/
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var d       //preference shock
     c       //consumption
     mu_z 	//trend growth rate of the economy (from neutral and investment specific technology)
@@ -48,11 +63,13 @@ var d       //preference shock
     F       //firm profits
     yg      // output growth
 ;     
-    
+
+// Define exogenous variables
 varexo epsd epsphi epsmu_I epsA epsm;
 
 predetermined_variables k;
 
+//Define parameters
 parameters h            //consumption habits
            betta        //discount factor
            gammma1      //capital utilization, linear term
@@ -86,6 +103,10 @@ parameters h            //consumption habits
            sigma_A      //standard deviation neutral technology
            sigma_m;      //standard deviation preference shock
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 //Fixed parameters, taken from FV(2010), Table 2, p. 37
 delta       = 0.025;  
 epsilon     = 10;   
@@ -134,6 +155,10 @@ The following model equations are the stationary model equations, taken from
 FV(2006), p. 20, section 3.2.
 */
 
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model; 
 //1. FOC consumption
 d*(c-h*c(-1)*mu_z^(-1))^(-1)-h*betta*d(+1)*(c(+1)*mu_z(+1)-h*c)^(-1)=lambda;
@@ -193,6 +218,7 @@ yg = (yd/yd(-1)*mu_z)/exp(LambdaYd);
 
 end;
 
+//Shocks
 shocks;
 var epsd;       stderr 1;
 var epsphi;     stderr 1;
@@ -203,5 +229,7 @@ end;
 
 steady;
 check;
+
+//Simulation
 %stoch_simul(order=1,irf=21, nograph, noprint) yd yg c R PI;
 stoch_simul (AR=100,IRF=0, noprint,nograph);
