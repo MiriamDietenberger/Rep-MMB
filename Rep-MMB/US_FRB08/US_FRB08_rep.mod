@@ -9,12 +9,6 @@
 % (at your option) any later version.
 
 //**************************************************************************
-// A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
-//
-// Volker Wieland, Tobias Cwik, Gernot J. Mueller, Sebastian Schmidt and 
-// Maik Wolters
-//
-// Working Paper, 2009
 // Last edited: 09/07/23 by M. Wolters with M. Burgert
 //
 //This model file contains the linearized Version of the FRB-US Model. 
