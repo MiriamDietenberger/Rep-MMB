@@ -1,8 +1,25 @@
+% US_HL16
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+//**************************************************************************
 // FROM WORKING VERSION: HLaEst2015BEP.mod
 // PAPER 1 2015 10 AUGUST: RE-ESTIMATION with updated sample
 // SAVER HOUSEHOLD FLOW OF FUNDS CONSTRAINT; entrep flow of funds constraint
 // Note: SAMPLE PERIOD 1982:01 - 2015:01 USED.
+//**************************************************************************
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var c_b i_d pi i_h psi_b q_psi div lambda l_h w nu_h h_s h_b
     d c_s psi_s
     x
@@ -12,8 +29,10 @@ var c_b i_d pi i_h psi_b q_psi div lambda l_h w nu_h h_s h_b
     xi_z xi_d xi_i varepsilon_e varepsilon_h  xi_psi xi_p 
     pi_obs q_psi_obs   y_obs  l_h_obs l_e_obs d_obs i_d_obs i_h_obs i_e_obs;  // div_e
 
+//Define exogenous variables
 varexo epsilon_p epsilon_z epsilon_i epsilon_d epsilon_h epsilon_e epsilon_nu_h epsilon_nu_e epsilon_psi; // 
 
+//Define parameters
 parameters beta_b phi R_d R_h R_psi Nu_h phi_w eta gamma gamma_b
            beta_s
            theta_R varepsilon_p gamma_p
@@ -26,6 +45,10 @@ parameters beta_b phi R_d R_h R_psi Nu_h phi_w eta gamma gamma_b
            rho_z rho_d rho_i rho_e rho_h rho_nuh rho_nue rho_psi rho_p 
            i_h_ss i_e_ss i_d_ss pi_ss; //  //  K_eY  PsiY //  theta_w varepsilon_w gamma_w
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 //Calibrated Parameters
 
 //households
@@ -112,6 +135,7 @@ i_h_ss = 0.078998;         // steady state interest rate level
 i_e_ss = 0.08487;
 i_d_ss = 0.04558;         // fed funds i_ss replaces i_d_ss 0.0596 in this setup
 
+
 % *****************************************************************
 % LOADING MEDIAN OF POSTERIOR
 % *****************************************************************
@@ -160,7 +184,9 @@ std_psi	=	coeffs_std(8);
 std_p	=	coeffs_std(9);
 
 
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
 
 #gamma_psib = PsiY/CY;   //  1.25 calculated from PsiY and CY
@@ -310,6 +336,7 @@ end;
 steady;
 check;
 
+//Shocks
 shocks;
 var epsilon_z =  std_z^2;
 var epsilon_i =  std_i^2;
@@ -323,6 +350,6 @@ var epsilon_p =  std_p^2;
 
 end;
 
-       
+//Simulation
 %stoch_simul(order=1, irf=15 , nograph);
 stoch_simul (AR=100,IRF=0, noprint,nograph);
