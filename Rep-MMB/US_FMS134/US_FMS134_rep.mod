@@ -259,6 +259,13 @@ end;
 //rhog=0.999999;
 
 //Simulation
-%stoch_simul(irf=20, noprint, nograph) y c g x; 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-// multy = y_zetag(20)/g_zetag(20)/gsy
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul(irf=20, noprint, nograph) y c g x; 
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//multy = y_zetag(20)/g_zetag(20)/gsy
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
+
