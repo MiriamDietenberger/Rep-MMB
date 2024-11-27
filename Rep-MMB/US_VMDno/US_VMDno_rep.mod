@@ -9,19 +9,12 @@
 % (at your option) any later version.
 
 //**************************************************************************
-// A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
-//
-// Volker Wieland, Tobias Cwik, Gernot J. Mueller, Sebastian Schmidt and
-// Maik Wolters
-//
-// Working Paper, 2009
-
 // Model: US_VMDno ("normal times")
-
+//
 // Further references:
 //      Verona, Martins and Drumond, "(Un)anticipated monetary policy in a DSGE model with a shadow banking system",
 //      International Journal of Central Banking, forthcoming
-
+//
 // implemented by Fabio Verona (in September 2012), email: fabio.verona@bof.fi
 // Last edited: 12/10/22 by M. Burgert
 //**************************************************************************
@@ -69,9 +62,6 @@ std1_xpU=0.25;
 alpha3=0;
 alpha4=30000;
 
-
-
-
 pp=load('FIMSteadyStateMMB');
 %for i=1:M_.param_nbr;
    % name = deblank(M_.param_names(i,:));
@@ -88,14 +78,10 @@ set_param_value(M_.param_names{jj},eval(M_.param_names{jj}));
 end;
 
 
-
 %----------------------------------------------------------------
 % 3. Model
 %----------------------------------------------------------------
 model;
-
-
-
 
 -nBU + gammaBUU/piU*kbarBU(-1)*qU(-1)*(RkBXU-RcouponXU(-1)) + gammaBUU/piU*(1+RcouponXU(-1))*nBU(-1) + weBUU;
 (1+betaUU*RcouponXU)*qU - betaUU*piU(+1)*(  uBU(+1)*rkSU(+1)*( (uSU(+1)*kbarSU/(uBU(+1)*kbarBU))^(1-rhoEIS)) - rkBUU*(exp(sigmaaBUU*(uBU-1))-1)/sigmaaBUU + (1-deltaUU)*qU(+1));
@@ -269,7 +255,6 @@ lambdanflexU=lambdanUU;
 PextSflexU=PextSUU;
 
 
-
 end;
 
 //Shocks
@@ -282,7 +267,11 @@ end;
 //steady(solve_algo=4);
 
 //Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 //stoch_simul(order=1,irf=20) YU cU iU hU ReXU piU nSU btotAU RkXU;
-
 //stoch_simul(order=1,irf=40) YU cU iU YflexU cflexU iflexU ReXU piU piflexU;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
