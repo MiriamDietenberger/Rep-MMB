@@ -20,7 +20,6 @@
 // The model with financial frictions
 // Flexible counterpart of the model (necessary to produce the output gap) has been added 
 //**********************************************************************
-close all;
 
 
 %----------------------------------------------------------------
@@ -525,7 +524,13 @@ resid(1);
 %steady;
 check;
 
-
 //Simulation
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order=1,irf=25, nograph) ln_yd ln_c ln_i ln_pi ln_y ln_n ln_v ln_r;
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul(order=1,irf=25, nograph) ln_yd ln_c ln_i ln_pi ln_y ln_n ln_v ln_r;
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
+
