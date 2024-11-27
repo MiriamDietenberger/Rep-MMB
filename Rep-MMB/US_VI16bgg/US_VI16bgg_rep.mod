@@ -25,7 +25,7 @@ var        y  c  i  w  l  pi r rn zk  u  k  q  rk   ext_pr   n             % Var
            yf cf if wf lf    rf   zkf uf kf qf rkf  ext_prf  nf            % Variables under flexible prices (13)
            a g eps_x eps_r eps_p eps_w eps_k;                              % Shocks (7)
       
- //Define exogenous variables
+//Define exogenous variables
 varexo     e_a e_g e_x e_r e_p e_w e_k;                                    % (7) 
 
 //Define parameters
@@ -210,7 +210,11 @@ var e_p; stderr 1.0;       %0.12;
 var e_w; stderr 1.0;       %0.29;
 end;
  
-
 //Simulation
-%stoch_simul(irf=21, nograph ) y i pi n ext_pr  ;                           % All shocks without a chart 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul(irf=21, nograph ) y i pi n ext_pr; % All shocks without a chart 
+//stoch_simul(AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
