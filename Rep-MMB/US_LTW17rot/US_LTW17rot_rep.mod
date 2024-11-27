@@ -9,8 +9,6 @@
 % (at your option) any later version.
 
 //**************************************************************************
-// A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
-//
 // Clearing Up the Fiscal Multiplier Morass, American Economic Review 2017, 107(8): 2409–2454
 // Eric M. Leeper, Nora Traum, and Todd B. Walker
 //
@@ -176,80 +174,31 @@ taulss = 0.186;           // steady state labor tax rate
 taukss = 0.218;           // steady state capital tax rate
 taucss = 0.023;           // steady state consumption tax rate
 
-// Estimated parameter No. 01: steady state growth rate of technology, multiplied by 100 
-gamm100 = 0.242968973360760;
-
-// Estimated parameter No. 02: inverse Frisch elasticity
-xi =  1.540098680199818;
-
-// fraction of non-savers in population
-muHH = 0.3;
-
-// Estimated parameter No. 03: prob. of unions not resetting price
-omegaw =  0.873633441786572;
-
-// Estimated parameter No. 04: prob. of firms not resetting price
-omegap =  0.889634877904653;
-
-// Estimated parameter No. 05: K utilization cost parameter
-gpsi =  0.126297919145076; 
-
-// Estimated parameter No. 06: s" in the investment adjustment cost function
-s =  5.213147230492578;
-
-// Estimated parameter No. 07: percentage of unions' wage adjustment when they cannot optimize
-chiw =  0.089393160044567;
-
-// Estimated parameter No. 08: percentage of intermediate firms' price adjustment when they cannot optimize
-chip =  0.060355303068460;
-
-// Estimated parameter No. 09: Taylor rule inflation coefficient
-phipi =  1.142492263502070;
-
-// Estimated parameter No. 10: Taylor rule output coefficient
-phiy =  0.178225311630840;
-
-// Estimated parameter No. 11: response of government consumption to debt
-gammgc =  0.214956274043740;
-
-//// response of capital tax to debt
-gammtk = 0;
-
-//// response of labor tax to debt
-gammtl = 0;
-
-// Estimated parameter No. 12: response of saver transfers to debt
-gammz =  -0.028247874637231;
-
-// Estimated parameter No. 13: serial correlation on technological productiviety growth
-rhoa =  0.251431768280169;
-
-// Estimated parameter No. 14: serial correlation on preference shock
-rhob =  0.314713788054350;
-
-// Estimated parameter No. 15: serial correlation on interest rate in Taylor rule
-rhor =  0.756483804459602;
-
-// Estimated parameter No. 16: serial correlation on investment preference shock
-rhoi =  0.511411853483883;
-
-// Estimated parameter No. 17: serial correlation on wage markup shock
-rhow =  0.326894727384245;
-
-// Estimated parameter No. 18: serial correlation on price markup shock
-rhop =  0.724249353191094;
-
-// Estimated parameter No. 19: serial correlation on gov. consumption shock
-rhogc =  0.984047962915516;
-
-//// serial correlation on capital tax shock
-rhotk = 0;
-
-//// serial correlation on labor tax shock
-rhotl = 0;
-
-//// serial correlation on consumption tax shock
-rhotc = 0;
+gamm100 = 0.242968973360760;            //No. 01: steady state growth rate of technology, multiplied by 100 
+xi =  1.540098680199818;            // No. 02: inverse Frisch elasticity
+muHH = 0.3;                        // fraction of non-savers in population
+omegaw =  0.873633441786572;            // No. 03: prob. of unions not resetting price
+omegap =  0.889634877904653;            //No. 04: prob. of firms not resetting price
+gpsi =  0.126297919145076;             // No. 05: K utilization cost parameter
+s =  5.213147230492578;                //No. 06: s" in the investment adjustment cost function
+chiw =  0.089393160044567;            //No. 07: percentage of unions' wage adjustment when they cannot optimize
+chip =  0.060355303068460;            //No. 08: percentage of intermediate firms' price adjustment when they cannot optimize
+phipi =  1.142492263502070;            //No. 09: Taylor rule inflation coefficient
+phiy =  0.178225311630840;            //No. 10: Taylor rule output coefficient
+gammgc =  0.214956274043740;            // No. 11: response of government consumption to debt
+gammtk = 0;            //// response of capital tax to debt
+gammtl = 0;            //// response of labor tax to debt
+gammz =  -0.028247874637231;            // No. 12: response of saver transfers to debt
+rhoa =  0.251431768280169;            // No. 13: serial correlation on technological productiviety growth
+rhob =  0.314713788054350;            //No. 14: serial correlation on preference shock
+rhor =  0.756483804459602;            // No. 15: serial correlation on interest rate in Taylor rule
+rhoi =  0.511411853483883;            // No. 16: serial correlation on investment preference shock
+rhow =  0.326894727384245;            // No. 17: serial correlation on wage markup shock
+rhop =  0.724249353191094;            // No. 18: serial correlation on price markup shock
+rhogc =  0.984047962915516;            // No. 19: serial correlation on gov. consumption shock
+rhotk = 0;            //// serial correlation on capital tax shock
+rhotl = 0;            //// serial correlation on labor tax shock
+rhotc = 0;            //// serial correlation on consumption tax shock
 
 // serial correlation on savers transfers shock
 //if RegimeM_I == 1
@@ -260,43 +209,19 @@ else
     rhoz = param(param_index);
 end
 */
-
-// Estimated parameter No. 20: technology shock standard deviation
-siga =  1.03292319884557;
-
-// Estimated parameter No. 21: preference shock standard deviation
-sigb =  42.6559249998644;
-
-// Estimated parameter No. 22: monetary policy shock standard deviation
-sigm =  0.231187433032408;
-
-// Estimated parameter No. 23: investment preference shock standard deviation
-sigi =  0.978941599253400;
-
-// Estimated parameter No. 24: wage markup shock standard deviation
-sigw =  0.250356962066959;
-
-// Estimated parameter No. 25: price markup shock standard deviation
-sigp =  0.0988174659346631;
-
-// Estimated parameter No. 26: gov. consumption shock standard deviation
-siggc =  1.83235871273796;
-
-// Estimated parameter No. 27: saver transfer shock standard deviation
-sigz =  2.68115974402062;
-
-// Estimated parameter No. 28: habit formation
-thet =  0.989468754445726;
-
-// Estimated parameter No. 29: substitutability (>0) or complementarity (< 0) of private and public consumption              
-alphag = -0.185909020087479;    
-
-// Estimated parameter No. 30: AR coefficients on policy shocks
-rhoem = 0.336277752958210;
+siga =  1.03292319884557;            // No. 20: technology shock standard deviation
+sigb =  42.6559249998644;            // No. 21: preference shock standard deviation
+sigm =  0.231187433032408;            // No. 22: monetary policy shock standard deviation
+sigi =  0.978941599253400;            //No. 23: investment preference shock standard deviation
+sigw =  0.250356962066959;            // No. 24: wage markup shock standard deviation
+sigp =  0.0988174659346631;            //No. 25: price markup shock standard deviation
+siggc =  1.83235871273796;            //No. 26: gov. consumption shock standard deviation
+sigz =  2.68115974402062;            // No. 27: saver transfer shock standard deviation
+thet =  0.989468754445726;            // No. 28: habit formation
+alphag = -0.185909020087479;            // No. 29: substitutability (>0) or complementarity (< 0) of private and public consumption              
+rhoem = 0.336277752958210;            // No. 30: AR coefficients on policy shocks
 //rhoem = 0;
-
-// Estimated parameter No. 31:   
-rhoeg = 0.126568144141410; 
+rhoeg = 0.126568144141410;             // No. 31:   
 
 //if RegimeM_I == 1
 rhoez = 0.8; 
@@ -319,9 +244,8 @@ lampricef=0;
 lamwagef=0;
 
 
-// -------------------------------------------------------------------------
+
 // Computation of the steady state
-// -------------------------------------------------------------------------
 Rhoss = (1 - (1/AD))*(1/bet);
 gammss = gamm100/100;
 expgss = exp(gammss);
@@ -368,7 +292,6 @@ Sss = taukss*rkss*kss + taulss*lss*wss + taucss*css - gcss - zss;
 % 3. Model
 %----------------------------------------------------------------
 model (linear);
-
 
 //--------------------------------------------
 //(1)	Production Function
@@ -423,8 +346,6 @@ lamprice*pi -lamprice*bet/(1+bet*chip)*pi(+1) - mc -lamprice*up = lamprice*chip/
 //lamprice*Npi - (lamprice*bet/(1+bet*chip))*Npi(+1) - Nmc - lamprice*Nup = (lamprice*chip/(1+bet*chip))*Npi(-1);
 
 
-
-
 //--------------------------------------------
 //(5)	Savers' Lagrange Multiplier
 //--------------------------------------------
@@ -472,7 +393,6 @@ cstar -csss/(csss + alphag*gcss)*cs -alphag*gcss/(csss + alphag*gcss)*gc=0;
 //Ncstar - (cs/(cs + alphag*gc))*Ncs - (alphag*gc/(cs + alphag*gc))*Ngc = 0;
 
 
-
 //--------------------------------------------
 //(9)	Euler Equation
 //--------------------------------------------
@@ -512,7 +432,6 @@ lambda - R + pi(+1) - lambda(+1) + rhoa*ua=0;
 q + R - pi(+1) -bet*exp(-gammss)*(1-delt)*q(+1) -bet*exp(-gammss)*Rkss*(1-taukss)*rk(+1) + taukss*exp(-gammss)*bet*Rkss*tauk(+1)=0;
 
 //Nq + NR - Npi(+1) - bet*exp(-gamm)*(1-delt)*Nq(+1) - bet*exp(-gamm)*Rk*(1-tauk)*Nrk(+1) + tauk*exp(-gamm)*bet*Rk*Ntauk(+1) = 0;
-
 
 
 //--------------------------------------------
@@ -558,11 +477,9 @@ kbar -(1 - (1-delt)*exp(-gammss))*((1+bet)*s*(exp(2*gammss)))*ui  -(1 - (1-delt)
 //Nkbar - (1 - (1-delt)*exp(-gamm))*((1+bet)*s*(exp(2*gamm)))*Nui - (1 - (1-delt)*exp(-gamm))*Ni + (1-delt)*exp(-gamm)*Nua = (1-delt)*exp(-gamm)*Nkbar(-1);
 
 
-
 //--------------------------------------------
 //(15)	Wage Equation!!
 //--------------------------------------------
-
 //g0(Nw,Nw) = 1 + lamwage;
 //g0(Nw,Nxw) = -lamwage*(bet/(1+bet));
 //g0(Nw,Npi) = (lamwage*(1 + bet*chiw)/(1 + bet));
@@ -1841,6 +1758,11 @@ shocks;
 end;
 
 //Simulation
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 //stoch_simul(irf = 40, nograph) ;
 //stoch_simul(irf = 40) y pi R l;
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
