@@ -112,5 +112,10 @@ var epsr=(0.0014*100)^2;      //monetary policy shock
 end;
 
 //Simulation
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(irf=20, nograph, noprint) output inflationq interest x;
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul(irf=20, nograph, noprint) output inflationq interest x;
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
