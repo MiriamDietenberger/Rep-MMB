@@ -19,7 +19,6 @@
 // Authors: Jeffrey C. Fuhrer and George R. Moore
 // Publication: American Economic Review, Vol. 85 (1), Mar. 1995, pp. 219-239.
 //
-//
 // This version of the Fuhrer Moore model is described in // Levin, Wieland and Williams (1998). 
 // "Robustness of Simple Monetary Policy Rules under Uncertainty" FEDS Working Paper, on pages 4-7 
 // and in Levin, Wieland and Williams (2001). "The Performance of Forecast-Based Monetary Policy 
@@ -119,7 +118,13 @@ var interest_, epsilon_y =  0		      ;
 var epsilon_y            =  3.63551004125000e-05;
 end;
 
-
 //Simulation
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul (irf = 17, noprint, nograph) inflationq interest outputgap;
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul (irf = 17, noprint, nograph) inflationq interest outputgap;
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
+
