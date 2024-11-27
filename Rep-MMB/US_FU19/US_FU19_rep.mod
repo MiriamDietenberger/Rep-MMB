@@ -13,8 +13,6 @@
 % Catanzaro, May 20, 2015
 //**************************************************************************
 
-close all
-
 
 %----------------------------------------------------------------
 % 1. Defining variables
@@ -229,9 +227,14 @@ end;
 
 %estimation(optim=('MaxIter',200),datafile=usmodel_data2015,mode_compute=0, mode_file=usmodel1984_2007_mh_mode  ,first_obs=1,  presample=4,lik_init=2,prefilter=0,mh_replic=0,mh_nblocks=2,mh_jscale=0.20,mh_drop=0.2);
 
-
 //Simulation
-%stoch_simul(irf=20,nomoments, nograph) pinfobs dy robs dc dinve labobs dw;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%shock_decomposition pinfobs dy robs dc dinve labobs dw;
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul(irf=20,nomoments, nograph) pinfobs dy robs dc dinve labobs dw;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//shock_decomposition pinfobs dy robs dc dinve labobs dw;
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
 
