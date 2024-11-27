@@ -93,7 +93,7 @@ constelab   = 0;
 %----------------------------------------------------------------
 model (linear);
 
-%%%%%%transformed parameters%%%%%
+//transformed parameters
 #gamma      = 1 + trend/100;
 #pic_ss     = 1+picbar/100;
 #R          = 1/beta;
@@ -180,15 +180,16 @@ eps_p   = rho_P*eps_p(-1) + e_p;
 eps_w   = rho_W*eps_w(-1) + e_w;
 eps_k   = rho_k*eps_k(-1)- e_k;       
 
-%%%%%%%%%%%%%%%%%%%%%%%%%
-%%FLEXIBLE PRICE MODEL%%%
-%%%%%%%%%%%%%%%%%%%%%%%%% 
-%%%%%%%%HOUSEHOLDS%%%%%%%
+
+//FLEXIBLE PRICE MODEL
+
+//HOUSEHOLDS
 (1-h)*muf=h*cf(-1)-cf;                                              
 Lambdaf = muf-muf(-1);                            
 Lambdaf(+1)+ rf = 0;                             
 wf = phi*lf-muf;
-%%%%%%%%FINANCIAL INTERMEDIARIES%%%%%%%
+
+//FINANCIAL INTERMEDIARIES
 vf = beta*theta*X*(Lambdaf(+1)+xf+vf(+1))+((1-theta)/V)*beta*(RK*rkf-R*rf(-1))+((1-theta)/V)*beta*(RK-R)*Lambdaf(+1);
 df = theta*beta*Z*(Lambdaf(+1)+zf+df(+1));
 zf = (1/Z)*((LEV*RK/1)*rkf+(R*(1-LEV/1))*rf(-1)+
@@ -199,22 +200,25 @@ nef = nf(-1)+zf;
 kf+qf=nf+levf; 
 nf=(N_e_Y/N_Y)*nef+(NN_Y/N_Y)*nnf;   
 nnf = kf+qf;                                     
-ext_prf = rkf(+1)-rf;                             
-%%%%%%%%INTERMEDIATE GOODS FIRMS%%%%%%%
+ext_prf = rkf(+1)-rf;        
+
+//INTERMEDIATE GOODS FIRMS
 yf = THETA*(a + alpha*(kf(-1)+eps_k)+alpha*uf  +(1-alpha)*lf);   
 rkf = (ZK/RK)*zkf + (1-delta)/RK*(qf+eps_k)-qf(-1); 
 uf = (1/(zeta/(1-zeta)))*zkf  ;          
 a=alpha*zkf+ (1-alpha)*wf  ;   
-zkf=wf+lf-kf(-1)-uf;                    
-%CAPITAL PRODUCERS
+zkf=wf+lf-kf(-1)-uf;  
+
+//CAPITAL PRODUCERS
 i_f = (1/(1+beta))* (i_f(-1) + beta*i_f(+1)+(1/(ksi))*(qf +eps_x))  ;
 %kf  =  ((1-delta)/1)*(kf(-1)+eps_k)+I_K*i_f + I_K*ksi*eps_x ;
 kf  =((1-delta)/1)*(kf(-1)+eps_k)+delta*(i_f)+ I_K*ksi*eps_x  ; 
-% RESOURCE CONSTRAINTS
+
+//RESOURCE CONSTRAINTS
 yf=(C_Y)*cf+(I_Y)*i_f+G_Y*g+K_Y*ZK*uf;       
 
 
-% measurement equations
+//measurement equations
 dy     = y-y(-1)+trend;
 dc     = c-c(-1)+trend;
 dfi    = i-i(-1)+trend;
@@ -287,6 +291,12 @@ options_.plot_priors=0;
 %it gives IRF and variance decomposition,,conditional_variance_decomposition=[1 4 8 40 80]
 
 //Simulation
-%stoch_simul(irf=20,nograph) y i pi n ext_pr;
-%stoch_simul(irf=20) y i pi c robs q n ext_pr;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul(irf=20,nograph) y i pi n ext_pr;
+//stoch_simul(irf=20) y i pi c robs q n ext_pr;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
