@@ -97,6 +97,7 @@ etaKR=0;
 % 3. Model
 %----------------------------------------------------------------
 model(linear); 
+
 #inf_p_SS=R_SS*nbeta;
 #mc_SS=(theta_p-1)/theta_p;
 #rk_SS=(1-nbeta*(1-delta))/(1-tau_k_SS)/nbeta;
@@ -114,8 +115,8 @@ model(linear);
 #tax_SS=tau_w_SS*w_SS*lp_SS+tau_k_SS*(rk_SS*k_SS+y_SS-rk_SS*k_SS-w_SS*lp_SS);
 #tr_SS=tr_o_y*y_SS;
 #b_SS=1/(1-1/nbeta)*(tr_SS+cg_SS-tax_SS);
-// Household
 
+// Household
 (1-nbeta*h)*chi=eps_q-sigma_c/(1-h)*(c-h*c(-1))-h*nbeta*eps_q(+1)+h*nbeta*sigma_c/(1-h)*(c(+1)-h*c);
 0=chi(+1)-chi+R-inf_p(+1);
 Rb=R-inf_p(+1);
@@ -127,37 +128,29 @@ I=I(-1)/(1+nbeta)+nbeta/(1+nbeta)*I(+1)+ q/nu/(1+nbeta)+eps_i/nu/(1+nbeta);
 sigma_u*u=rk-tau_k_SS/(1-tau_k_SS)*tau_k;
 
 // Staggered Prices & Wages 
-
 inf_w =nbeta*inf_w(+1)+(1-gamma_w)*(1-gamma_w*nbeta)/gamma_w/(1+theta_w*sigma_l)*(MRS-w+ tau_w_SS/(1-tau_w_SS)*tau_w);
 inf_w=w-w(-1)+inf_p;
 inf_p =nbeta*inf_p(+1)+(1-gamma_p)*(1-gamma_p*nbeta)/gamma_p*(mc);
 
 //Firm
-
 //u+k(-1)=y+(1-nalpha)*(w-rk)+(nalpha-1)*eps_z;
 mc+(1-nalpha)*eps_z+nalpha*(u+k(-1))-nalpha*lp=w;
 
 //mc=(1-nalpha)*(w-eps_z)+nalpha*rk;
 mc+(1-nalpha)*eps_z+(nalpha-1)*(u+k(-1))+(1-nalpha)*lp=rk;
 
-
 // Supply & Demand
-
 y_SS*y=k_SS^(nalpha)*lp_SS^(1-nalpha)*(nalpha*u+nalpha*k(-1)+(1-nalpha)*lp+ (1-nalpha)*eps_z);
 y_SS*y=c_SS*c+I_SS*I+cg_SS*cg+rk_SS*(1-tau_k_SS)*k_SS*u;
 
 GDP=y-rk_SS*(1-tau_k_SS)*k_SS/y_SS*u;
 
 //Government
-
 b_SS*b-b_SS/nbeta*(R(-1)-inf_p+b(-1))=cg_SS*cg+tr_SS*tr-tax_SS*tax;
-
 
 tax_SS*tax=tau_w_SS*w_SS*lp_SS*(tau_w+w+lp)+tau_k_SS*rk_SS*k_SS*(tau_k+rk+u+k(-1))+tau_k_SS*(y_SS*y-rk_SS*k_SS*(rk+u+k(-1))-w_SS*lp_SS*(w+lp));
 
 // Policy functions
-
-
 R = rho_R*R(-1) + (1-rho_R)*(rho_pi*inf_p+rho_y*GDP)+eps_m; 
 
 // Fiscal Policy Rule I
@@ -166,9 +159,7 @@ tau_w=  rho_w*tau_w(-1)+(1-rho_w)*(etaWb*b(-1)+etaWy*GDP+etaWh*lp)+eps_tauw;
 //  Fiscal Policy Rule II
 tau_k=  rho_k*tau_k(-1)+(1-rho_k)*(etaKb*b(-1)+etaKy*GDP+etaKI*I)+eps_tauk;
 
-
 // Exogenous Variables
-
 cg=rho_cg*cg(-1)+eps_cg;
 tr=rho_tr*tr(-1)+eps_tr;
 eps_i=rho_eps_i*eps_i(-1)+e_i;
@@ -197,9 +188,16 @@ steady;
 check;
 
 //Simulation
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul( irf=300,order = 1, nograph,nomoments, noprint)lp, I, c, y, w, k, tax,Rb, R, b, tau_w, tau_k, tax_rev_tauw, tax_rev_tauk, cg, GDP;
-%
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul( irf=300,order = 1, nograph,nomoments, noprint)lp, I, c, y, w, k, tax,Rb, R, b, tau_w, tau_k, tax_rev_tauw, tax_rev_tauk, cg, GDP;
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
+
+
 %clc;
 %disp('loading posterior draws recommended model...')
 %load draws_ext.mat
