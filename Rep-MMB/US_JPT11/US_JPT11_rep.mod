@@ -12,10 +12,8 @@
 // Dynare code to replcate Justiniano, A., Primiceri, G. E., & Tambalotti, A. (2011).           *
 // Investment shocks and the relative price of investment. Review of Economic                   *
 // Dynamics, 14(1), 102-121.                                                                    *
-//                                                                                              *
 // **********************************************************************************************
 
-close all;
 
 
 %----------------------------------------------------------------
@@ -83,9 +81,8 @@ rhoupsilon = 0.813;
 % 3. Model
 %----------------------------------------------------------------
 model(linear);
-// ------------------------------------------------------------------------
+
 // Computation of the steady state
-// ------------------------------------------------------------------------
 #gamma=gamma100/100;
 #gammamiu=gammamiu100/100;
 #beta=100/(Fbeta+100);
@@ -151,7 +148,6 @@ lambdastar = Rstar + lambdastar(+1) - rhoz*z -(rhomiu*alpha/(1-alpha))*miu;
 // ------------------------------------------------------------------------
 mpk = chi*u;
 mpkstar = chi*ustar;
-
 
 // eq 15 and 16, capital foc (phi and phistar)
 // ------------------------------------------------------------------------
@@ -230,18 +226,15 @@ Rkstar = (beta*exp(-gamma-gammamiu)*(1-delta))*qstar + ((1-beta*exp(-gamma-gamma
 ////Rd = lambda - lambda(+1) + rhoz*z;
 ////Rdstar = lambdastar - lambdastar(+1) + rhoz*z; 
 
-
 // Definition of price of capital Tobin's q
 // ------------------------------------------------------------------------
 //q = phi - lambda;
 //qstar = phistar - lambdastar;
 
-
 //Definition of risk-free rate from Fisher equation
 // ------------------------------------------------------------------------
 Rd = R - p(+1);
 Rdstar = Rstar;
-
 
 // eq 32 - 40, exogenous shocks 
 // ------------------------------------------------------------------------
@@ -269,7 +262,6 @@ end;
 steady;
 check;
 
-
 //Shocks
 shocks;
 var upsilons    =	5.786^2	;
@@ -282,8 +274,13 @@ var bs          =	0.034^2	;
 var mius        =	0.629^2	;
 end;
 
-
 //Simulation
 options_.nograph   = 1;
-%stoch_simul(irf=15, ar=10); 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul(irf=15, ar=10); 
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
