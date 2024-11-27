@@ -11,21 +11,24 @@
 // BRA_SAMBA08 replication
 
 %----------------------------------------------------------------
-% 1. Define endogenous variables
+% 1. Defining variables
 %----------------------------------------------------------------
+
+//Define endogenous variables
 
 var co crot c no nrot n q wr k u fii qi i x m rk mc pi bystar nxy r gy syhat 
 bby g y yva piva pibar sgbar zc zn zi zfiistar zfii a zr zg  mstar pistar rstar; //endogenous variables
 
-%----------------------------------------------------------------
-% 2. Define exogenous variables
-%----------------------------------------------------------------
+
+//Define exogenous variables
 
 varexo pibar_ gbar_ c_ n_ i_ fiistar_ fii_ a_ r_ g_ mstar_ pistar_ rstar_; //exogenous variables (innovations)
 
 %----------------------------------------------------------------
-% 3. Define parameters
+% 2. Parameter declaration and calibration
 %----------------------------------------------------------------
+
+//Define parameters
 
 parameters beta alpha sigma pessi kappa h omegabarb tet nuu kuu vi del dela 
 dels sc si sg sm sx sva sd omegabarc omegabarn iok fiistar rstarC bystarC rC 
@@ -33,7 +36,7 @@ byC gamar gamapi gamay gamag gamas gamab rhoa rhoc rhoi rhon rhoq rhor rhog
 rhosbar rhopi rhofii rhofiistar rhomstar rhorstar rhopistar;
 
 %----------------------------------------------------------------
-% 4. Parameter values
+% 3. Calibration and Estimation
 %----------------------------------------------------------------
 
 beta = 0.98;
@@ -137,9 +140,8 @@ pistar = rhopistar*pistar(-1) + pistar_;
 rstar = rhorstar*rstar(-1) + rstar_;
 end;
 
-%----------------------------------------------------------------
-% 6. Shocks
-%----------------------------------------------------------------
+
+// Shocks
 
 shocks;
 var c_ = 1;    //0.081^2;
@@ -160,8 +162,12 @@ var c_, mstar_ =0;
 var r_, mstar_ =0;
 end;
 
-%----------------------------------------------------------------
-% 7. Simulation
-%----------------------------------------------------------------
+// Simlation
 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
