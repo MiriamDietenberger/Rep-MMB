@@ -9,8 +9,6 @@
 % (at your option) any later version.
 
 //**********************************************************************
-//Replication file US_PM08fl_rep.mod
-//
 // Model: US_PM08fl stationary version (with financial-real linkages)
 //
 // Further references:
@@ -122,5 +120,11 @@ var RES_RS_US; stderr 0.4712;
 end;
 
 //Simulation
-%stoch_simul(irf=40, nograph, noprint) Y_US PIE_US4h RS_USh ; 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul(irf=40, nograph, noprint) Y_US PIE_US4h RS_USh ; 
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
