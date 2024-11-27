@@ -279,5 +279,5 @@ end;
 //stoch_simul(order=1,irf=40) YU cU iU YflexU cflexU iflexU ReXU piU piflexU;
 //stoch_simul (AR=100,IRF=0, noprint,nograph);
 //*****************************
-stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
