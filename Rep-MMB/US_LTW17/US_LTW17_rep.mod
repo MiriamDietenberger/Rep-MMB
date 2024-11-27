@@ -9,8 +9,6 @@
 % (at your option) any later version.
 
 //**************************************************************************
-// A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
-//
 // Clearing Up the Fiscal Multiplier Morass, American Economic Review 2017, 107(8): 2409�2454
 // Eric M. Leeper, Nora Traum, and Todd B. Walker
 //**************************************************************************
@@ -193,9 +191,8 @@ Pibar = 0.643991271663901;
 lamprice = ((1+bet*chip)*omegap)/((1-bet*omegap)*(1-omegap));
 lamwage = (omegaw*(1+bet)*(1+xi*(1+(1/etaw))))/((1-omegaw*bet)*(1-omegaw));
 
-// -------------------------------------------------------------------------
+
 // Computation of the steady state
-// -------------------------------------------------------------------------
 Rhoss = (1 - (1/AD))*(1/bet);
 gammss = gamm100/100;
 expgss = exp(gammss);
@@ -984,6 +981,13 @@ shocks;
 end;
 
 //Simulation
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(irf = 40, nograph) ;
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul(irf = 40, nograph) ;
 //stoch_simul(irf = 40) y pi R l;
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
+
