@@ -52,7 +52,6 @@ parameters beta_b phi R_d R_h R_psi Nu_h phi_w eta gamma gamma_b
 //Calibrated Parameters
 
 //households
-
 beta_b = 0.96;     // 0.95 0.96 discount factor for borrower must be less than (1/R_h)
 phi = 0.5;         // habit formation
 R_d = 1.01;     // 1.01187 gross real return to deposit
@@ -67,7 +66,6 @@ beta_s = 0.99;    // 0.988 related to steady state equity return discount factor
 gamma = 2;        // constant relative risk aversion coefficient
 
 //entrepreneurs
-
 beta_e = 0.95;     // 0.95 0.96 entrepreneurs discount factor must be less than 1/R_e
 R_e = 1.039;      //  1.0247 // 1.039375 gross return to Entrepreneurs loans see R_h above
 Nu_e = 0.65;       // loan-to-value ratio for entrepreneurs
@@ -78,7 +76,6 @@ varepsilon_p = 11;   // 7.667 11 // 21 (Iacoviello 2005) or 6 (Christiano et al 
 kappa_v = 2;         // physical capital adjustment cost
 
 //Retailers and unions
-
 theta_R = 0.65;     // probability of retail prices remaining unchanged in NKPC, theta_R = 0 for fully flexible prices
 gamma_p = 0.25;     // degree of price indexation
 
@@ -88,7 +85,6 @@ gamma_p = 0.25;     // degree of price indexation
 phi_s = 0.53;       // weight on (or share of) saver households in unions/economy
 
 //banking sector
-
 beta_B = 0.99;            // 0.988 banking discount factor is equal to the patient HHs' discount factor in Gerali et al. 2010
 delta_B = 0.4;         // Gerali 0.1049 USmodel 0.1044 Cost for managing the banks capital position
 kappa_k = 4;              // parameter governing adjustment costs in banking
@@ -105,7 +101,6 @@ phi_B = 0.5;             // pass through of equity price PCH in bank cap accum e
 phi_div = 0.85;
 
 //monetary policy and aggregates
-
 kappa_i = 0.65;          // Taylor rule coefficient on i
 kappa_pi = 1.5;            // Taylor rule coefficient on pi
 kappa_y = 0.25;          // Taylor rule coefficient on y
@@ -117,7 +112,6 @@ PsiY = 0.81625;              // 0.7672 0.8 0.9 total equity to output ratio
 //K_eY = 10.7;             // 8.8 // 10.7 Christiano et al. 2010 USdata
 
 //shock parameters
-
 rho_z = 0.75;             // AR(1) parameter for productivity shock
 rho_d = 0.5;             // AR(1) parameter for deposit shock
 rho_i = 0.5;             // AR(1) parameter for MP shock
@@ -220,7 +214,6 @@ model(linear);
 //EQUATIONS
 
 //BORROWERS
-     
 psi_b = beta_b*(gamma_psib/(1 - phi))*(q_psi(+1) + (R_psi - 1)*div(+1) - (R_psi)*(gamma_b/(1 - phi))*(c_b(+1) - phi*c_b)) + (gamma_psib/(1 - phi))*((gamma_b/(1 - phi))*(c_b - phi*c_b(-1)) - q_psi) 
         + (gamma_psib/(1 - phi))*Nu_h*(1-phi_w)*((1/R_h) - beta_b)*(R_psi*(lambda + nu_h + pi(+1)) + q_psi(+1) + (R_psi - 1)*div(+1));      //  - xi_psi 
 
@@ -230,8 +223,8 @@ l_h = (phi_w/R_h)*(w(+1) + h_b) + ((1 - phi_w)/(R_h*R_psi))*(q_psi(+1) + (R_psi 
 
 w = (gamma_b/(1 - phi))*(c_b - phi*c_b(-1)) + (1 + Gamma_w)*eta*h_b - Gamma_w*(lambda + nu_h + w(+1) + pi(+1));      // FOC H with w see p. 20 dynare manual
 
-//SAVERS
 
+//SAVERS
 d = (gamma_ds/(1 - phi))*(gamma/(1 - phi))*(c_s - phi*c_s(-1)) - (beta_s*R_d*(gamma_ds/(1 - phi)))*((gamma/(1 - phi))*(c_s(+1) - phi*c_s) - i_d + pi(+1)); // FOC for D_s
 
 psi_s = beta_s*(gamma_psis/(1 - phi))*(q_psi(+1) + (R_psi - 1)*div(+1) - (R_psi)*(gamma/(1 - phi))*(c_s(+1) - phi*c_s)) + (gamma_psis/(1 - phi))*((gamma/(1 - phi))*(c_s - phi*c_s(-1)) - q_psi); //  - xi_psi FOC equity held by savers, determines the price
@@ -241,12 +234,12 @@ w = eta*h_s + (gamma/(1 - phi))*(c_s - phi*c_s(-1)); //
    //Saver household flow of funds constraint
 c_s + gamma_ds*(d) + gamma_psis*(q_psi + psi_s) = ((1-alpha)/X)*(1/(CY))*(w + h_s) + R_d*gamma_ds*(i_d(-1) + d(-1) - pi) + gamma_psis*(q_psi + psi_s(-1)) + (R_psi - 1)*gamma_psis*(div + psi_s(-1));
 
-//RETAILERS
 
+//RETAILERS
 pi = (beta_R/(1 + beta_R*gamma_p))*pi(+1) + (gamma_p/(1 + beta_R*gamma_p))*pi(-1) - (1/(1 + beta_R*gamma_p))*(((1 - theta_R)*(1 - theta_R*beta_R))/theta_R)*x + xi_p; //with indexation
 
-// ENTREPRENEURS
 
+// ENTREPRENEURS
 h = y - x - w;                                             // FOC H
 ((1/R_e) - beta_e)*lambda_e = beta_e*(pi(+1)) - (1/R_e)*(i_e); // FOC L_e
 
@@ -259,9 +252,9 @@ l_e = (phi_k/R_e)*(q_k(+1) + k_e) + ((1 - phi_k)/R_e)*(q_psi(+1)) - i_e + (1/R_e
 y = alpha*k_e(-1) + (1 - alpha)*h + xi_z;        // production function
 k_e = (1 - delta_e)*k_e(-1) + delta_e*v;       // Capital accumulation equation
 
+
 //Banking Sector
  //Wholesale branch
- 
 k_B = (1 - delta_B)*k_B(-1) + delta_B*pi_B(-1) + (phi_B*PsiBKB)*(q_psi - q_psi(-1)) - (1 - phi_B*PsiBKB)*pi; //
 
 i_l = i_d - ((1/(R_d - 1))*kappa_k*((tau)^3))*(k_B - l);  //  - xi_t  spread between the wholesale loan and wholesale deposit rate
@@ -280,12 +273,12 @@ i_h = (kappa_h/(varepsilon_hss - 1 + kappa_h + kappa_h*beta_B))*i_h(-1) + (beta_
 //Retained earnings net dividend payments
 Pi_BL*pi_B = (R_h - 1)*L_hL*(i_h + l_h) + (R_e - 1)*L_eL*(i_e + l_e) - (R_d - 1)*DL*(i_d + d);  //
 
-//MONETARY POLICY
 
+//MONETARY POLICY
 i_d = kappa_i*i_d(-1) + kappa_pi*(1 - kappa_i)*pi + kappa_y*(1 - kappa_i)*(y - y(-1)) + xi_i; // conventional nominal interest rate (Taylor-type) rule
 
-//MARKET CLEARING - aggregate resource constraints
 
+//MARKET CLEARING - aggregate resource constraints
 y = phi_s*CY*c_s + (1-phi_s)*CY*c_b + delta_e*K_eY*v + delta_B*K_BY*k_B(-1) - (delta_B*K_BY)*pi;
 
 c = phi_s*c_s + (1 - phi_s)*c_b;                                      // aggregate consumption
@@ -351,5 +344,11 @@ var epsilon_p =  std_p^2;
 end;
 
 //Simulation
-%stoch_simul(order=1, irf=15 , nograph);
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul(order=1, irf=15 , nograph);
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
