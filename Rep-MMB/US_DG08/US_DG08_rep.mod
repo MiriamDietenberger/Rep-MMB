@@ -1,17 +1,31 @@
-//DeGraeve Replication with both sticky and flexible price output in Dynare 
+% US_DG08
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
+//**************************************************************************
+//DeGraeve Replication with both sticky and flexible price output in Dynare 
+//
 // DE GRAEVE, F., 2008.: The External Finance Premium and the Macroeconomy:
 // US Post-WWII Evidence, Journal of Economic Dynamics and Control
 // 32(2008), 3415-3440.
-
+//
 // This file simulates the dynamic response of the model to specific shocks
-
+//
 // Replication of IRF to monetary policy shock (one standard deviation)
 // Replication of IRF to productivity shock (one standard deviation): decelerator effect
-//------------------------------------------------------------------------------------------------------------------------
-//1. Variable declaration
-//------------------------------------------------------------------------------------------------------------------------
+//**************************************************************************
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+// Define endogenous variables
 var C, L, R, Rauxil, w, pi, pibar, Y, K, ren, I, Q, Rk, Rkforward, Prem,  N, Rn, eps_B, eps_L, eps_A, eps_I, eps_G,
 
 //% Consumption, Labor, Real Interest Rate, Wage, Inflation, Inflation Target,
@@ -26,21 +40,22 @@ Cf, Lf, Rf, wf, Yf, Kf, renf, If, Qf;
 
 //% the flexble-price counterparts
 
-
+//Define exogenous variables
 varexo eta_w, eta_p, eta_R, etapi, epsinno_B, epsinno_L, epsinno_A, epsinno_I, epsinno_G; 
 //% wage markup shock, price markup shock, interest rate shock, 
 //% interest rate target shock, 
 //% innovations in the shock processes for discount factor, labor supply,
 //% productivity, investment, government spending
 
-//------------------------------------------------------------------------------------------------------------------------
-// 2. Parameter declaration and calibration
-//-------------------------------------------------------------------------------------------------------------------------
-
+//Define parameters
 parameters h, sigma_c, lambda_w, beta, gamma_w, xi_w, sigma_1, theta, alpha, psi, gamma_p, xi_p, tau, 
 phi, Rkbar, epsilon, gamma, KbarNbar, c_y, k_y, rho, rpi, ry, rdeltapi, rdeltay,
 rho_B, rho_L, rho_A, rho_I, rho_G;
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
   h  = 0.4073;        % habit formation parameter
   sigma_c = 2.1878;   % risk aversion parameter = inverse of intertemporal ela of substitution
   lambda_w = 0.5;  % equilibrium wage markup
@@ -72,11 +87,10 @@ rho_B, rho_L, rho_A, rho_I, rho_G;
   rho_I = 0.6430 ;     % persistence of investment supply shock
   rho_G = 0.9607 ;     % persistence of government spending shock
   
-//-----------------------------------------------------------------------------------------------------------------------
-// 3. The model
-//-----------------------------------------------------------------------------------------------------------------------
 
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model (linear);
 
 C = h/(1+h)*C(-1) + 1/(1+h)*C(+1) + (sigma_c - 1)/((1+lambda_w)*(1+h)*sigma_c) * (L - L(+1)) 
@@ -130,7 +144,6 @@ eps_I = rho_I * eps_I(-1) + epsinno_I;
 eps_G = rho_G * eps_G(-1) + epsinno_G;
 
 
-
 // now the flexible-price equations
 
 Cf = h/(1+h)*Cf(-1) + 1/(1+h)*Cf(+1) + (sigma_c - 1)/((1+lambda_w)*(1+h)*sigma_c) * (Lf - Lf(+1)) 
@@ -155,17 +168,11 @@ Rf = (1-beta*(1-tau))*renf(+1) + beta*(1-tau)*Qf(+1) - Qf;
 
 end;
 
-//--------------------------------------------------------------------------------------------------------------------------
-// 4. Steady state
-//---------------------------------------------------------------------------------------------------------------------------
-
+//Steady
 //steady;
 //check;
 
-//---------------------------------------------------------------------------------------------------------------------------
-// 5. shocks
-//---------------------------------------------------------------------------------------------------------------------------
-
+//Shocks
 shocks;
 var eta_w; stderr 0.2733;
 var eta_p; stderr 0.2058;
@@ -178,6 +185,14 @@ var epsinno_I; stderr 0.6893;
 var epsinno_G; stderr 0.5748;
 
 end;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(irf=20, noprint, nograph) Q N Prem Y; 
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul(irf=20, noprint, nograph) Q N Prem Y; 
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
 
