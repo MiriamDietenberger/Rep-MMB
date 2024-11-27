@@ -143,12 +143,15 @@ var e_gam;     stderr 12.3169555240614;
 var e_eps; stderr 0.437308817102200;
 end;
 
-
 //Simulation
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order=1,nomoments,noprint, nograph, irf=32);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul(order=1,nomoments,noprint, nograph, irf=32);
 //stoch_simul(order=1,noprint,nograph,irf=32);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
-%differenceSIGE
-
+//differenceSIGE
 //Comment on legend for the IRFs: R09 corresponds to replicated IRFs from Reis (2009), while VW14 refers to replicated IRFs using Verona and Wolters (2014) approximation (truncating lagged expectations)  
