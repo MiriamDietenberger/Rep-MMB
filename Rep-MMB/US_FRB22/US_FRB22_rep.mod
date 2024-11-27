@@ -1753,4 +1753,10 @@ end;
 
 
 //Simulation
-stoch_simul(nograph,noprint,nofunctions,nocorr,drop=0,irf=0,order=1,periods=50);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul(nograph,noprint,nofunctions,nocorr,drop=0,irf=0,order=1,periods=50);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
