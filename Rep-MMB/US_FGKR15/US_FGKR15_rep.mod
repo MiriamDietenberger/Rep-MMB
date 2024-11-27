@@ -267,7 +267,6 @@ exp(kt) =     (1 - delt - phiu1*(exp(utilt) - 1) - phiu2/2*(exp(utilt)-1)^2 )*ex
             + (1 - kappa/2*(exp(gzt)*exp(invt)/exp(invt(-1))-gzs)^2)*exp(invt) ; 
 exp(kbt)= (1-deltau)*exp(kbt(-1))/(exp(inflt)^nom_depreciation*exp(gzt)) + exp(invt) ; 
 
-
 // structural shocks
 gzt = log(gzs) + ezt ;
 dt = rhod*dt(-1) + edt ;
@@ -346,12 +345,12 @@ end;
 
 
 //Simulation
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 //***************************
 //The following was commented out for use in Rep-MMB
 //Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 //*****************************
 /*
 //---------------------------------------------------------------------
