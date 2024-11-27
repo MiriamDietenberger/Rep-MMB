@@ -873,5 +873,11 @@ end;
 //options_.Schur_vec_tol = 1e-6;
 
 //Simulation
-%stoch_simul (irf =16, nograph, noprint) interest inflationq outputgap;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (irf =16, nograph, noprint) interest inflationq outputgap;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
