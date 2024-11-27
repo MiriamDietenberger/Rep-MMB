@@ -9,12 +9,6 @@
 % (at your option) any later version.
 
 //**************************************************************************
-// A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
-//
-// Volker Wieland, Tobias Cwik, Gernot J. Mueller, Sebastian Schmidt and 
-// Maik Wolters
-//
-// Working Paper, 2009
 // Last edited: 09/07/23 by M. Wolters with M. Burgert
 //
 //This model file contains the linearized Version of the FRB-US Model. 
@@ -2605,6 +2599,10 @@ end;
 %M_.Sigma_e = Sigma_e_;
 %options_.Schur_vec_tol = 1e-6;
 
-
 //Simulation
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
