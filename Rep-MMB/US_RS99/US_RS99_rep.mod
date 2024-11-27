@@ -10,15 +10,6 @@
 
 
 //**************************************************************************
-// A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
-//
-// Volker Wieland, Tobias Cwik, Gernot J. Mueller, Sebastian Schmidt and
-// Maik Wolters
-//
-// Working Paper, 2009
-
-// Model: US_RS99
-
 // Further references:
 // Rudebusch, G., and L. Svensson. 1999. "Policy Rules for Inflation Targeting."
 // in: John B. Taylor (ed.), Monetary Policy Rules. Chicago: University of Chicago Press for NBER.
@@ -78,7 +69,13 @@ var eps = 1.009^2;
 var eta = 0.819^2;
 end;
 
-
 //Simulation
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 //stoch_simul (irf = 60);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
+
