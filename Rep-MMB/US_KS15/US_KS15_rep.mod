@@ -104,6 +104,13 @@ var eps_nu; stderr 0.0152;  // preference shock
 var eps_m;  stderr 0.0055;  // interest rate shock
 end;
 
+
 //Simulation
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(irf=20, nograph) c y m pit RR R;
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul(irf=20, nograph) c y m pit RR R;
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
