@@ -181,7 +181,6 @@ sigw = rho_sigw*sigw(-1)+psi_sigw;
 
 //pist = rho_pist*pist(-1)+psi_pist;
 
-
 // now the flexible-price equations//
 
 c_f = -(1-h*exp(-zstar))/(sigmac*(1+h*exp(-zstar)))*r_f+b+(h*exp(-zstar))/(1+h*exp(-zstar))*(c_f(-1)-z)
@@ -213,7 +212,6 @@ qk_f = rkstar/(rkstar+1-del)*rk_f(+1)+(1-del)/(rkstar+1-del)*qk_f(+1)-r_f+(sigma
 
 end;
 
-
 // Steady state
 steady;
 
@@ -228,7 +226,13 @@ var psi_sigw; stderr 0;
 end;
 
 //Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 //write_latex_dynamic_model;
 //check;
 //stoch_simul(irf=20) R pi L y;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
