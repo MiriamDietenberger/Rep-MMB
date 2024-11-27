@@ -8,17 +8,9 @@
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 
-//**************************************************************************
-// A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
-//
-// Volker Wieland, Tobias Cwik, Gernot J. Mueller, Sebastian Schmidt and 
-// Maik Wolters
-//
-// Working Paper, 2009
-// Model: US_OW98
-
+//*************************************************************************
 // Replication of IRF to monetary policy shock
-
+//
 // Further references:
 // Orphanides, A., and V. Wieland. 1998. "Price stability and monetary policy effectiveness when nominal interest rates are bounded at zero."
 // Finance and Economics Discussion Series 98-35, Board of Governors of the Federal Reserve System.
@@ -38,10 +30,8 @@ var  ygap pdot rff drff	pinf plevel rl rrl ec efi eii eg ex yp cwage vindex
      pitarg rho1 rho16 rho28 rho40 dygap cwage1 cwage2 plevel1 plevel2 plevel3 
      rff1 efi1 efi2 eii1 eii2 ygap1 ygap2
 
-//**************************************************************************
 // Modelbase Variables                                                   //*    
    interest inflation inflationq outputgap output;                       //*
-//**************************************************************************
 
 //Define exogenous variables
 varexo ecsh efish eiish exsh cwsh egsh interest_;
@@ -71,16 +61,12 @@ rrlbar	= 1.0289616884640973e-02;
 %----------------------------------------------------------------
 model(linear);
 
-//**************************************************************************
 // Definition of Modelbase Variables in Terms of Original Model Variables //*
-
 interest   = rff-rffbar*100;                                             //*
 inflation = (1/4)*(pdot+ pdot(-1)+ pdot(-2)+ pdot(-3))-pinfbar*100;      //*
 inflationq  = pdot-pinfbar*100;                                          //*
 outputgap  = ygap;                                                       //*
 output = ygap;                                                           //*
-//**************************************************************************
-
 
 // Original Model Code:
 
@@ -95,7 +81,6 @@ dygap    =  ygap - ygap(-1);
 // ex ante real short rate
 rho1     =  rff - pdot(+1);
 
-
 rff - pdot(+1) = rho16 - 16.0*(rho16(+1) - rho16);
 rff - pdot(+1) = rho28 - 28.0*(rho28(+1) - rho28);
 rff - pdot(+1) = rho40 - 40.0*(rho40(+1) - rho40);
@@ -104,7 +89,6 @@ rff - pdot(+1) = rho40 - 40.0*(rho40(+1) - rho40);
 pinf     =  plevel - plevel3(-1);
 // quarterly inflation
 pdot     =  4*(plevel - plevel(-1));
-
 
 // Aggregate demand
 ygap     =  ec + efi + eii + eg + ex - 1;
@@ -125,7 +109,6 @@ eg       =  0.0033254101 + 0.9821910468*eg(-1) + egsh;
 ex       =  exbar + exsh;
 //permanent income (discounted at 10%)
 yp       =  (1-0.9)*(ygap + 0.9*ygap(+1) + (0.9^2)*ygap(+2) + (0.9^3)*ygap(+3) + (0.9^4)*ygap(+4) + (0.9^5)*ygap(+5) + (0.9^6)*ygap(+6) + (0.9^7)*ygap(+7) + (0.9^8)*ygap(+8))/(1.0-(0.9^9));
-
 //nominal contract wage
 cwage - plevel =   + (0.25+1.5*0.0803)*vindex + (0.25+0.5*0.0803)*vindex(+1) + (0.25-0.5*0.0803)*vindex(+2) + (0.25-1.5*0.0803)*vindex (+3) + 0.0055*((0.25+1.5*0.0803)*ygap + (0.25+0.5*0.0803)*ygap(+1) + (0.25-0.5*0.0803)*ygap(+2) + (0.25-1.5*0.0803)*ygap(+3)) +cwsh;
 //price level
@@ -213,5 +196,13 @@ end;
 
 options_.Schur_vec_tol = 1e-6;  
 
+
 //Simulation
-stoch_simul (irf = 0,AR=100, noprint, nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (irf = 0,AR=100, noprint, nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
+
