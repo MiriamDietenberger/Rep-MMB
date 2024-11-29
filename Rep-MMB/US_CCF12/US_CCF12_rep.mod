@@ -1,4 +1,4 @@
-% US_YR13
+% US_CCF12
 % 
 % Rep-MMB of the Macroeconomic Model Data Base (MMB)
 % https://www.macromodelbase.com/rep-mmb
