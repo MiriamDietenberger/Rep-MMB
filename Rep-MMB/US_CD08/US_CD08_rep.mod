@@ -1,19 +1,44 @@
+% US_CD08
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+//**********************************************************************
 // Title: The Financial Accelerator in an Estimated New Keynesian Model
 // Authors: Christensen, Ian, and Ali Dib
 // Publication: Review of Economic Dynamics 2008 (11), 155-178.
 // This file simulates the dynamic response of the model with financial accelerator (FA)
 //to specific shocks
-
+//
 // Replication of IRF to monetary policy shock (unit shock)
 // Replication of IRF to money demand shock (unit shock)
+//**********************************************************************
+
+
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var lambda c b m e r h w y k a i cost z mu pi q x f n rp;
 
+//Define exogenous variables
 varexo e_r u_x u_a u_e u_b;
 
+//Define parameters
 parameters gamma alpha rho_pi rho_y rho_mu delta chi beta phi psi nu 
 rho_a rho_e rho_x rho_b c1 m1 r1 h1 cy1 iy1 f1 z1 kn1 pi_ss r_ss xi_ss f_ss z_ss 
 lambda_c lambda_m k__y c__y w_h_y h_ss i__y b_ss k__n S;
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 gamma=0.0598;
 alpha=0.3384;
 rho_pi=1.4059;
@@ -36,9 +61,7 @@ xi_ss=5/6;
 k__n=2;
 
 ///////////////////////////
-
 S=1.0075; // Note, when replicating reported standard errors, one has to set S=1 to get the reported results.
-
 ///////////////////////////
 
 r_ss=pi_ss/beta;
@@ -52,6 +75,10 @@ w_h_y=(1-alpha)*lambda_c*xi_ss/(c__y);
 h_ss=w_h_y/(eta+w_h_y);
 i__y=1-c__y;
 
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear); 
 ((1-gamma)*lambda_c-1)*c=gamma*lambda+lambda_m*((r_ss-1)/r_ss)*(b+(gamma-1)*m)-gamma*e; 
 
@@ -93,20 +120,26 @@ b=rho_b*b(-1)+u_b;
 end; 
 
 
-
-
 // Caution: Standard errors are set equal to 1, in order to replicate IRFs. The correct standard errors are commented out.
+
+//Shocks
 shocks;
 var e_r ; stderr 1; //0.0058 ;
 var u_e ; stderr 1; //0.0073 ;
 var  u_b ; stderr 1; //0.0103 ;
 var  u_a ; stderr 1; //0.0096 ;
 var  u_x ; stderr 1; //0.0331 ;
-
 end;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 //check;
 //stoch_simul(dr_algo=1,ar=10,irf=10,periods=50000)y i c h r pi q n rp m;
 //stoch_simul(ar=10,irf=10)y y_f gap c i m r pi;
-%stoch_simul(irf=10, noprint, nograph)y i h r;
+//stoch_simul(irf=10, noprint, nograph)y i h r;
 // ar order of autocorrelation coefficients to compute and to print
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
