@@ -1,24 +1,43 @@
-// Model: NK_PSV16
+% NK_PSV16
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
+
+//**********************************************************************
 // Further references:
 // Pancrazi, R., Seoane, H.D. and Vukotic, M., 2016. 
 // The price of capital and the financial accelerator. Economics Letters, 149, pp.86-89.
-
+//
 // BGG model augmented with the Equilibrium Price of Capital
- 
+//
 // The code is provided by authors and based on the original code of BGG from Ambrogio Cesa-Bianchi (2012) 
-
+//
 // Last edited by: Lazar Milivojevic 17/04/2018
+//**********************************************************************
 
-// Variables
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var y c i g ce n rk r q k x a h pi rn qtilde ;
 
+//Define exogenous variables
 varexo eM eG eA;
 
-// Parameters
-
+//Define parameters
 parameters beta eta alpha delta omega eps G_Y C_Y I_Y Ce_Y Y_N X rhoA rhoG psi K_N R gamma mu nu theta rho S kappa;
+
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
     C_Y	    =	0.61        ; 
     Ce_Y	  =	0.01        ; 
     I_Y 	  =	0.18    	;
@@ -46,7 +65,9 @@ parameters beta eta alpha delta omega eps G_Y C_Y I_Y Ce_Y Y_N X rhoA rhoG psi K
     nu        = 0.5         ;
 
 // Characterizing equations
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model;
     y = C_Y*c + I_Y*i + G_Y*g + Ce_Y*ce;            //4.14
     c = -r + c(+1);                                 //4.15       
@@ -76,5 +97,12 @@ shocks;
     var eM; stderr 0.25/4;
 end;
 
-%stoch_simul(order=1,irf=12, noprint, nograph) ; 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul(order=1,irf=12, noprint, nograph) ; 
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
