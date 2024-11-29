@@ -1,14 +1,27 @@
-% Model: NK_KW16
+% NK_KW16
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
-% Further Reference: 
-% Kirchner, M., S. van Wijnbergen. 2016. " Fiscal deficits, financial fragility, and the effectiveness of government policies".
-% Journal of Monetary Economics 80, pp. 51-68.
+//**********************************************************************
+// Further Reference: 
+// Kirchner, M., S. van Wijnbergen. 2016. " Fiscal deficits, financial fragility, and the effectiveness of government policies".
+// Journal of Monetary Economics 80, pp. 51-68.
+//
+// Created by Felix Strobel (10.10.17)
+// This code replicates the plot for Bank Financing' in Figure 1 of the article.
+//**********************************************************************
 
-% Created by Felix Strobel (10.10.17)
-% This code replicates the plot for Bank Financing' in Figure 1 of the article.
 
-
-
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var 
 Y           % final output
 Ym          % intermediary output
@@ -53,18 +66,22 @@ T           % taxes
 B;          % government debt
 
 
-
-%capital quality, government spending, interest rate, technology, and net worth shock
+//capital quality, government spending, interest rate, technology, and net worth shock
 varexo e_ksi e_g e_i e_a e_n;
 
+//Define parameters
 parameters 
     beta hh delta varphi eta_i alpha gam epsilon kappa_pi kappa_y G_over_Y B_over_Y theta lambda chi
     rho_i rho_ksi rho_a rho_g sigma_i sigma_ksi sigma_a sigma_g sigma_n
     Y_ss L_ss w_ss U_c_ss Y_over_K L_over_K K_ss Y_ss Ym_ss G_ss I_ss C_ss Z_ss F_ss B_ss N_ss D_ss T_ss
     a_ss ksi_ss g_ss Lambda_ss Pm_ss Phi_ss Q_ss Dis_ss infl_ss inflstar_ss Rd_ss Rp_ss Rb_ss Rk_ss i_ss
     prem_ss nu_b_ss nu_n_ss nu_k_ss portf_B_ss Om_ss Gy_ss;
-    
-% standard Parameters
+
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+// standard Parameters
 beta=0.99;          % discount factor 
 hh=0.815;           % habit formation
 delta = 0.025;      % depreciation rate
@@ -81,7 +98,7 @@ theta=1-1/16;       % survival rate of banks
 kappa_pi=1.50000000;% Taylor rule coefficient on inflation
 kappa_y =0.12500000;% Taylor rule coefficient on output growth
 
-%shock parameters
+// shock parameters
 rho_i=0.8;        % interest rate smoothing
 rho_ksi=0.66;     % persistence of capital quality shock
 rho_a=0.95;       % persistence of technology shock
@@ -92,16 +109,16 @@ sigma_g=0.05;     % std. dev. of government spending shock
 sigma_i=0.0025;   % std. dev. of interest rate shock
 sigma_n=0.01;     % std. dev. of net worth shock
 
-%%% steady state values of variables labelled above
-Lambda_ss = 1;                     %
-Q_ss=1;                            % 
+// steady state values of variables labelled above
+Lambda_ss = 1;                     
+Q_ss=1;                             
 Dis_ss=1;
 infl_ss=1;
 inflstar_ss=1;
 a_ss=1;
 g_ss=1;
 ksi_ss=1;
-Pm_ss = (epsilon-1)/epsilon;       %
+Pm_ss = (epsilon-1)/epsilon;       
 
 prem_ss = 0.01/4;
 prem2_ss = prem_ss;
@@ -116,8 +133,8 @@ ERb_ss=Rk_ss;
 nu_n_ss = (1-theta)*beta*(Rd_ss)/(1-theta*beta);
 nu_k_ss = (1-theta)*beta*(Rk_ss-Rd_ss)/(1-theta*beta);
 nu_b_ss = nu_k_ss; 
-lambda = nu_k_ss + nu_n_ss/Phi_ss;          % tightness parameter on incentive constraint
-chi = 1-theta*((Rk_ss-Rd_ss)*Phi_ss+Rd_ss); % share of old net worth that is given to new bankers
+lambda = nu_k_ss + nu_n_ss/Phi_ss;                  % tightness parameter on incentive constraint
+chi = 1-theta*((Rk_ss-Rd_ss)*Phi_ss+Rd_ss);         % share of old net worth that is given to new bankers
 w_ss = (alpha^(alpha)*(1-alpha)^(1-alpha)*Pm_ss*(Rk_ss-1+delta)^(-alpha))^(1/(1-alpha));
 Y_over_K = (Rk_ss-1+delta)/(alpha*Pm_ss);
 L_over_K = (Y_over_K)^(1/(1-alpha));
@@ -143,31 +160,35 @@ T_ss = (Rb_ss-1)*B_ss+G_ss;
 portf_B_ss = Phi_ss*N_ss;
 D_ss = K_ss + B_ss - N_ss;
 
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model;
 
-% Households
+// Households
 exp(U_c)  =   (exp(C)-hh*exp(C(-1)))^(-1)-beta*hh*(exp(C(+1))-hh*exp(C))^(-1); % Marginal utility of consumption
 exp(Lambda)  =   exp(U_c)/exp(U_c(-1));                                        % Stochastic discount rate
 beta*exp(Rd(+1))*exp(Lambda(+1))  =   1;                                       % Euler equation
 exp(L)^varphi    = exp(U_c)*exp(w);                                            % Labor supply
 
-% Intermediate goods producer
-exp(Rk)     =   (exp(Pm)*alpha*exp(Ym)/exp(K(-1))+exp(ksi)*exp(Q)*(1-delta))/exp(Q(-1)); % Return on capital (Assumption: this = E26)
+// Intermediate goods producer
+exp(Rk)     =   (exp(Pm)*alpha*exp(Ym)/exp(K(-1))+exp(ksi)*exp(Q)*(1-delta))/exp(Q(-1));           % Return on capital (Assumption: this = E26)
 
-exp(Ym)     =   exp(a)*(exp(ksi)*exp(K(-1)))^alpha*exp(L)^(1-alpha); % Production function
-exp(w)      =   exp(Pm)*(1-alpha)*exp(Ym)/exp(L); % Real Wages (Assumption: This replaces E28 (Eq. for mc))
+exp(Ym)     =   exp(a)*(exp(ksi)*exp(K(-1)))^alpha*exp(L)^(1-alpha);                               % Production function
+exp(w)      =   exp(Pm)*(1-alpha)*exp(Ym)/exp(L);                                                  % Real Wages (Assumption: This replaces E28 (Eq. for mc))
 
-% Capital Goods Producer
+//Capital Goods Producer
 %exp(Q)  =   1 + eta_i/2*(exp(I)/exp(I(-1))-1)^2
 %              + eta_i*(exp(I)/exp(I(-1))-1)*exp(I)/exp(I(-1))
-%              - beta*exp(Lambda(+1))*eta_i*(exp(I(+1))/exp(I)-1)*(exp(I(+1))/exp(I))^2;     % Optimal investment decision (check out E29)
+%              - beta*exp(Lambda(+1))*eta_i*(exp(I(+1))/exp(I)-1)*(exp(I(+1))/exp(I))^2;           % Optimal investment decision (check out E29)
 1/exp(Q) =   1 - eta_i/2*(exp(I)/exp(I(-1))-1)^2 
                - eta_i*(exp(I)/exp(I(-1))-1)*exp(I)/exp(I(-1)) 
-               + beta*exp(Lambda(+1))*eta_i*(exp(I(+1))/exp(I)-1)*(exp(I(+1))/exp(I))^2*exp(Q)/exp(Q(+1)); //E29
+               + beta*exp(Lambda(+1))*eta_i*(exp(I(+1))/exp(I)-1)*(exp(I(+1))/exp(I))^2*exp(Q)/exp(Q(+1));     % E29
 
 exp(K)  =   (1-delta)*exp(ksi)*exp(K(-1)) + (1 - eta_i/2*(exp(I)/exp(I(-1))-1)^2)*exp(I);          % Capital accumulation equation
 
-% Retailer
+// Retailer
 exp(Ym)    =   exp(Y)*exp(Dis);                                                                             % Retail output
 exp(Dis)    =   gam*exp(Dis(-1))*exp(infl)^epsilon + 
                 (1-gam)*((1-gam*exp(infl)^(epsilon-1))/(1-gam))^(-epsilon/(1-epsilon));                     % Price dispersion
@@ -176,8 +197,7 @@ exp(Z)       =   exp(Y)         + beta*gam*exp(Lambda(+1))*exp(infl(+1))^(epsilo
 exp(inflstar)   =  epsilon/(epsilon-1)*exp(F)/exp(Z)*exp(infl);                                             % Optimal price choice
 exp(infl)^(1-epsilon)     =   gam + (1-gam)*(exp(inflstar))^(1-epsilon);                                    % Price index
 
-
-% Financial Intermediaries
+// Financial Intermediaries
 exp(nu_k)=beta*exp(Lambda(+1))*((exp(Rk(+1))-exp(Rd(+1)))*(1-theta)+ 
           theta*exp(Q(+1))*exp(K(+1))/(exp(Q)*exp(K))*exp(nu_k(+1))); % shadow excess value of loans
 exp(nu_b)=beta*exp(Lambda(+1))*((exp(Rb(+1))-exp(Rd(+1)))*(1-theta)+
@@ -200,19 +220,19 @@ exp(prem) =   exp(Rk(+1))-exp(Rd(+1));                  % Loan Premium
 exp(prem2) =   exp(Rb(+1))-exp(Rd(+1));                 % Bond Premium
 exp(Rp) = exp(Rk)*exp(Om(-1))+exp(Rb)*(1-exp(Om(-1)));  % Return on portfolio
 
-% Fiscal policy
+// Fiscal policy
 %G = (1-rho_g)*G_ss + rho_g*G(-1) + eg; %
 exp(B) = exp(Rb)*exp(B(-1))+exp(G)-exp(T); % Government Budget Constraint
 exp(G) = G_ss*exp(g); % Government consumption
 exp(T) = T_ss; % Taxes
 exp(Gy) = exp(G)/Y_ss; % Share of gov. consumption in GDP
  
-% Additional Equations
+// Additional Equations
 exp(Y) =   exp(C) +exp(G) + exp(I); % Aggregate resource constraint
 exp(i(-1)) =   exp(Rd)*exp(infl); % Fisher equation
 exp(i) =   exp(i(-1))^rho_i* (i_ss*exp(infl)^kappa_pi*((Y)/(Y(-1)))^(kappa_y))^(1-rho_i)*exp(-e_i); % Taylor rule
 
-% Shocks
+// Shocks
 a  =   rho_a*a(-1)-e_a; %42. TFP shock
 ksi=   rho_ksi*ksi(-1)-e_ksi; %43. Capital quality shock
 g  =   rho_g*g(-1)+e_g; %44. Government consumption shock
@@ -269,6 +289,7 @@ end;
 steady;
 check;
 
+//Shocks
 shocks;
 %var e_a=sigma_a^2;
 %var e_ksi=sigma_ksi^2;
@@ -276,6 +297,13 @@ shocks;
 var e_g=25;
 %var e_i=sigma_i^2;
 end;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order = 1, irf=30) Gy ERb ERk I K Q N Phi G C Y;
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul(order = 1, irf=30) Gy ERb ERk I K Q N Phi G C Y;
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
     
