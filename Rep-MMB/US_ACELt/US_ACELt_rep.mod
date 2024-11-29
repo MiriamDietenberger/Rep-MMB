@@ -1,43 +1,46 @@
-//**************************************************************************
-// A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
-//
-// Volker Wieland, Tobias Cwik, Gernot J. Mueller, Sebastian Schmidt and
-// Maik Wolters
-//
-// Working Paper, 2009
-//**************************************************************************
+% US_ACELt
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
-// Model: US_ACELt
-
+//**********************************************************************
 // Further references:
 // Altig, D., L. Christiano, M. Eichenbaum, and J. Linde. 2004. "Firm-Specific Capital, Nominal Rigidities and the Business Cycle."
 // working paper.
-
+//
 // Last edited: 10/09/07 by S. Schmidt
-
-
+//
+//
 // This file simulates the dynamic response of the model to specific shocks
 // This code is a adoption of the code provided by L.J.Christiano on
 // http://faculty.wcas.northwestern.edu/~lchrist/research/ACEL/acelweb.htm
-
+//
 // This version is produces the right impulse responses to neutral and investment
 // specific technology shocks. Timing: Technology shock, agents' decisions, monetary policy shock.
 // This file produces wrong answers to monetary policy shocks as variables are
 // not predetermined. See US_ACELm for a appropriate version for monetary policy shocks.
+//**********************************************************************
 
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var c_t wtilde_t lambda_zstar_t m_t pi_t x_t s_t i_t h_t kbar_t1 q_t ytilde_t R_t mutilde_t rhotilde_t u_t
     x_M_t eps_M_t mu_z_t eps_muz_t x_z_t mu_ups_t eps_muups_t x_ups_t
     cf_t wtildef_t lambda_zstarf_t mf_t pif_t xf_t sf_t if_t hf_t kbarf_t1 qf_t ytildef_t Rf_t mutildef_t rhotildef_t uf_t
 	epsilon_t;  // the last variable is the additional transitory neutral technology shock not considered in the original codes
 
-
+//Define exogenous variables
 varexo  epsilon_M_ eps_muz_ eps_muups_ epsilon_t_;  // the last shock is the transitory technology shock, not in the original codess 
 
-
-
+//Define parameters
 parameters
-
            alpha b beta delta eps eta lambda_f lambda_w mu_ups mu_z nu psi_L
            sigma_L x xi_w V kappa sigma_a gamma squig vaartheta rho_M theta_M
            rho_muz theta_muz c_z cp_z rho_xz rho_muups theta_muups c_ups
@@ -49,6 +52,9 @@ parameters
            bf_w xif_w ETA1f ETA2f ETA3f ETA4f ETA5f ETA6f ETA7f ETA8f ETA9f ETA10f  rho_epsilon; //xif_p
 
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 rho_epsilon =   0.9767 ;     // coefficient for the transitory technology shock, not in the original code
 alpha       =   0.3600 ;
 b           =   0.7048 ;
@@ -140,15 +146,18 @@ ETA9f  =   -bf_w*xif_w*(1-blewy); //eta7
 ETA10f  =  beta*bf_w*xif_w*(1-blewy); //eta8
 
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
-
-
 
 // Original Model Code:
 
 
-// STICKY PRICE MODEL ///////////////////////////
+/////STICKY PRICE MODEL///// 
+
 // THE FIRM SECTOR
+
 //Capital Euler Equation: eq. (1) in technical appendix
 lambda_zstar_t(+1) + (1-delta)/(rhotilde+1-delta) * mutilde_t(+1) + rhotilde/(rhotilde+1-delta)*rhotilde_t(+1)
 - lambda_zstar_t - mutilde_t
@@ -180,7 +189,9 @@ wtilde_t - s_t + alpha/(1-alpha)*ytilde/(ytilde+phi)*ytilde_t + nu*R/(nu*R+1-nu)
 - alpha/(1-alpha) * kbar_t1(-1)
 = - alpha/(1-alpha) * mu_z_t - alpha/(1-alpha)^2 * mu_ups_t + 1/(1-alpha)*epsilon_t;
 
+
 // THE HOUSEHOLD SECTOR
+
 // Money demand: eq. (7) in technical appendix
 c_t - q_t = R/(R-1)/(2+sig_eta) * R_t;
 
@@ -229,9 +240,10 @@ x_t =  x_M_t + x_z_t + x_ups_t;   // replaced by interest rule of model base
 1/sigma_a * rhotilde_t = u_t;
 
 
+/////FLEXIBLE PRICE MODEL/////
 
-// FLEXIBLE PRICE MODEL ///////////////////////////
 // THE FIRM SECTOR
+
 //Capital Euler Equation: eq. (1) in technical appendix
 lambda_zstarf_t(+1) + (1-delta)/(rhotilde+1-delta) * mutildef_t(+1) + rhotilde/(rhotilde+1-delta)*rhotildef_t(+1)
 - lambda_zstarf_t - mutildef_t
@@ -299,7 +311,6 @@ wtildef_t - x*m/(x*m-q) * mf_t +  hf_t + q/(x*m-q) * qf_t = x*m/(x*m-q) * xf_t;
 // Monetary Policy: eq. (13) in technical appendix
 xf_t =  0;// x_M_t + 0*x_z_t + 0*x_ups_t;  //We assume a constant money growth rate for the flex price equilibrium
 
-
 // Linking base growth to the base: eq. (14) in technical appendix
 -  mf_t  - pif_t
 +  mf_t(-1) + xf_t(-1)
@@ -313,7 +324,6 @@ xf_t =  0;// x_M_t + 0*x_z_t + 0*x_ups_t;  //We assume a constant money growth r
 // Capital Utilization: eq. (16) in technical appendix
 1/sigma_a * rhotildef_t = uf_t;
 
-
 // Shock processes:
 x_M_t       = rho_M * x_M_t(-1) + theta_M* eps_M_t(-1) + epsilon_M_;
 eps_M_t     = epsilon_M_;
@@ -326,10 +336,10 @@ x_ups_t     = cp_ups * eps_muups_t(-1) + rho_xups *x_ups_t(-1) +  c_ups * eps_mu
 epsilon_t   = rho_epsilon * epsilon_t(-1) + 0.5187*epsilon_t_;
 end;
 
-
 //steady;
 //check;
 
+//Shocks
 shocks;
 var epsilon_M_;
 stderr .3285; // sig_M
@@ -338,5 +348,14 @@ stderr .0673; // sig_muz
 var eps_muups_;
 stderr .3027; //sig_muups
 end;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 //stoch_simul(irf = 20, ar=100); //noprint
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
