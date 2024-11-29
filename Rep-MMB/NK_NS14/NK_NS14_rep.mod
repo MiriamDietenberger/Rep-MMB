@@ -1,17 +1,30 @@
-clc;
-close all;
+% NK_NS14
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 
 %----------------------------------------------------------------
-% Varialbles
+% 1. Defining variables
 %----------------------------------------------------------------
+//Define endogenous variables
 var c cf r pi pif piH piF l lf pH p pf sH sF y yf g gf w wf i if k kf ny nyf q ;
+
+//Define exogenous variables
 varexo eg egf er;
 
-%----------------------------------------------------------------
-% Parameters
-%----------------------------------------------------------------
+//Define parameters
 parameters sigma_c sigma_l beta kappa zeta phiH phiF phiHstar phiFstar Cbar Ibar nn eta rhoii phiPi phiY phiG rhoG aa nu omegaBar delta eps_phi rho_y rho_k;
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 sigma   = 1;      % Intertemporal elastisity of substitution
 alpha   = 0.75;   % Calvo parameter
 beta    = 0.99;   % Subjective discount factor
@@ -74,8 +87,9 @@ lambda = whichLambda'*lambda;
 tauBar = alpha*Xi*lambda/(1-alpha*beta*lambda);
 zeta     = (1+omegaBar*theta-(omegaBar-nu^(-1))*tauBar*alpha*beta/(1-alpha*beta*lambda))^(-1);
 
+
 %----------------------------------------------------------------
-% Model
+% 3. Model
 %----------------------------------------------------------------
 
 model(linear);
@@ -162,15 +176,24 @@ pf=piF+pf(-1);
 
 end;
 
-
+//Shocks
 shocks;
 var eg = 1;
 var egf = 1;
 end;
 
 steady;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(hp_filter = 1600, order = 1, irf = 100);
+
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul(hp_filter = 1600, order = 1, irf = 100);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
 
 
 
