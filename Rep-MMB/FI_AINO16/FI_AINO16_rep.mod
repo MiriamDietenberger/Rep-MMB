@@ -1,3 +1,13 @@
+% FI_AINO16
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 /*
  * Aino 2.0 model
  * Copyright (C) 2016 Bank of Finland, Juha Kilponen and Fabio Verona
@@ -25,15 +35,21 @@
  * fabio.verona@bof.fi
  */
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
+//Define endogenous variables
 var psi	q iH cH rFI rEUR k wF y hF mcY pieY ds yC mC pC c pO iT yI mI pI
     rK yX mX mcX x pieX pX pieMC pieM tbY m pM ToT bstar astar  pieC pieI rs trY w h  mu lamK lamLT lamCY lamCM lamIY 
     upsilon upsilonMC upsilonX zetaCH zetaEUR lamW iG hG cGF wG pOILS mW pieW pieOILS epsX pRAWS pieRAWS
     rb nwe btot epsb lev_e by  RB kbank nuB epsKB bankprofits deposits bka rwage;
- 
+
+//Define exogenous variables
 varexo epsMU epsLAMBDAK epsLAMBDALT epsLAMBDACY epsLAMBDACM epsLAMBDAIY epsUPSILON epsUPSILONMC epsUPSILONX epsZETACH epsLAMW
        epsZETAEUR epsdS epsIG epshG epsGF epsPOILS epsPRAWS epsMW epsPIEW epsXX epsEPSB epsnuB epsBankCapital epsrEUR;      	
 
+//Define parameters
 parameters
     bC ssMU ssTAXWR ssRS ssRPOILS ssTAXCR bet delta lambdaW	rhoY deltaY ssLAMBDAK ssLAMBDALT ssTAXKR gamI sspieY phia
     xiW sigmaL ssHG ssTAXFR ssUPSILON ssUPSILONMC ssUPSILONMI ssUPSILONMX
@@ -51,6 +67,10 @@ parameters
       % M_.params(i) = eval(['pp.' name]);
    % end;
 %end;
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 load all_parameters_February2016;
 for jj=1:length(M_.param_names)
@@ -82,6 +102,10 @@ seepsPRAWS=pp.seepsPRAWS;
 seepsBankCapital=pp.seepsBankCapital;
 seepsEPSB=pp.seepsEPSB;
 seepsrEUR=pp.seepsrEUR; 
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -476,6 +500,11 @@ var	epsLAMBDAK;         stderr seepsLAMBDAK;
 var	epsrEUR;    	stderr seepsrEUR; 
 end;
 
-%stoch_simul(order=1,irf=20,nograph, noprint) y cH iH x m tbY rK rwage mcY hF ToT pieY rb btot bka nwe q rs rEUR;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//%stoch_simul(order=1,irf=20,nograph, noprint) y cH iH x m tbY rK rwage mcY hF ToT pieY rb btot bka nwe q rs rEUR;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
 
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
