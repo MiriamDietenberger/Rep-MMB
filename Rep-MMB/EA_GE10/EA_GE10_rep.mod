@@ -1,17 +1,33 @@
+% EA_GE10
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // EA_GE10 code for replication of IRFs.
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
-
+//Define endogenous variables
 var   r c l inv q k nw rk y pi z mc a x eb el S g rn wp EMP ypot cf invf qf rkf rf kf wpf lf zf mcf; //thetae; epi 
 
-
+//Define exogenous variables
 varexo ux ub ul ua  ur ug ulambdapi uw ; //uq; uthetae upi 
 
- 
+//Define parameters 
 parameters    alpha beta delta theta RR S_ss rhob vkappa thetae  phim rhol rhox rhopi rhoa  NWK KNW Rk  xie
              rpi ry  h rhog sigmal sigmac  cw  gammaw  lambdaw gammapi pis FI  phi rdeltapi rdeltay 
              GAMMA thetaest c_y gz;  //Xi epsilon thetaf rhothetae GY Z_ss KY
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 //calibrated parameters
 
@@ -59,7 +75,9 @@ rdeltapi=0.1417;            //response of int.rate to infl. first diff.
 rdeltay=0.2061;             //response of int.rate to output growth
 xie=0.7458;                 //Calvo employment
 
-      
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------     
 
 model;
 
@@ -208,11 +226,14 @@ var ulambdapi=0.1743^2;     //std.dev. price markup shock
 
 end;
 
-%stoch_simul(irf=20, noprint, nograph) c l inv q nw y k rn S;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
- 
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//%stoch_simul(irf=20, noprint, nograph) c l inv q nw y k rn S;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
 
-
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 
 
