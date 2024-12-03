@@ -1,3 +1,14 @@
+% G2_SIGMA08
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+
 // Title: Trade adjustment and the composition of trade
 // Authors: Christopher J. Erceg, Luca Guerrieri and Christopher Gust
 // Publication: Journal of Economic Dynamics and Control 
@@ -9,6 +20,11 @@
 // Figure 3 in EGG2008
 // In the original file the AR parameter of the shock was changed to 0.95 (from 0.9) in line with footnote 11 of EGG2008 
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var cc sp2gdp cc2gdp if if2gdp tobq kp kp1 rentks gdp ccd ifd mgsni mgsnic mgsnii rmc 
     rmi rs mcq mpl wmarkup mrs dpq pq dpmf pmf px dw w zetac zetap le rpmpq rpxpq rpmpx 
     rpcpq rpipq dpc pc gdppot gdpgap rs1 rs1f1 rs1f2 rs1f3 rs1f4 rs1f5 rs1f6 rs1f7 rs1f8 
@@ -35,7 +51,7 @@ var cc sp2gdp cc2gdp if if2gdp tobq kp kp1 rentks gdp ccd ifd mgsni mgsnic mgsni
 // Additional Variables needed for replication
 realimp realexp realerpq;
 
-
+//Define exogenous variables
 varexo erratp erratt errgcxp errpitarp errpitart errconshkp errconshkt errtaxkp 
        errtaxkt errtranshkp errtranshkt erratpf errattf errgcxpf errgcxtf errpitarpf errpitartf 
        errconshkpf errconshktf errtaxkpf errtaxktf errtranshkpf errtranshktf errriskpp errriskpt 
@@ -47,7 +63,7 @@ varexo erratp erratt errgcxp errpitarp errpitart errconshkp errconshkt errtaxkp
 //**************************************************************************
 
 
-
+//Define parameters
 parameters shrckey shrcy shrgy rbar gzbar popg delta  shriy phik  deltahat phii invfor inddelta tauk defspread cessub shrmy shrmc shrmi etamc          
            phimc forswitch lovparm monlag gampi gamex gamy gamy4 gamgap taul chi shrlab indexp kappap indexm kappax indexw kappaw qcapshr shrlaby rkbar          
            shrckeyf shrcyf shriyf shrgyf shrmyf shrmcf shrmif etamcf etamif phimcf monlagf gamexf gamyf gamy4f gamgapf kappapf kappaxf kappawf sigma phic           
@@ -74,7 +90,9 @@ parameters shrckey shrcy shrgy rbar gzbar popg delta  shriy phik  deltahat phii 
 //**************************************************************************
 
 
-
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 forswitch = 0;  //% cost of adjusting imports external if forswitch = 0, internal if forswitch = 1;  (home and foreign) 
 switchg = 1;  //% if switchg = 0, govt spending shock is relative to baseline GDP; 
@@ -229,6 +247,10 @@ kappax = (1-psix)*(1-psix*beta)/psix;
 kappapf = (1-psipf)*(1-psipf*beta)/psipf;
 kappaxf =  (1-psixf)*(1-psixf*beta)/psixf;
 kappawf =  (1-psiwf)*(1-psiwf*beta)/(psiwf*(1+chi*shrlab*(1+thetawf)/thetawf));
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -727,5 +749,12 @@ var errimpshkf    =1;
 var errtaxlshkpf  =1;
 var errtaxlshktf  =1;
 end;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(irf = 30, nograph, noprint) realimp realexp realerpq ntby;
+
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(irf = 30, nograph, noprint) realimp realexp realerpq ntby;
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
