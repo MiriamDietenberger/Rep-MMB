@@ -1,3 +1,13 @@
+% EA_VI16bgg
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 % Financial frictions in the Euro Area and the United States: a Bayesian assessment
 % Macroeconomic Dynamics, 20 (05), p. 1313-1340, 2016
 % Stefania Villa
@@ -6,26 +16,28 @@
 % SMETS-WOUTERS & BGG MODEL   [EA_VI16bgg]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% /////////////////////////////////////////////////////////////////////////
-% 1. Defining variables and parameters
-% /////////////////////////////////////////////////////////////////////////
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
+//Define endogenous variables
 var        y  c  i  w  l  pi r rn zk  u  k  q  rk   ext_pr   n             % Variables under nominal rigidities (15), Zk=marginal product of capital, u=installed capital, q=Tobin's Q, rk=external financing cost , n=net worth
            yf cf if wf lf    rf   zkf uf kf qf rkf  ext_prf  nf            % Variables under flexible prices (13)
            a g eps_x eps_r eps_p eps_w eps_k;                              % Shocks (7)
       
- 
+//Define exogenous variables 
 varexo     e_a e_g e_x e_r e_p e_w e_k;                                    % (7) 
 
+//Define parameters
 parameters alpha beta delta  epsilon epsilon_w M G_Y kappa theta  N_K      % Calibrated Parameters
            ksi h  sigma_w sigma_p sigma_wi sigma_pi zeta  Theta            % Estimated Parameters
            rho_pi rho_dy rho_y rho_r                                       % Taylor rule parameters
            rho_a rho_k rho_g rho_x rho_ri rho_p rho_w                      % Shock persistence parameters
            phi  bas_point s_coef;
 
-% ////////////////////////////////////////////////////////////////////////
-% 2. Calibrated Parameters and Initialisations
-% ////////////////////////////////////////////////////////////////////////
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 % Calibrated Parameters
 alpha     = 0.330;    % Capital income share
@@ -69,9 +81,9 @@ bas_point = 150;                         % Steady state spread
 s_coef    = (bas_point + 40000)/40000;   % Transformation to decimal form and quarterly basis
 
 
-% ////////////////////////////////////////////////////////////////////////
+%----------------------------------------------------------------
 % 3. Model
-% ////////////////////////////////////////////////////////////////////////
+%----------------------------------------------------------------
 
 
 model(linear); 
@@ -201,8 +213,13 @@ var e_w; stderr 1.0;       %0.12;
 end;
  
 
-% ////////////////////////////////////////////////////////////////////////
-% 6. Simulation
-% ////////////////////////////////////////////////////////////////////////
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(irf=21,nograph) y i pi n ext_pr  ;                           % All shocks without a chart 
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(irf=21,nograph) y i pi n ext_pr  ;                           % All shocks without a chart 
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
