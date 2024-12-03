@@ -1,3 +1,18 @@
+% DEREA_GEAR16
+%
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var              
   i_a_t            i_b_t            i_c_t                             // Interest Rate
   i_Ga_t           i_Gb_t                                             // Government bond rate
@@ -92,6 +107,7 @@ var
   
 ;
 
+//Define exogenous variables
 varexo  
   nua_a       nub_a                // Technology shock
   nua_etheta  nub_etheta           // Price markup shock
@@ -118,6 +134,7 @@ varexo
   nua_eM                           // Monetary policy shock
 ;
 
+//Define parameters
 parameters  
   //***************************************************************************************
   // Defin_a_tstion of deep model parameters
@@ -280,6 +297,10 @@ parameters
 ;
 
 set_params_31_08_aw1;
+
+%----------------------------------------------------------------
+% 2. Model
+%----------------------------------------------------------------
 
 model;
 //*************************************************************************
@@ -802,4 +823,12 @@ shocks;
   var nua_eM        = 0.0008^2;
 end;
 
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 stoch_simul(order=1,irf_shocks=(nua_eM),irf=40) y_a_t c_a_t i_policy_t pi_a_t;
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

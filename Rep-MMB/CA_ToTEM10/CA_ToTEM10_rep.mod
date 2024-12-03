@@ -1,3 +1,13 @@
+% CA_ToTEM10
+%
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //**************************************************************************
 // This file has been transformed from its MMB version to be a replication 
 // .mod file in June 2022.
@@ -22,7 +32,11 @@
 	// This file simulates the dynamic response of Bank of Canada's ToTEM model
 	// to specific shocks. 
 	
-	
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 	var cbal,cbal_cor,defn_yn,defn_yn_ss,den_w,deprk,dr1rown,gbn_cor,gbn_yn,gbn_yn_ss,
 	    gn_yn_ss,inff,infprow,infq,infq2,infq_pg,infq_row,infrow,infrow2,infrow_ss,gn_yn_cor
 	    la,la0_cor,la5_cor,la9_cor,ladotrow,la_inv,la_tot,lc,lc0_cor,lc995_cor,lcfl,lchm,lckl,
@@ -44,15 +58,11 @@
 	    ug,uinv,usact,usum,utotal,ux,w_inf;
 	
 	
-
-	
-	
+//Define exogenous variables
 	varexo lyrow_shk,lpcomrow_shk,lxdc_shk,lforexn_shk,lc_shk,la_shk,gn_yn_shk;%
 	
 	
-  
-	
-	     
+//Define parameters	     
 	parameters 
 	           alpha_c,alpha_c2,alpha_com,alpha_g,alpha_hawc,alpha_hawcom,alpha_hawg,alpha_hawinv,alpha_hawx,
 	           alpha_inv,alpha_x,a_cbal,a_gbn,a_k,a_ladotus,a_lc,a_lc2,a_lforexn,a_lg,a_linv,a_lm,a_lpcomrow,a_lprow,
@@ -71,7 +81,10 @@
 	           lxdx_shk,lxf_shk,lxw_shk,ly_res_shk,linv_shk,lx_shk,lm_shk,r1n_tran_shk,rh_prem_shk,
 	           rf_prem_shk,lk_shk,transf_r_shk,tdn_shk,rgbn_shk,tinc_shk,cbal_shk,nfa_shk;
 	
-	
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 	///////
 	//  Parameters for monetary policy rule
 	r1n_ss_ss = 1.25599099e-02;
@@ -264,11 +277,11 @@
 	nfa_shk=0.00000000e+00;
 	
 
-	
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------		
 	
 	model;
-	
-
 	
 	
 	// Original Model Code:
@@ -572,6 +585,7 @@
 	infrow_ss = infrow_ss(-1)+infrow_shk ;
 	end;
 
+//Shocks
 	%resid;
 	options_.solve_tolf=1e-5;
 	steady(maxit=1000);
@@ -585,5 +599,12 @@
 	var gn_yn_shk; stderr 0.02*100;
 	end;
 	options_.Schur_vec_tol = 1e-6;
-	
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 	stoch_simul (irf = 0,AR=100, noprint, nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

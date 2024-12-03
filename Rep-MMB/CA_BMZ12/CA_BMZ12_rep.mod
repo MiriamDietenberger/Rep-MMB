@@ -1,3 +1,12 @@
+% CA_BMZ12
+%
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
 //this is the program for simulation for BMZ, July 07, 2010
 //values based on results from estimation_bmz
@@ -6,8 +15,12 @@
 
 close all
 // global Gamma_y
-// Define 20 variables
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var  auxt, bigXt, bigZt, ct, eqti, et, ht, it, kt, lambdat, llt, mct, nt, pit, pref, pstart, qt, 
 rkt, rnt, st, xt, yt, zt,
 auxtfp, ctfp,   htfp, itfp, ktfp, lambdatfp, lltfp, mctfp, 
@@ -16,12 +29,10 @@ rktfp, rntfp, ytfp, ygap, lnyt, lnit, lnygap, uu, vf, ft,
 taut, bt, cgn, cg, mpl, kl, mpk, rw, mcl, mck, mcb, mcc, mcd, mce, htb, qgap, expi, lev, kc, ce,
 ste,efc;
 
-// Define 4 exogenous shocks (technology, monetary, investment, preference)
-
+//Define exogenous variables
 varexo epszt, epset, epsxt, epspt, epsft;
 
-// Define 14 structural parameters and STEADY STATE values
-
+//Define parameters
 parameters b, a, chi, d,  g, te, veps, xi, nu, tau, r_p, r_r, r_y, rho_z, rho_e, rho_x, mub, tau1,  rho_p, 
            aux_ss, pi_ss, q_ss, z_ss, e_ss, mc_ss, rn_ss, rk_ss, s_ss, ik_ss, eqti_ss, 
            yk_ss, ck_ss, yc_ss, h_ss, k_ss, n_ss, c_ss, i_ss, y_ss, 
@@ -35,9 +46,11 @@ parameters b, a, chi, d,  g, te, veps, xi, nu, tau, r_p, r_r, r_y, rho_z, rho_e,
            ste_ss, efc_ss
            lnyt_ss lnit_ss qgap_ss
            ; //nk, auxfp_ss,ygapfp_ss, chib,tau2,
-  
-// Set parameter and SS values
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+ 
 ca    = 1;//cases
 
 //////policy experiment parameters
@@ -50,13 +63,12 @@ rho_f = 0.7980;//mode;//0.9847; //0.5;//0;0.9847;//risk premium shock
 
 
 /////other parameters
-
 b     = 0.99;
 a     = 2/3;
 
+
 // parameter for the ad-hoc cost of external funds
 //ela of ext finance cost
-
 chi   = 0.0594;//0.021;//0.084;//0.0421;//mode;
 nkratio = 0.6;
 d     = 0.025;
@@ -86,8 +98,7 @@ rho_p = 0.9546;
 //mub   = 1.0025;
 mub   = 1.005;
 
-// Compute SS
-
+/////compute STEADY STATE
 pi_ss     = mub;
 z_ss      = 1;
 e_ss      = 1;
@@ -167,12 +178,13 @@ lnyt_ss     = 0;
 lnit_ss     = 0; 
 qgap_ss     = q_ss-qfp_ss;
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
+
 model;
 
-// Model equations:
-
 //equations for sticky price model
-
 lambdat     = pref/ct;
 lambdat     = rnt*b*(lambdat(+1)/pit(+1));
 rkt         = ((1-a)*((yt*llt)/kt(-1))*mct+(1-d)*qt)/qt(-1);
@@ -223,8 +235,9 @@ cg         = bt/bt(-1);
 lev        = qt*kt/nt;
 kc         = (xi/2)*(it/kt(-1)-d)^2*kt(-1);
 
-// Policy rule:
 
+
+// Policy rule:
 //rnt/rn_ss  = ((rnt(-1)/rn_ss)^r_r)*(((pit/pi_ss)^r_p)*((yt/ytfp)^r_y))^(1-r_r)*et;
 //rnt/rn_ss  = ((rnt(-1)/rn_ss)^r_r)*(((pit/pi_ss)^r_p)*((qt/qtfp)^r_q)*((yt/ytfp)^r_y))^(1-r_r)*et;
 //rnt/rn_ss  = ((rnt(-1)/rn_ss)^r_r)*(((pit/pi_ss)^r_p)*((st/s_ss)^r_s)*((yt/ytfp)^r_y))^(1-r_r)*et;//risk premium
@@ -242,7 +255,6 @@ rnt/rn_ss  = ((rnt(-1)/rn_ss)^r_r)*(((pit/pi_ss)^r_p)*((cgn/cgn_ss)^r_c)*((yt/y_
 
 
 // Prices:
-
 pstart = (veps/(veps-1))*(bigXt/bigZt);
 pstart = ((1-nu*pit^(veps-1))/(1-nu))^(1/(1-veps));
 bigXt  = mct*yt + nu*b*(lambdat(+1)/lambdat)*(pit(+1)^(veps))*bigXt(+1);
@@ -251,7 +263,6 @@ bigZt  = yt + nu*b*(lambdat(+1)/lambdat)*(pit(+1)^(veps-1))*bigZt(+1);
 
 
 //equations for flexible price model
-
 lambdatfp     = pref/ctfp;
 lambdatfp     = rntfp*b*(lambdatfp(+1)/pitfp(+1));
 rktfp         = ((1-a)*((ytfp)/ktfp(-1))*mctfp+(1-d)*qtfp)/qtfp(-1);
@@ -266,8 +277,10 @@ lltfp        = 1;
 ygap         = yt-ytfp;
 lnygap       = log(ygap)-log(ygap_ss);
 qgap         = qt-qtfp;
-// Policy rule:
 
+
+
+// Policy rule:
 //rntfp/rn_ss  = ((rntfp(-1)/rn_ss)^r_r)*(((pitfp/pi_ss)^r_p)*((ytfp/ytfp)^r_y))^(1-r_r)*et;
 //rntfp/rn_ss  = ((rntfp(-1)/rn_ss)^r_r)*(((pitfp/pi_ss)^r_p)*((qtfp/qtfp)^r_q)*((ytfp/ytfp)^r_y))^(1-r_r)*et; //asset price
 
@@ -275,22 +288,22 @@ rntfp/rn_ss  = ((rntfp(-1)/rn_ss)^r_r)*(((pitfp/pi_ss)^r_p)*((bt/bt(-1)*pit)^r_c
 
 //rntfp/rn_ss  = ((rntfp(-1)/rn_ss)^r_r)*(((pitfp/pi_ss)^r_p)*((bt/bt(-1))^r_c)*((ytfp/ytfp)^r_y))^(1-r_r)*et;//credit growth
 
-// Prices:
 
+
+// Prices:
 pstartfp = (veps/(veps-1))*mctfp;
 pstartfp = 1;
 
-
-// Shocks:
-
+//Shocks
 log(zt)   = rho_z*log(zt(-1)) + epszt;
 log(et)   = rho_e*log(et(-1)) + epset;
 log(xt)   = rho_x*log(xt(-1)) + epsxt;
 log(pref) = rho_p*log(pref(-1)) + epspt;
 log(ft)   = rho_f*log(ft(-1)) - epsft;
 end;
-// Define the initial value of the variables for the simulation
 
+
+// Define the initial value of the variables for the simulation
 initval;
 
 auxt   = rn_ss/pi_ss;
@@ -366,6 +379,8 @@ steady;
 
 check;
 
+
+
 // Estimated version
 shocks;
 var epszt = 0.0060^2;
@@ -378,6 +393,11 @@ var epsft = 0.0018^2;//mode and mean;//0.0016^2;//0.01^2;//0.0016^2;//risk premi
 
 end;
 
+//Simulation
+
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 //stoch_simul(dr_algo=0,order=1, irf=40) yt pit cgn nt rnt ft zt qt st it ;
 //stoch_simul(order=2,irf=0) vf yt pit qt rnt st it ct ht ygap ;
 
@@ -417,9 +437,8 @@ ht_irf_z=ht_epszt/h_ss;
 kt_irf_z=kt_epszt/k_ss; 
 mct_irf_z=mct_epszt/mc_ss; 
 
-
-
 mat_res_2 = [yt_epszt/y_ss pit_epszt/pi_ss cgn_epszt/cgn_ss nt_epszt/n_ss rnt_epszt/rn_ss zt_epszt qt_epszt/q_ss st_epszt/s_ss it_epszt/i_ss ct_epszt/c_ss ht_epszt/h_ss kt_epszt/k_ss rkt_epszt/rk_ss mct_epszt/mc_ss cg_epszt qtfp_epszt ygap_epszt/yfp_ss mpl_epszt/mpl_ss kl_epszt/kl_ss mpk_epszt/mpk_ss rw_epszt/rw_ss  mcl_epszt/mcl_ss mck_epszt/mck_ss mcb_epszt/mcb_ss mcc_epszt/mcc_ss mcd_epszt/mcd_ss mce_epszt/mce_ss htb_epszt/htb_ss auxt_epszt/aux_ss bt_epszt/bt_ss rkt_epszt/rk_ss expi_epszt/pi_ss lev_epszt/lev_ss ce_epszt ytfp_epszt/yfp_ss ste_epszt/ste_ss efc_epszt/efc_ss];
 */
+//***************************
 
-
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

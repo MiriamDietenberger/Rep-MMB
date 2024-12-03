@@ -1,15 +1,32 @@
+% EAES_RA09
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // Replication file for EAES_RA09 model 
 //by Martina Jancokova
 //RESTRICTED model
 //Note: pi represents here p-p(t-1)
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var dy dy_star mu r pi c mu_star c_star rer t_N t_H t_F t_T t_N_star t_H_star t_F_star t_T_star 
     c_H c_F c_N c_H_star c_F_star c_N_star l w l_star w_star l_N l_T l_N_star l_T_star y_N z_N y_H z_T y_N_star z_N_star 
     y_F_star z_T_star pi_H pi_N pi_N_star pi_F pi_star pi_EMU g_N g_T g_N_star g_T_star y y_star; 
 //pi_T pi_T_star p_N p p_H p_F p_T p_N_star p_T_star p_star 
 
+//Define exogenous variables
 varexo eps_m eps_ZT eps_ZN eps_ZT_star eps_Z eps_ZN_star eps_GT eps_GN eps_GT_star eps_GN_star;
 
+//Define parameters
 parameters b x alfa_T b_star alfa_T_star nu eps w_bar w_bar_star gamma gamma_star vaphi_N theta_N beta alfa_N  
            vaphi_H theta_H vaphi_N_star theta_N_star alfa_N_star vaphi_F_star theta_F_star lambda lambda_star s
            eta eta_star rho_r gamma_pi rho_ZT rho_ZN rho_ZT_star rho_ZN_star rho_GT rho_GN rho_GT_star rho_GN_star;
@@ -22,6 +39,10 @@ parameters b x alfa_T b_star alfa_T_star nu eps w_bar w_bar_star gamma gamma_sta
 //NOTE: the positive estimated trends are set equal zero (multiplied by zero)
 //      to perfectly match the IRFs in the paper
 //  TRENDS: x alfa_T alfa_T_star alfa_N alfa_N_star
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 b=0.6;                  //habit persistence in home country C
 x=0*0.57;                 //growth rate in the EMU in percent 
@@ -68,6 +89,9 @@ lambda_star=0.98;
 //s=0.11;                 //average weight of Spain in EMU HICP C
 s=((1-lambda)*gamma*(1-eta)/((1-lambda_star)*gamma_star*(1-eta_star))+1)^(-1);
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -228,5 +252,13 @@ var eps_GN; stderr 4.58;
 var eps_GN_star; stderr 2.34;
 end;
 
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 %stoch_simul(irf=15, nograph, noprint) pi pi_star pi_N_star pi_N dy dy_star;
 stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
