@@ -1,3 +1,13 @@
+% EA_SR07
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // Replication file
 
 // Model: EA_SR07
@@ -8,7 +18,11 @@
 
 // Last edited: 10/09/07 by S. Schmidt
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
+//Define endogenous variables
 var pi_hat pi_mc pi_mi pi_x w_barhat c_hat i_hat psi_zhat P_k dS H_hat k_barhat k_hat q_hat m_barhat mu_hat a gamma_mcdhat gamma_midhat gamma_xstar mc_x R_hat E //23 endogenous variables
     pistar_hat ystar_hat Rstar_hat // 3 foreign variables
     tauk_hat tauy_hat tauc_hat tauw_hat g_hat //5 government variables
@@ -24,11 +38,12 @@ var pi_hat pi_mc pi_mi pi_x w_barhat c_hat i_hat psi_zhat P_k dS H_hat k_barhat 
     interest inflation inflationq outputgap output;                      //*
 //**************************************************************************       
 
+//Define exogenous variables
 varexo  epsilon_tauk epsilon_tauw epsilon_tauc epsilon_tauy epsilon_lambdad epsilon_lambdamc epsilon_lambdami epsilon_lambdax epsilon_muz epsilon_epsilon
         epsilon_Upsilon epsilon_ztildestar epsilon_zetac epsilon_zetah epsilon_phitilde epsilon_R epsilon_pibar epsilon_pistar epsilon_ystar epsilon_Rstar epsilon_rhog;
 
 
- 
+//Define parameters 
 parameters 
            beta alpha eta_c sigma_a mu sigma_L delta lambda_w omega_i omega_c nu tau_y tau_c rho_pibar gr A_q A_L rho_tauk rho_tauw sigma_q //20 fixed parameters
            xi_d xi_mc xi_mi xi_x xi_w xi_e kappa_w kappa_d kappa_mc kappa_mi kappa_x lambda_d lambda_mi lambda_mc S_tilde b eta_i eta_f mu_z tau_w tau_k phi_a
@@ -50,6 +65,10 @@ FisLag211 ,FisLag212 ,FisLag213 ,FisLag221 ,FisLag222 ,FisLag223 ,FisLag231 ,Fis
 FisShock11, FisShock12, FisShock13, FisShock14, FisShock15, FisShock21, FisShock22, FisShock23, FisShock24, FisShock25,
 FisShock31, FisShock32, FisShock33, FisShock34, FisShock35, FisShock41, FisShock42, FisShock43, FisShock44, FisShock45,
 FisShock51, FisShock52, FisShock53, FisShock54, FisShock55,epstauk, epstauw;   
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 ForLag111 = 0.1762;
 ForLag112 = 0.2798;
@@ -314,6 +333,9 @@ y_star=omega_c*gamma_cmc^eta_c*c+omega_i*gamma_imi^eta_i*i;
 //ForFisEstRes
 //DeclareALLVParametersEstim
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -711,7 +733,14 @@ stderr 0.053;
 //stderr 0.044;
 
 end;
+
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 //steady;
 //check;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(irf=20, noprint, nograph) pi_hat w_barhat c_hat i_hat x R_hat E y_hat;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(irf=20, noprint, nograph) pi_hat w_barhat c_hat i_hat x R_hat E y_hat;
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
