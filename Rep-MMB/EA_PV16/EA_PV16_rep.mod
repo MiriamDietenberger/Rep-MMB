@@ -1,3 +1,13 @@
+% EA_PV16
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // QUEST3 extension with short-term and long-term government bonds and EA CB bond purchases
 // Romanos Priftis & Lukas Vogel, 2016. "The Portfolio Balance Mechanism and QE in the Euro Area," Manchester School, vol. 84(S1), pages 84-105.
 
@@ -256,11 +266,23 @@ ea_zet = elasticity money demand
 lev = dummy dynamics notation
 */
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var ea_b ea_ben EA_bl EA_blcb EA_blnlc ea_br EA_bs ea_bw ea_bwr ea_by ea_c ea_cay ea_clc ea_cnlc ea_db EA_dbl EA_dblcb ea_dbr EA_dbs ea_dbwr ea_dc ea_dcnlc ea_de ea_dex ea_dexl ea_dexr ea_dexucap ea_dgs ea_di ea_digs ea_dim ea_dinfc ea_dinfx ea_dinfy ea_dinom ea_dk ea_dkg ea_dl ea_dlamlc ea_dlamnlc ea_dltfp EA_dm ea_dnomint ea_doil EA_dpbl ea_dpim ea_dpx ea_dpy ea_dq ea_dr ea_drealint ea_dtl ea_dv ea_dwinf ea_dwr ea_dy ea_e ea_eps_gs ea_eps_igs ea_eps_rpremeimpl ea_eps_rpremkimpl ea_eta ea_ex ea_ex_l ea_ex_r ea_ex_ucap ea_f ea_gby ea_gs ea_i ea_igs ea_im ea_imr ea_infc ea_inflation ea_infx ea_infy ea_inom ea_k ea_kg ea_l ea_lamlc ea_lamnlc ea_ltfp ea_m ea_nomint ea_o ea_oil EA_pbl ea_pc ea_pcy ea_pim ea_po ea_poil ea_px ea_py ea_q ea_r ea_realint ea_tax ea_tby ea_tfp ea_tl ea_tot ea_toty ea_tpremimpl ea_tr ea_trlc ea_ucap ea_ucnlc ea_v ea_vl ea_winf ea_wr ea_wrinf ea_y ea_ygap EA_yobs r_b r_ben R_bl R_blcb R_blnlc r_br R_bs r_bw r_bwr r_by r_c r_cay r_clc r_cnlc r_db R_dbl R_dblcb r_dbr R_dbs r_dbwr r_dc r_dcnlc r_dex r_dexl r_dexr r_dexucap r_dgs r_di r_digs r_dim r_dinfc r_dinfx r_dinfy r_dinom r_dk r_dkg r_dl r_dlamlc r_dlamnlc r_dltfp R_dm r_dnomint r_doil R_dpbl r_dpim r_dpx r_dpy r_dq r_dr r_drealint r_dtl r_dv r_dwinf r_dwr r_dy r_eps_gs r_eps_igs r_eps_rpremkimpl r_eta r_ex r_ex_l r_ex_r r_ex_ucap r_exoil r_f r_gby r_gs r_i r_igs r_im r_imea r_infc r_inflation r_infx r_infy r_inom r_k r_kg r_l r_lamlc r_lamnlc r_ltfp r_m r_nomint r_o r_oil R_pbl r_pc r_pcy r_pim r_po r_poil R_profcb r_px r_py r_q r_r r_realint r_tax r_tby r_tfp r_tl r_tot r_toty r_tpremimpl r_tr r_trlc r_ucap r_ucnlc r_v r_vl r_winf r_wr r_wrinf r_y r_ygap R_yobs;
- 
+
+//Define exogenous variables
 varexo ea_a ea_btar ea_bwyt ea_eps_ben ea_eps_clc ea_eps_cnlc ea_eps_eta ea_eps_etax ea_eps_g ea_eps_i ea_eps_ig ea_eps_im ea_eps_l ea_eps_ltfp ea_eps_m EA_eps_qe ea_eps_rpremb ea_eps_rpreme ea_eps_rpremk ea_eps_tl ea_eps_tr ea_eps_trlc ea_eps_ucap ea_eps_v ea_eps_w ea_ex_ben ea_ex_by ea_ex_gby ea_ex_gs ea_ex_igs ea_ex_inf ea_ex_ltfp ea_ex_tl ea_ex_trlc ea_ex_tvat ea_fcl ea_fcy ea_g ea_ig ea_ilag ea_im1lag EA_inoml ea_libdum ea_npart EA_profcb ea_rpremb ea_rpremk ea_size ea_slc ea_ssc ea_taxdum ea_taxshare ea_tc ea_tinf ea_trshare ea_tryshare ea_tvat ea_ty ea_upi null r_a r_btar r_e r_eps_ben r_eps_clc r_eps_cnlc r_eps_eta r_eps_etax r_eps_g r_eps_i r_eps_ig r_eps_im r_eps_l r_eps_ltfp r_eps_m r_eps_poil R_eps_qe r_eps_rpremb r_eps_rpremk r_eps_tl r_eps_tr r_eps_trlc r_eps_ucap r_eps_v r_eps_w r_ex_ben r_ex_by r_ex_gby r_ex_gs r_ex_igs r_ex_inf r_ex_ltfp r_ex_tl r_ex_trlc r_ex_tvat r_fcl r_fcy r_g r_ig r_ilag r_im1lag R_inoml r_npart r_rpremb r_rpremk r_size r_slc r_ssc r_taxdum r_taxshare r_tc r_tinf r_trshare r_tryshare r_tvat r_ty r_upi w_coreinf w_gpop w_gtfp;
- 
+
+//Define parameters
 parameters dyn ea_a1 ea_a2 ea_alpha ea_alphag ea_benex ea_benpc ea_benrr ea_bentl ea_bentvat ea_delta EA_deltabl ea_deltag ea_dumtrlc EA_gamb ea_gami ea_gami2 ea_gamim ea_gaml ea_gamoil ea_gamp ea_gampx ea_gamw ea_gslag ea_hab ea_habl ea_igslag ea_kappa EA_kbl ea_llag ea_omeg ea_pimlag ea_rho EA_rhoqe ea_rhotfp ea_rlag ea_rprem ea_s EA_sbl ea_sfim ea_sfp ea_sfpx ea_sfw ea_sig ea_sig1 ea_sigc ea_sigmaoil ea_soil ea_sxd ea_s_r ea_tau ea_taux ea_tgovb1 ea_tgovb2 ea_tgovby ea_tgovinf ea_theta ea_thetanlc EA_tqe ea_trnom ea_ucaplag ea_zet lev r_a1 r_a2 r_alpha r_alphag r_benex r_benpc r_benrr r_bentl r_bentvat r_delta R_deltabl r_deltag r_dumtrlc R_gamb r_gami r_gami2 r_gamim r_gaml r_gamoil r_gamp r_gampx r_gamw r_gslag r_hab r_habl r_igslag r_kappa R_kbl r_llag r_omeg r_pimlag r_poildol r_rho R_rhoqe r_rhotfp r_rlag r_s R_sbl r_sfim r_sfp r_sfpx r_sfw r_sig r_sig1 r_sigc r_sigmaoil r_soil r_sxd r_s_ea r_tau r_taux r_tgovb1 r_tgovb2 r_tgovby r_tgovinf r_theta r_thetanlc R_tqe r_trnom r_ucaplag r_zet;
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+
 dyn=1;
 ea_a1=0.0323611111111111;
 ea_a2=0.05;
@@ -385,7 +407,11 @@ R_tqe=0;
 r_trnom=1;
 r_ucaplag=0.99;
 r_zet=0.4;
- 
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
+
 model; 
           1/(1+ea_theta+ea_rho)*(lev*ea_lamnlc(1)+(1-lev)*(ea_lamnlc+ea_dlamnlc(1)))/ea_lamnlc = 1/(1+ea_inom)*(1+ea_infy(1))+EA_gamb*EA_pbl*EA_kbl*(EA_kbl*EA_bs/EA_blnlc-1)*(1+ea_infy(1)) ;
           ea_f = ea_b/ea_py+ea_e*ea_bw/ea_py+ea_v*(1+ea_eps_v) ;
@@ -1002,4 +1028,6 @@ values 1;
 end;
 
 simul (periods=600);
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
