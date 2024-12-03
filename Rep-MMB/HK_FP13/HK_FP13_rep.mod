@@ -1,5 +1,19 @@
+% HK_FP13
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //HOUSING_RED_UNIFORM.mod
 //Dynare code for Funke and Paetz (2011), Housing Prices and the Business Cycle: An Empirical Application to Hong Kong
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
 //DECLARATION OF ENDOGENOUS VARIABLES
  
@@ -24,7 +38,11 @@ rho_a_c rho_a_d rho_mu_c1 rho_mu_c2 rho_mu_d1 rho_mu_d2 rho_LTV rho_d_b rho_d_s 
 //EQUILIBRIUM VALUES
 
 CBDB PDC CSDS CBC CSC DBD DSD BHCB DBCB DB CB DS CS N ND NC C D NCCB NDCB;
- 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+
 //PARAMETER VALUES
      
 alpha_c = 0.87;//0.5;
@@ -104,7 +122,11 @@ NDCB = ND/CB;
 Lambda_b = ((1-h_c)*gamma/(1-gamma)^(2)) * CBDB *PDC^(-1) - (1 - rho_d_b) * beta_b * (1 - delta) * ((1 - sigma) * gamma * ( log(DB) - log((1 - h_c)*CB)) - (gamma/(1 - gamma)));
  
 Lambda_s = ((1-h_c)*gamma/(1-gamma)^(2)) * CSDS *PDC^(-1) - (1 - rho_d_s) * beta_s * (1 - delta) * ((1 - sigma) * gamma * ( log(DS) - log((1 - h_c)*CS)) - (gamma/(1 - gamma)));
- 
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
+
 //THE MODEL
  
 model (linear);
@@ -246,5 +268,11 @@ var epsd_b; stderr 10.70;
  
 end;
 
-%stoch_simul(irf=9) y n r c c_b c_s psi b_b d_b d_s pi_c_h pi_d_h y_c y_d;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//%stoch_simul(irf=9) y n r c c_b c_s psi b_b d_b d_s pi_c_h pi_d_h y_c y_d;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
