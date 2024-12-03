@@ -25,23 +25,21 @@
 //*************************************************************************
 
 %----------------------------------------------------------------
-% 1. Define endogenous variables
+% 1. Defining variables
 %----------------------------------------------------------------
 
+//Define endogenous variables
 var y R pi z deltaq deltay_star y_bar y_star deltae pi_star inflationq interest; //A output;
 
-%----------------------------------------------------------------
-% 2. Define exogenous variables
-%----------------------------------------------------------------
-
+//Define exogenous variables
 varexo epsR epsq epsy_star epspi_star epsz;
 
-%----------------------------------------------------------------
-% 3. Define parameters
-%----------------------------------------------------------------
-
+//Define parameters
 parameters tau alfa rhoz beta kappa rhoR psi1 psi2 psi3 rhoq rhoy_star rhopi_star rss;
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 tau=0.31;                           //intertemporal substition elasticity
 alfa=0.11;                          //import share
@@ -58,7 +56,7 @@ rhoy_star=0.97;                     //persistence in exogenous world output
 rhopi_star=0.46;                    //persistence in world inflation shock
 
 %----------------------------------------------------------------
-% 4. Model
+% 3. Model
 %----------------------------------------------------------------
 
 model(linear);
@@ -100,10 +98,7 @@ end;
 steady;
 check;
 
-%----------------------------------------------------------------
-% 5. Shocks
-%----------------------------------------------------------------
-
+//Shocks
 shocks;
 var epsR=0.36^2;
 var epsq=1.25^2;
@@ -113,9 +108,12 @@ var epspi_star=2.00^2;
 
 end;
 
-%----------------------------------------------------------------
-% 6. Simulation
-%----------------------------------------------------------------
-
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 %stoch_simul(irf=12) y inflationq interest deltae;
 stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
