@@ -1,9 +1,23 @@
+% EA_AWM05
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // Title: An Area-Wide Model (AWM) for the Euro Area
 // Authors: Gabriel Fagan, Jerome Henry, Ricardo Mestre
 // Publication: ECB Working Paper 42. January 2001
 
 // This file simulates the dynamic response of the model to specific shocks
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var stn lnn wrn piyfd pipcd itr itd pieen pimtd pcr lsr xtr mtr ltn pixtd
     ywd compr ywr gcr nfn tdn_yen ign piyet urx lprod yett pcd mtd picompr
     ulc ult ksr strq xtd piywdx pipyr piyer scr fdd ywrx ywdx tbr yer pcn
@@ -35,7 +49,7 @@ var stn lnn wrn piyfd pipcd itr itd pieen pimtd pcr lsr xtr mtr ltn pixtd
         output;   			          			 //*
 //**************************************************************************  
 
-
+//Define exogenous variables
 varexo  innoelnn innoewrn innoeyfd innoepcd innoeitr innoeitd   
     	innoextd innoemtd innoepcr innoelsr innoextr innoemtr innoeltn
 
@@ -43,7 +57,7 @@ varexo  innoelnn innoewrn innoeyfd innoepcd innoeitr innoeitd
         interest_ fiscal_;                         // Modelbase Shocks   //*
 //**************************************************************************
 
-
+//Define parameters
 parameters BETABIG DELTABIG HICP__CST HICP__D1 HICP__D11 HICP__LHICPMTD HICP__LHICPPCD 
            HICP__LHICPULC ITD__CST ITD__DDLMTD ITD__DDLYFD ITD__DLITDMTD1 
            ITD__DLITDMTD5 ITD__DLITDMTD6 ITD__DLITDYFD1 ITD__DLITDYFD4 
@@ -98,6 +112,11 @@ parameters BETABIG DELTABIG HICP__CST HICP__D1 HICP__D11 HICP__LHICPMTD HICP__LH
         cofintpit pitarget cofintrlb rlbar const std_r_ std_r_quart;     //*
 									 //*
 									 //*
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+
  // load Modelbase Monetary Policy Parameters//*
 // Policy Rule Gerdesmeier and Roffia (2003)
 cofintintb1 =  0.87^3; 
@@ -364,6 +383,9 @@ aywd                = 1-subtract;
 ayett               = 1-subtract;
 acompr              = 1-subtract;
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 //*****************************************************************************
@@ -664,5 +686,11 @@ var interest_          =  1; // because of IRF! 0.1104      ;
 
 end;
 
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 stoch_simul (AR=100,IRF=0, noprint,nograph);
 %stoch_simul (irf = 41, ar=0, nograph, noprint) inflation outputgap interest output; 
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
