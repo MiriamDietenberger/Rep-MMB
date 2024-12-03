@@ -1,3 +1,13 @@
+% EA_BE15
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // Replication of the model:
 // Benchimol, J. 2015. "Money in the Production Function: A New Keynesian DSGE Perspective."
 // Southern Economic Journal 2015, 82(1), 152�184
@@ -8,10 +18,18 @@
 
 	//	Unconstrained (return to scale sum could be different from 1)
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var y, pi, ir, mp, mn, yf, mpf, mnf, ea, eu, ei, ep, en, vel rr ygap;
 varobs y, pi, ir, mp, mn;
+
+//Define exogenous variables
 varexo ua, uu, ui, up, un;
 
+//Define parameters
 parameters
 	//	Micro parameters
 	alphan alpham beta teta nu sigma gamma khi neta epsilon a1 a2 li1 li2 li3 cible
@@ -21,6 +39,11 @@ parameters
 	vym vyc vya vyp
 	mnf1 mnf2 mnf3 mnf4
 	pi1 pi2; 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+
 	//	Micro parameters
 	alphan	=	0.50;
 	alpham	=	0.25;
@@ -66,6 +89,10 @@ parameters
 	//	pi
 	pi1		=	((((1-teta)*(1-beta*teta))/((1-alphan+epsilon*(2*alphan-1))*teta))*(neta+alphan-((1-sigma)*(1-alphan)))); // a verifier
 	pi2		=	((((1-teta)*(1-beta*teta))/((1-alphan+epsilon*(2*alphan-1))*teta))*(1-alphan-alpham*(1+neta)));
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -140,6 +167,9 @@ end;
 //estimation(nograph,graph_format=(eps,fig),nodisplay,datafile=data1pchpdetrend,mode_compute=4,filter_step_ahead=[1:12],bayesian_irf,forecast=12,filter_decomposition,mh_jscale=0.5,mh_replic=300000,mh_nblocks=10) y pi ir mp mn yf mpf mnf vel;
 //close all;
 
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 %stoch_simul(graph_format=(eps),order=1,irf=40,conditional_variance_decomposition=[1:60], nograph) pi y ir rr ygap mp mn vel;
 stoch_simul (AR=100,IRF=0, noprint,nograph);
 
@@ -149,3 +179,6 @@ stoch_simul (AR=100,IRF=0, noprint,nograph);
 //close all;
 //dynare_sensitivity(nograph,graph_format=(eps,fig),nodisplay,identification=1,morris=1,morris_nliv=6,morris_ntra=50,stab=1,rmse=1,redform=1,ppost=1);
 //close all;
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
