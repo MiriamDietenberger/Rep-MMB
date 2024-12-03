@@ -9,9 +9,10 @@
 % (at your option) any later version.
 
 %----------------------------------------------------------------
-% 1. Define endogenous variables
+% 1. Defining variables
 %----------------------------------------------------------------
 
+//Define endogenous variables
 var              
   i_a_t            i_b_t            i_c_t                             // Interest Rate
   i_Ga_t           i_Gb_t                                             // Government bond rate
@@ -106,10 +107,7 @@ var
   
 ;
 
-%----------------------------------------------------------------
-% 2. Define exogenous variables
-%----------------------------------------------------------------
-
+//Define exogenous variables
 varexo  
   nua_a       nub_a                // Technology shock
   nua_etheta  nub_etheta           // Price markup shock
@@ -136,10 +134,7 @@ varexo
   nua_eM                           // Monetary policy shock
 ;
 
-%----------------------------------------------------------------
-% 3. Define parameters  
-%----------------------------------------------------------------
-
+//Define parameters
 parameters  
   //***************************************************************************************
   // Defin_a_tstion of deep model parameters
@@ -304,7 +299,7 @@ parameters
 set_params_31_08_aw1;
 
 %----------------------------------------------------------------
-% 4. Model block
+% 2. Model
 %----------------------------------------------------------------
 
 model;
@@ -828,8 +823,12 @@ shocks;
   var nua_eM        = 0.0008^2;
 end;
 
-%----------------------------------------------------------------
-% 5. Simulation
-%----------------------------------------------------------------
 
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 stoch_simul(order=1,irf_shocks=(nua_eM),irf=40) y_a_t c_a_t i_policy_t pi_a_t;
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
