@@ -17,9 +17,10 @@ close all
 // global Gamma_y
 
 %----------------------------------------------------------------
-% 1. Define variables
+% 1. Defining variables
 %----------------------------------------------------------------
 
+//Define endogenous variables
 var  auxt, bigXt, bigZt, ct, eqti, et, ht, it, kt, lambdat, llt, mct, nt, pit, pref, pstart, qt, 
 rkt, rnt, st, xt, yt, zt,
 auxtfp, ctfp,   htfp, itfp, ktfp, lambdatfp, lltfp, mctfp, 
@@ -28,16 +29,10 @@ rktfp, rntfp, ytfp, ygap, lnyt, lnit, lnygap, uu, vf, ft,
 taut, bt, cgn, cg, mpl, kl, mpk, rw, mcl, mck, mcb, mcc, mcd, mce, htb, qgap, expi, lev, kc, ce,
 ste,efc;
 
-%----------------------------------------------------------------
-% 2. Define 4 exogenous shocks (technology, monetary, investment, preference)
-%----------------------------------------------------------------
-
+//Define exogenous variables
 varexo epszt, epset, epsxt, epspt, epsft;
 
-%----------------------------------------------------------------
-% 3. Define 14 structural parameters and STEADY STATE values
-%----------------------------------------------------------------
-
+//Define parameters
 parameters b, a, chi, d,  g, te, veps, xi, nu, tau, r_p, r_r, r_y, rho_z, rho_e, rho_x, mub, tau1,  rho_p, 
            aux_ss, pi_ss, q_ss, z_ss, e_ss, mc_ss, rn_ss, rk_ss, s_ss, ik_ss, eqti_ss, 
            yk_ss, ck_ss, yc_ss, h_ss, k_ss, n_ss, c_ss, i_ss, y_ss, 
@@ -53,7 +48,7 @@ parameters b, a, chi, d,  g, te, veps, xi, nu, tau, r_p, r_r, r_y, rho_z, rho_e,
            ; //nk, auxfp_ss,ygapfp_ss, chib,tau2,
 
 %----------------------------------------------------------------
-% 4. Define parameter and STEADY STATE Values
+% 2. Calibration and Estimation
 %----------------------------------------------------------------
  
 ca    = 1;//cases
@@ -103,10 +98,7 @@ rho_p = 0.9546;
 //mub   = 1.0025;
 mub   = 1.005;
 
-%----------------------------------------------------------------
-% 5. Compute STEADY STATE
-%----------------------------------------------------------------
- 
+/////compute STEADY STATE
 pi_ss     = mub;
 z_ss      = 1;
 e_ss      = 1;
@@ -186,11 +178,11 @@ lnyt_ss     = 0;
 lnit_ss     = 0; 
 qgap_ss     = q_ss-qfp_ss;
 
-model;
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
-%----------------------------------------------------------------
-% 6. Model block
-%----------------------------------------------------------------
+model;
 
 //equations for sticky price model
 lambdat     = pref/ct;
@@ -302,10 +294,7 @@ rntfp/rn_ss  = ((rntfp(-1)/rn_ss)^r_r)*(((pitfp/pi_ss)^r_p)*((bt/bt(-1)*pit)^r_c
 pstartfp = (veps/(veps-1))*mctfp;
 pstartfp = 1;
 
-%----------------------------------------------------------------
-% 7. Shocks
-%----------------------------------------------------------------
-
+//Shocks
 log(zt)   = rho_z*log(zt(-1)) + epszt;
 log(et)   = rho_e*log(et(-1)) + epset;
 log(xt)   = rho_x*log(xt(-1)) + epsxt;
@@ -404,22 +393,16 @@ var epsft = 0.0018^2;//mode and mean;//0.0016^2;//0.01^2;//0.0016^2;//risk premi
 
 end;
 
+//Simulation
 
-
-
-%----------------------------------------------------------------
-% 8. Simulation
-%----------------------------------------------------------------
-
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 //stoch_simul(dr_algo=0,order=1, irf=40) yt pit cgn nt rnt ft zt qt st it ;
 //stoch_simul(order=2,irf=0) vf yt pit qt rnt st it ct ht ygap ;
 
 %stoch_simul(order=2, irf=20, noprint, nograph) yt llt pit cgn nt rnt ft zt qt st it ct ht kt rkt mct cg qtfp ygap ytfp bt taut et xt pref mpl kl mpk rw mcl mck mcb mcc mcd mce htb auxt qgap bt rkt expi lev ce ytfp ste efc;
 stoch_simul (AR=100,IRF=0, noprint,nograph);
-
-
-
-
 /*
 mat_res_1 = [yt_epsft/y_ss pit_epsft/pi_ss cgn_epsft/cgn_ss nt_epsft/n_ss rnt_epsft/rn_ss ft_epsft qt_epsft/q_ss st_epsft/s_ss it_epsft/i_ss ct_epsft/c_ss ht_epsft/h_ss kt_epsft/k_ss rkt_epsft/rk_ss mct_epsft/mc_ss cg_epsft qtfp_epsft ygap_epsft/yfp_ss mpl_epsft/mpl_ss kl_epsft/kl_ss mpk_epsft/mpk_ss rw_epsft/rw_ss  mcl_epsft/mcl_ss mck_epsft/mck_ss mcb_epsft/mcb_ss mcc_epsft/mcc_ss mcd_epsft/mcd_ss mce_epsft/mce_ss htb_epsft/htb_ss auxt_epsft/aux_ss bt_epsft/bt_ss rkt_epsft/rk_ss expi_epsft/pi_ss lev_epsft/lev_ss ce_epsft ytfp_epsft/yfp_ss ste_epsft/ste_ss efc_epsft/efc_ss];
 //Calculation IRF for financial shock
@@ -454,9 +437,8 @@ ht_irf_z=ht_epszt/h_ss;
 kt_irf_z=kt_epszt/k_ss; 
 mct_irf_z=mct_epszt/mc_ss; 
 
-
-
 mat_res_2 = [yt_epszt/y_ss pit_epszt/pi_ss cgn_epszt/cgn_ss nt_epszt/n_ss rnt_epszt/rn_ss zt_epszt qt_epszt/q_ss st_epszt/s_ss it_epszt/i_ss ct_epszt/c_ss ht_epszt/h_ss kt_epszt/k_ss rkt_epszt/rk_ss mct_epszt/mc_ss cg_epszt qtfp_epszt ygap_epszt/yfp_ss mpl_epszt/mpl_ss kl_epszt/kl_ss mpk_epszt/mpk_ss rw_epszt/rw_ss  mcl_epszt/mcl_ss mck_epszt/mck_ss mcb_epszt/mcb_ss mcc_epszt/mcc_ss mcd_epszt/mcd_ss mce_epszt/mce_ss htb_epszt/htb_ss auxt_epszt/aux_ss bt_epszt/bt_ss rkt_epszt/rk_ss expi_epszt/pi_ss lev_epszt/lev_ss ce_epszt ytfp_epszt/yfp_ss ste_epszt/ste_ss efc_epszt/efc_ss];
 */
+//***************************
 
-
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
