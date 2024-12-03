@@ -1,3 +1,18 @@
+% EA_DKR11
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var
 AP ATCU ATCU1 SI SI1 R_K MC UCbis Y Z W I K L 
 AW_C AW_D AP_D ATCU_D ATCU1_D SI_D SI1_D 
@@ -58,7 +73,7 @@ EE_R EE_A EE_B EE_G EE_L EE_I EE_P EE_Q EE_W EE_LTV EE_H EE_A_D EE_P_D EE_Bankca
 EE_R_L EE_R_L_E 
 
 ;
-
+//Define exogenous variables
 varexo 
 E_A E_I E_B E_G E_P E_W E_R E_A_D E_H 
 E_SIG_HH E_SIG
@@ -78,7 +93,7 @@ E_R_L E_R_L_E E_R_D E_Bankcap
 //E_SIG_HH_NEWS2 E_SIG_HH_NEWS3 E_SIG_HH_NEWS4 E_SIG_HH_NEWS5 E_SIG_HH_NEWS6 E_SIG_HH_NEWS7 E_SIG_HH_NEWS8
 
 ;  
-
+//Define parameters
 parameters 
 
 xie mu muw muw_C muw_D subv subvw tauSS tauwSS
@@ -134,7 +149,9 @@ corHC corHSIG
 bw //weight of borrowers' debt in adjustment cost function of bank capital accumulation
 
 ;
-
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 bw=1;
 
 lambdaR = 0; //In welfare function
@@ -319,6 +336,11 @@ corHC       =   0; //0.615841514;
 corHSIG     =   0; //1.953579186;
 
 //////////////////////////////////////////////////////////////////////////
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
+
 model; 
 # czcap = czcapbis/(1-czcapbis);
 # h_NR = h;
@@ -785,6 +807,9 @@ end;
 steady;
 check;
 
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 //stoch_simul(order=1,irf=20) Robs Yobs Zobs Cobs Iobs Lobs Wobs CPIobs PIobs PIgdpobs Z_Dobs DRobs DNRobs 
 //    PI_Dobs T_Dobs dDebtobs Debtobs CRobs CNRobs L_Cobs L_Dobs W_Cobs W_Dobs 
 //    R_Lobs R_Dobs RB_Lobs R_L_Eobs RB_Dobs Debt_Eobs Debt_TOTobs Bankcapobs LEVobs
@@ -795,3 +820,6 @@ check;
 
 %stoch_simul(order=1,irf=20, noprint, nograph) Zobs Iobs Cobs Robs;
 stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
