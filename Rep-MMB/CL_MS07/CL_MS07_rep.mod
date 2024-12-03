@@ -32,9 +32,10 @@
 // Last edited: 10/08/26 by S. Schmidt
 
 %----------------------------------------------------------------
-% 1. Define endogenous variables
+% 1. Defining variables
 %----------------------------------------------------------------
 
+//Define endogenous variables
 var ah_hat, bF_hat, bg_hat, c_hat, ca_y_hat, cf_hat, ch_hat, chF_hat,
     dc_hat, de_hat, dinv_hat, dwr_hat, dy_hat, dyF_hat, dys_hat, g_hat,
     gex_hat, i_hat, iF_hat, iFax_hat, inv_hat, invf_hat, invh_hat, k_hat,
@@ -53,17 +54,11 @@ var ah_hat, bF_hat, bg_hat, c_hat, ca_y_hat, cf_hat, ch_hat, chF_hat,
     r_flex, rer_flex, Rk_flex, tau_flex, u_flex, wr_flex, x_flex, y_flex,
     yFa_flex, yh_flex, ysa_flex, zr_flex, sh_m_hat;
 
-%----------------------------------------------------------------
-% 2. Define exogenous variables
-%----------------------------------------------------------------
-
+//Define exogenous variables
 varexo eps_ah, eps_ys, eps_prsF, eps_yF, eps_iF, eps_piF, eps_sh_w,
     eps_sh_c, eps_sh_i, eps_prfF, eps_proF, eps_st, eps_sh_m, eps_gex;
 
-%----------------------------------------------------------------
-% 3. Define parameters
-%----------------------------------------------------------------
-
+//Define parameters
     sigma_L, h, phi_L, xi_L, eta_C, theta_I, S_I, phi_Hd, xi_Hd,
     phi_Hf, xi_Hf, phi_F, xi_F, omega_C, omega_H, mvarphi_i1, mvarphi_pi1,
     mvarphi_y1, mvarphi_rer1, mvarphi_i2, mvarphi_pi2, mvarphi_y2, eta_F,
@@ -78,6 +73,10 @@ varexo eps_ah, eps_ys, eps_prsF, eps_yF, eps_iF, eps_piF, eps_sh_w,
     eBF_Y, Kh_Lh, Oh_Lh, agg_Lh, Gh_Lh, Yh_Lh, Gh_Kh, Ah, Id_Kh, I_Y, C_Y,
     Mf_Y, VAh_Y, Y_Lh, Yh_Y, M_Y, X_Y, YhF_Y, Mo_M, Ys_X, BalG_Y, Tau_Y,
     bG_Y, Ren_Y, RenNs_Y;
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 // monetary policy rule (real versus nominal interest rate target)
 // (set psi_mon=1 in the model base)
@@ -219,7 +218,7 @@ Tau_Y       = 0.092;
 bG_Y        = (Gh_Y-Tau_Y-chi*Ys_Y+BalG_Y)*((1+pi_C)*(1+g_y)*(1+n))/(1-1/((1+iF)*Theta_ss));
 
 %----------------------------------------------------------------
-% 4. Model block
+% 3. Model
 %----------------------------------------------------------------
 
 model(linear);
@@ -666,10 +665,7 @@ end;
 steady;
 check;
 
-%----------------------------------------------------------------
-% 5. Shocks
-%----------------------------------------------------------------
-
+//Shocks
 shocks;
 
 var eps_ah; stderr sd_ah;
@@ -690,9 +686,13 @@ var eps_prfF; stderr sd_prfF;
 
 end;
 
-%----------------------------------------------------------------
-% 6. Shocks
-%----------------------------------------------------------------
 
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 %stoch_simul(irf=20) dy_hat, picz_hat, rer_hat, l_hat, ca_y_hat;
 stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
