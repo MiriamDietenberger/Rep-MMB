@@ -24,9 +24,6 @@ bby g y yva piva pibar sgbar zc zn zi zfiistar zfii a zr zg  mstar pistar rstar;
 
 varexo pibar_ gbar_ c_ n_ i_ fiistar_ fii_ a_ r_ g_ mstar_ pistar_ rstar_; //exogenous variables (innovations)
 
-%----------------------------------------------------------------
-% 2. Parameter declaration and calibration
-%----------------------------------------------------------------
 
 //Define parameters
 
@@ -36,7 +33,7 @@ byC gamar gamapi gamay gamag gamas gamab rhoa rhoc rhoi rhon rhoq rhor rhog
 rhosbar rhopi rhofii rhofiistar rhomstar rhorstar rhopistar;
 
 %----------------------------------------------------------------
-% 3. Calibration and Estimation
+% 2. Calibration and Estimation
 %----------------------------------------------------------------
 
 beta = 0.98;
@@ -92,7 +89,7 @@ rhorstar = 0.848;
 rhopistar = -0.139;
 
 %----------------------------------------------------------------
-% 5. Model block
+% 3. Model
 %----------------------------------------------------------------
 
 model(linear);
