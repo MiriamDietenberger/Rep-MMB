@@ -19,9 +19,10 @@
 // XR1H, XR2H and XR3H are set equal to their OSR values of the original file.
 
 %----------------------------------------------------------------
-% 1. Define endogenous variables
+% 1. Defining variables
 %----------------------------------------------------------------
 
+//Define endogenous variables
 var AF AH BIGGAMF BIGGAMH BIGGAMIMPF BIGGAMIMPH BIGGAMMF BIGGAMMH BIGGAMNF 
     BIGGAMNH BIGGAMQF BIGGAMQH BIGGAM_MONF BIGGAM_MONH BIGGAM_MOTF BIGGAM_MOTH 
     BIGGAM_O_NF BIGGAM_O_NH BIGGAM_O_TF BIGGAM_O_TH CAPAF CAPAH CF CF_NAT CH 
@@ -53,10 +54,8 @@ var AF AH BIGGAMF BIGGAMH BIGGAMIMPF BIGGAMIMPH BIGGAMMF BIGGAMMH BIGGAMNF
     interest inflation inflationq outputgap output;                      //*
 //**************************************************************************
 
-%----------------------------------------------------------------
-% 2. Define exogenous variables
-%----------------------------------------------------------------
 
+//Define exogenous variables
 varexo E_ZBH E_ZUH E_ZUF E_ZEYEH E_ZEYEF E_GAMMAH E_GAMMAF E_LANDH E_LANDF E_GAF 
        E_CAPAH E_CAPAF
 
@@ -65,10 +64,8 @@ varexo E_ZBH E_ZUH E_ZUF E_ZEYEH E_ZEYEF E_GAMMAH E_GAMMAF E_LANDH E_LANDF E_GAF
         interest_ fiscal_;                                               //*
 //************************************************************************** 
 
-%----------------------------------------------------------------
-% 3. Define parameters
-%----------------------------------------------------------------
- 
+
+//Define parameters
 parameters COSTLF COSTLH EPSF EPSH EPSQMF EPSQMH GLAMBDAF GLAMBDAH SIGMAF SIGMAH 
            SSF SSH XR1F XR1H XR2F XR2H XR3F XR3H XR4F XR4H ALPHANF ALPHANH ALPHATF 
            ALPHATH ALPHA_OF ALPHA_OH A_ONEF A_ONEH A_ZEROF A_ZEROH B0F B0H B1F 
@@ -93,6 +90,9 @@ parameters COSTLF COSTLH EPSF EPSH EPSQMF EPSQMH GLAMBDAF GLAMBDAH SIGMAF SIGMAH
 // not needed for replication
 //**************************************************************************
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 COSTLF=5;
 COSTLH=5;
@@ -243,6 +243,10 @@ interest_EXOG=PIE4F_EXOG^0.25/BET;
 PIE4NF_EXOG=1.02988357195356^4;
 PIEBAR4QF_EXOG=1.02988357195356^4;
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
+
 model; 
 //**************************************************************************
 // Definition of Modelbase Variables in Terms of Original Model Variables //*
@@ -284,9 +288,6 @@ output           = GDPF*100;                                             //*
 //           + std_r_ *interest_;                                          //* 
 //**************************************************************************
 
-%----------------------------------------------------------------
-% 4. Model block
-%----------------------------------------------------------------
 
 // Original Model Code:
           ZZ_UTILITYH = (ZUH*(CH-HH)^(1-SIGMAH)-1)/(1-SIGMAH)-CAPAH*LH^(1+ZEDH)/(1+ZEDH) ;
@@ -870,10 +871,11 @@ end;
 
 //end;
 
-%----------------------------------------------------------------
-% 5. Simulation
-%----------------------------------------------------------------
 
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 //osr_params XR1H XR2H XR3H;
 
 //osr(IRF=0);
@@ -882,3 +884,6 @@ end;
              
 %stoch_simul(order=1, nograph) ZZ_PIE4H ZZ_DRNOMH GDPGAPH;
 stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
