@@ -1,3 +1,13 @@
+% EA_SW03
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // Title: An Estimated Stochastic Dynamic General Equilibrium Model of the Euro Area
 // Authors: Smets, Frank and Raf Wouters
 // Publication: Journal of the European Economic Association, September 2003, 1(5), 1123-1175.
@@ -8,6 +18,11 @@
 // Replication of IRF. GR (2003) policy rule used, which reacts to annual inflation,
 // comparable IRF also for annual inflation
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var mcf zcapf rkf kf pkf muf cf invef yf labf pinff wf pf emplf rrf effortf
     rf mc zcap rk k pk mu c inve y lab pinf w p empl ww effort pinf4 r dr 
     pinfLAG1 pinfLAG2 ygap a as b g ls qs ps ms scons sinv sy slab spinf sw 
@@ -18,7 +33,7 @@ var mcf zcapf rkf kf pkf muf cf invef yf labf pinff wf pf emplf rrf effortf
         interest interestq inflation outputgap output;                   //*
 //**************************************************************************
 
- 
+//Define exogenous variables 
 varexo ea eb y_ els eqs eps eas econs einv ey elab epinf ew em
 
 //**************************************************************************
@@ -26,7 +41,7 @@ varexo ea eb y_ els eqs eps eas econs einv ey elab epinf ew em
        interest_ fiscal_;                                                //*
 //**************************************************************************
 
-
+//Define parameters
 parameters calfa ctou cbeta chab ccs cinvs crelwage chabw clabeff chlab csadjcost 
            csigma chabb cprobw clandaw csigl cprobp cindw cindp cfc cinvdyn 
            czcap csadjlab crpi crdpi crr cry crdy crhoa crhoas crhob crhog 
@@ -47,6 +62,11 @@ parameters calfa ctou cbeta chab ccs cinvs crelwage chabw clabeff chlab csadjcos
                                                                          //*
 // load Modelbase Monetary Policy Parameters                             //*
 // Policy Rule Gerdesmeier and Roffia (2003)
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+
 cofintintb1 =  0.87^3; 
 cofintintb2 = 0; 
 cofintintb3 = 0; 
@@ -138,6 +158,10 @@ cscaleey    = 0;
 cscaleelab  = 0;
 cscaleepinf = 0.1602;
 cscaleew    = 0.2892;
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -255,5 +279,11 @@ var interest_ = 1; // set equal to one for IRF
 
 end;
 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul (irf = 41, ar=0, nograph, noprint) inflation outputgap interest;
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul (irf = 41, ar=0, nograph, noprint) inflation outputgap interest;
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
