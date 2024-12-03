@@ -1,9 +1,31 @@
+% EA_BF17
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 %close all;
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var y, pi, r, mp, yf, mpf, ep, ei, em, at ygap;
+
+//Define exogenous variables
 varexo up, ui, um, ua;
 
+//Define parameters
 parameters alpha beta teta vega sigma neta epsilon b a1 a2 li1 li2 li3 li4 rhoa rhop rhoi rhom pb yb mpb rb cstd;
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
    alpha	=	0.295;
     beta	=	0.995;
@@ -38,6 +60,10 @@ parameters alpha beta teta vega sigma neta epsilon b a1 a2 li1 li2 li3 li4 rhoa 
 	rb		= 0.00;
 	cstd	= 0.008;
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
+
 model;
 yf = ((1+neta)/((vega-(vega-sigma)*a1)*(1-alpha)+neta+alpha))*at+((1-alpha)*(vega-sigma)*(1-a1)/((vega-(vega-sigma)*a1)*(1-alpha)+neta+alpha))*(mpf) - (log((1+(1/((1/(epsilon-1)))))/((1+(1/((1/(epsilon-1)))))-1)))*((1-alpha)/((vega-(vega-sigma)*a1)*(1-alpha)+neta+alpha))+(((1-alpha)*(vega-sigma)*(1-a1))/((1-vega)*((vega-(vega-sigma)*a1)*(1-alpha)+neta+alpha)))*em;
 mpf = -((a2*(vega-(vega-sigma)*a1))/vega)*(yf(+1))+(1+((a2*(vega-(vega-sigma)*a1))/vega))*(yf)+(1/vega)*em;
@@ -61,5 +87,12 @@ shocks;
 %    var up = cstd;
 %    var um = cstd^2;
 end;
+
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 %stoch_simul(order=1,irf=3) em y ygap pi;
 stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
