@@ -136,9 +136,9 @@ varexo
 
 //Define parameters
 parameters  
-  //***************************************************************************************
-  // Defin_a_tstion of deep model parameters
-  //***************************************************************************************
+  
+// Defin_a_tstion of deep model parameters
+
   mu_a              mu_b                      // share of RoT-households
   mu_bar_a          mu_bar_b                  // Transfers distribution parameter
   betta_a           betta_b                   // discount factor
@@ -246,9 +246,9 @@ parameters
   gTR_a  gTR_b                                // Public transfers as share of GDP (including unemployment benefits)
   gn_a  gn_b                                  // Share of public employment of total employment
   c_c  in_c                                   // Consumption and investment share for RoW
-  //***************************************************************************************
+ 
   // Definition of steady state model parameters
-  //***************************************************************************************
+ 
   i_a_ts        i_b_ts        i_c_ts    // Interest Rate
   i_Ga_ts       i_Gb_ts                 // Government bond rate
   i_policy_ts                           // Policy Rate EMU
@@ -303,9 +303,9 @@ set_params_31_08_aw1;
 %----------------------------------------------------------------
 
 model;
-//*************************************************************************
+
 // equations relevant for country A (monetary union member)
-//*************************************************************************
+
 // Equation 1
 lambda_o_a_t*pi_a_t(+1) = betta_a*exp(e_rp_a_t)*(1+i_a_t)*lambda_o_a_t(+1);
 lambda_o_a_t*pi_a_t(+1) = betta_a*(1+i_Ga_t)*lambda_o_a_t(+1);
@@ -320,9 +320,8 @@ lambda_o_a_t=exp(e_b_a_t)*(c_o_tild_a_t-hab_a*c_o_tild_a_t(-1))^(-sigma_a)/(1+ta
 lambda_r_a_t=exp(e_b_a_t)*(c_r_tild_a_t-hab_a*c_r_tild_a_t(-1))^(-sigma_a)/(1+tauc_a_t);
 
 
-//*************************************************************************
+
 // Introduction of labor force and unemployment rate
-//*************************************************************************
 
 // Labor force particpation constraint
 lambda_o_a_t*((1-tauw_a_t)*(wr_a_t*nP_a_t+wrG_a_t*nG_a_t)+UB_a_t*(l_o_a_t-n_a_t)) = kappaw_a_t*exp(e_n_a_t)*l_o_a_t^(psi_a)*n_a_t;
@@ -347,9 +346,8 @@ mu_a*lambda_r_a_t*UB_a_t = omega_r_a_t*(lambda_r_a_t*UB_a_t-psi_a*l_r_a_t^(psi_a
 (1-mu_a)*lambda_o_a_t*UB_a_t = omega_o_a_t*(lambda_o_a_t*UB_a_t-psi_a*l_o_a_t^(psi_a-1)*n_a_t*kappaw_a_t);
 
 
-//*************************************************************************
+
 // Government
-//*************************************************************************
 
 // government spending shock country A
 
@@ -465,9 +463,8 @@ log((1+i_policy_t)/(1+i_policy_ts)) = rho_a_i*log((1+i_policy_t(-1))/(1+i_policy
 log((1+i_policy_t)/(1+i_policy_ts))  = pop_a/(pop_b+pop_a)*log((1+i_a_t)/(1+i_a_ts)) + pop_b/(pop_b+pop_a)*log((1+i_b_t)/(1+i_b_ts));
 
 
-//*************************************************************************
+
 // equations relevant for country B (monetary union member)
-//*************************************************************************
 
 // Equation 38
 lambda_o_b_t*pi_b_t(+1) = betta_b*(1+i_b_t)*exp(e_rp_a_t)*lambda_o_b_t(+1);
@@ -482,9 +479,8 @@ lambda_o_b_t=exp(e_b_b_t)*(c_o_tild_b_t-hab_b*c_o_tild_b_t(-1))^(-sigma_b)/(1+ta
 
 lambda_r_b_t=exp(e_b_b_t)*(c_r_tild_b_t-hab_b*c_r_tild_b_t(-1))^(-sigma_b)/(1+tauc_b_t);
 
-//*************************************************************************
+
 // Introduction of labor force and unemployment rate
-//*************************************************************************
 
 // Labor force particpation constraint
 lambda_o_b_t*((1-tauw_b_t)*(wr_b_t*nP_b_t+wrG_b_t*nG_b_t)+UB_b_t*(l_o_b_t-n_b_t)) = kappaw_b_t*exp(e_n_b_t)*l_o_b_t^(psi_b)*n_b_t;
@@ -608,9 +604,8 @@ y_b_t=pop_a/pop_b*(c_ab_t+in_ab_t)+(c_bb_t+in_bb_t)+pop_c/pop_b*exp(e_RoW_b_t)*(
 
 
 
-//*************************************************************************
+
 // equations relevant for country C (outside monetary union)
-//*************************************************************************
 
 y_c_t = exp(z_g_t)*y_c_aux_t;
 
@@ -629,9 +624,8 @@ z_g_t = a44*z_g_t(-1) + c44*eps_z_g;
 pr_ac_t=(1/rer_ca_t)*1;
 pr_bc_t=(rer_ba_t/rer_ca_t)*1;
 
-//*************************************************************************
+
 // equations determining international relationship
-//*************************************************************************
 
 // Equation
 // B's holdings of A's bonds
@@ -696,9 +690,8 @@ pi_ba_t = 1*pi_aa_t;
 pi_bc_t = Del_S_bc_t*pi_c_t;
 
 
-//*************************************************************************
+
 // Shocks
-//*************************************************************************
 
 // technology shock country A
 a_a_t = rho_a_a*a_a_t(-1) + nua_a;
@@ -768,16 +761,16 @@ epsilon_enG_b_t = rho_epsilon_enG_b*epsilon_enG_b_t(-1) + nub_enG;
 
 end;
 
-// ######################################################################  
+
 // Calculate steady state
-// ###################################################################### 
+ 
 resid(1);
 steady;
 
-//*************************************************************************
+
 // Set up of the Variance-Covariance Matrix of innovations
 // (assumption: all shocks are structural and uncorrelated)
-//*************************************************************************
+
 
 shocks;
   var	nua_a	=	0.00753802716440	^2	;
