@@ -1,3 +1,13 @@
+% NK_BGG99
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //**************************************************************************
 // Model replication coded by: Rasa Pusinskaite, e_mail: pusinskaite@wiwi.uni-frankfurt.de
 
@@ -9,6 +19,11 @@
 // In: Handbook of Macroeconomics. North Holland, Amsterdam.
 //**************************************************************************
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var cH              //Consumption
     hH              //Household labor
     piH             //Inflation
@@ -27,9 +42,10 @@ var cH              //Consumption
     pi_t1H //pipH sH //One period forward inflation
     premiumH        //External finance premium
 ;
-
+//Define exogenous variables
 varexo e_a e_g e_rn;    //Technology, demand and monetary shocks
 
+//Define parameters
 parameters 
     X               //Steady state gross markup
     R               //Steady state gross real risk-free interest rate
@@ -65,6 +81,10 @@ parameters
     rhov rhov_a rhov_g      //Serial correlation coefficients    
 ; 
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+
 alphav = 0.35;
 omegav = 0.64/(1-alphav);  
 betav = 0.99;
@@ -99,6 +119,10 @@ etav = 3;
 thetav = 0.75;
 kappav = (1-thetav)/thetav*(1-thetav*betav);
 zetav = 0.11;
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 yH = CY*cH + C_EY*c_eH + IY*iH+GY*gH;
@@ -137,5 +161,11 @@ var e_g; stderr 0.01;
 var e_rn; stderr 0.0025/4;       
 end;
 
-%stoch_simul(IRF=30, nograph);
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//%stoch_simul(IRF=30, nograph);
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
