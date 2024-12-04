@@ -140,9 +140,9 @@ parameters
 % 2. Calibration and Estimation
 %----------------------------------------------------------------            
 
-% *********************			
+		
 % CALIBRATED PARAMETERS
-% *********************
+
 
 beta_p       = 0.9943;                                                     % discount factor patient households
 beta_i       = 0.975;                                                      % discount factor impatient households     
@@ -190,9 +190,9 @@ ind_bh       = 0.0;                   % indexation rates on loans to households
 
 
 
-% *****************************************************************
+
 % LOADING MEDIAN OF POSTERIOR: USES EXTRACT_MEDIAN_FROM_POSTERIOR.m (dummy way)
-% *****************************************************************
+
 
 load median_values.txt;
 coeffs = median_values;
@@ -228,10 +228,6 @@ a_p         =   0.0     ;   % degree of habit formation: patient households
 %----------------------------------------------------------------
 % 3. Model
 %----------------------------------------------------------------
-
-//%------------------------------------------------------------
-//% Model equations
-//%------------------------------------------------------------
 
 model;
 
