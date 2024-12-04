@@ -1,19 +1,38 @@
+% NK_GK11
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // Dynare model file to calculate the GK model
 // Created by Peter Karadi
 // July 2010
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
+//Define endogenous variables
 var Y Ym K Keff L I C G Q varrho Lambda Rk R N Ne Nn nu eta phi z x Pm w 
      VMPK U X D F Z i prem delta In Welf infl inflstar a ksi g ;    
 
+//Define exogenous variables
 varexo e_a e_ksi e_g e_Ne e_i;   
 
-
+//Define parameters
 parameters 
 
  betta sig hh varphi zetta theta alfa G_over_Y eta_i epsilon gam gam_P kappa_pi kappa_y rho_i rho_ksi sigma_ksi rho_a
  sigma_a rho_g sigma_g sigma_Ne sigma_i rho_shock_psi sigma_psi kappa tau omega lambda chi b delta_c G_ss I_ss Pmf
  L_mom RkmR_mom phi_mom  L0 K0 chi0 lambda0 omega0 deltai Y_ss;//kappa tau
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 %exogenous chosen parameters
 betta   =   0.99;           %Discount rate
@@ -79,6 +98,10 @@ chi0    =   3.4;             %Starting value for the labor utility weight
 //chi      =   chi0;
   
 //**************************************************************************
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model;
  
@@ -279,8 +302,13 @@ end;
 //check;
 
 //steady;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order=1, irf=40, nograph, noprint);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(order=1, irf=40, nograph, noprint);
+//***************************
 
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 // Saving the impulse responses
 //save ../data/FA_1.mat Y_e_a Y_e_ksi Y_e_g Y_e_Ne Y_e_i Ym_e_a Ym_e_ksi Ym_e_g Ym_e_Ne Ym_e_i K_e_a K_e_ksi K_e_g K_e_Ne K_e_i Keff_e_a Keff_e_ksi Keff_e_g Keff_e_Ne Keff_e_i L_e_a L_e_ksi L_e_g L_e_Ne L_e_i I_e_a I_e_ksi I_e_g I_e_Ne I_e_i C_e_a C_e_ksi C_e_g C_e_Ne C_e_i G_e_a G_e_ksi G_e_g G_e_Ne G_e_i Q_e_a Q_e_ksi Q_e_g Q_e_Ne Q_e_i varrho_e_a varrho_e_ksi varrho_e_g varrho_e_Ne varrho_e_i Lambda_e_a Lambda_e_ksi Lambda_e_g Lambda_e_Ne Lambda_e_i Rk_e_a Rk_e_ksi Rk_e_g Rk_e_Ne Rk_e_i R_e_a R_e_ksi R_e_g R_e_Ne R_e_i N_e_a N_e_ksi N_e_g N_e_Ne N_e_i Ne_e_a Ne_e_ksi Ne_e_g Ne_e_Ne Ne_e_i Nn_e_a Nn_e_ksi Nn_e_g Nn_e_Ne Nn_e_i nu_e_a nu_e_ksi nu_e_g nu_e_Ne nu_e_i eta_e_a eta_e_ksi eta_e_g eta_e_Ne eta_e_i phi_e_a phi_e_ksi phi_e_g phi_e_Ne phi_e_i z_e_a z_e_ksi z_e_g z_e_Ne z_e_i x_e_a x_e_ksi x_e_g x_e_Ne x_e_i Pm_e_a Pm_e_ksi Pm_e_g Pm_e_Ne Pm_e_i w_e_a w_e_ksi w_e_g w_e_Ne w_e_i VMPK_e_a VMPK_e_ksi VMPK_e_g VMPK_e_Ne VMPK_e_i U_e_a U_e_ksi U_e_g U_e_Ne U_e_i X_e_a X_e_ksi X_e_g X_e_Ne X_e_i D_e_a D_e_ksi D_e_g D_e_Ne D_e_i F_e_a F_e_ksi F_e_g F_e_Ne F_e_i Z_e_a Z_e_ksi Z_e_g Z_e_Ne Z_e_i i_e_a i_e_ksi i_e_g i_e_Ne i_e_i prem_e_a prem_e_ksi prem_e_g prem_e_Ne prem_e_i delta_e_a delta_e_ksi delta_e_g delta_e_Ne delta_e_i In_e_a In_e_ksi In_e_g In_e_Ne In_e_i Welf_e_a Welf_e_ksi Welf_e_g Welf_e_Ne Welf_e_i a_e_a a_e_ksi a_e_g a_e_Ne a_e_i ksi_e_a ksi_e_ksi ksi_e_g ksi_e_Ne ksi_e_i g_e_a g_e_ksi g_e_g g_e_Ne g_e_i infl_e_a infl_e_ksi infl_e_g infl_e_Ne infl_e_i inflstar_e_a inflstar_e_ksi inflstar_e_g inflstar_e_Ne inflstar_e_i ;
