@@ -882,8 +882,8 @@ end;
 
 //stoch_simul(order=1) ZZ_GDPH ZZ_CH ZZ_EYEH ZZ_GH ZZ_EXPORTSH ZZ_IMPORTSH ZZ_XBALH_TOT_RAT ZZ_CURBALH_RAT ZZ_PIE4H ZZ_DPIE4H ZZ_RNOMH ZZ_DRNOMH ZZ_GDPF ZZ_CF ZZ_EYEF ZZ_GF ZZ_EXPORTSF ZZ_IMPORTSF ZZ_XBALF_TOT_RAT ZZ_CURBALF_RAT ZZ_PIE4F ZZ_DPIE4F ZZ_RNOMF ZZ_DRNOMF ZZ_REALEX ;
              
-%stoch_simul(order=1, nograph) ZZ_PIE4H ZZ_DRNOMH GDPGAPH;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(order=1, nograph) ZZ_PIE4H ZZ_DRNOMH GDPGAPH;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 //***************************
 
 stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
