@@ -864,8 +864,8 @@ end;
 //***************************
 //The following was commented out for use in Rep-MMB
 //Nov. 2024
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order=1, irf = 20, ar=100, nograph, noprint) US_YGAP EA_YGAP;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(order=1, irf = 20, ar=100, nograph, noprint) US_YGAP EA_YGAP;
 //***************************
 
 stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
