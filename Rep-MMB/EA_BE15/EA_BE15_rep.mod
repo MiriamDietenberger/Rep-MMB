@@ -170,8 +170,8 @@ end;
 //***************************
 //The following was commented out for use in Rep-MMB
 //Nov. 2024
-%stoch_simul(graph_format=(eps),order=1,irf=40,conditional_variance_decomposition=[1:60], nograph) pi y ir rr ygap mp mn vel;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(graph_format=(eps),order=1,irf=40,conditional_variance_decomposition=[1:60], nograph) pi y ir rr ygap mp mn vel;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 
 //close all;
 //oomipf1_=oo_;
