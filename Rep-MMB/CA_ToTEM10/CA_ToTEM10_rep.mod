@@ -604,7 +604,7 @@
 //***************************
 //The following was commented out for use in Rep-MMB
 //Nov. 2024
-	stoch_simul (irf = 0,AR=100, noprint, nograph);
+//	stoch_simul (irf = 0,AR=100, noprint, nograph);
 //***************************
 
 stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
