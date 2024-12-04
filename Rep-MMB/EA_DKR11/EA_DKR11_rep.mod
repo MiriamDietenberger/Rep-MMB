@@ -818,8 +818,8 @@ check;
 //stoch_simul(order=1,irf=20,irf_shocks=(E_Bankcap,E_R_L,E_R)) Zobs Cobs Iobs Z_Dobs Lobs Wobs T_Dobs CPIobs Debtobs Debt_Eobs LEVobs 
 //    Bankcapobs Depoobs R_Dobs SB_Lobs Robs S_LLobs R_Lobs S_LL_Eobs R_L_Eobs;
 
-%stoch_simul(order=1,irf=20, noprint, nograph) Zobs Iobs Cobs Robs;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(order=1,irf=20, noprint, nograph) Zobs Iobs Cobs Robs;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 //***************************
 
 stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
