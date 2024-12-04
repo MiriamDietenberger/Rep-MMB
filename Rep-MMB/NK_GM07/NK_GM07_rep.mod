@@ -100,9 +100,9 @@ rB_ss = 0.0052;
 
 model;
 
-//########################
-//#### baseline model ####
-//########################
+
+//baseline model
+
 
 //(32)
 dp = beta * dp(+1) + kappa * mc;
@@ -143,9 +143,9 @@ dp = p - p(-1);
 
 rIB = (1 - mu_3) * ((1 + mu_1) * dp(+1) + mu_2 * (mc)) + mu_3 * (rIB(-1)) + eps_i;
 
-//########################
-//#### interest-rates ####
-//########################
+
+//interest-rates
+
 
 //Definition of the EFP
 EFP = (w + m - c);
@@ -169,9 +169,9 @@ rL - rIB =  EFP;
 
 
 
-//########################
-//##### policy rules #####
-//########################
+
+//policy rules
+
 
 
 //Policy determination of constant bonds to consumption
@@ -179,9 +179,8 @@ b = 0;
 
 
 
-//########################
-//### shock-processes ####
-//########################
+//shock-processes
+
 
 a1 = rho_a1 * a1(-1) + eps_a1;
 a2 = rho_a2 * a2(-1) + eps_a2;
