@@ -1,4 +1,12 @@
-
+% NK_IR04
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 // Model: NK_IR04
 
 // Further references:
@@ -12,15 +20,24 @@
 // of output and hence the output gap. Following Ravenna & Walsh (2006), we impose
 // an interest rate peg for the flexible price equilibrium.
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
+//Define endogenous variables
 var y m pi r a e z;
 
+//Define exogenous variables
 varexo epsa_ epse_ epsz_ interest_;
 
+//Define parameters
 parameters  omega1 omega2 psi gamma1 gamma2 gamma3 rhor 
             rhoy rhopi rhoa rhoe rhoz sigmaa sigmae sigmaz sigmar 
             lny lnm lnpi lnr yss mss piss rss;
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 // parameters of constrained model
 omega1 = 1;
@@ -48,6 +65,9 @@ mss = 16954.6939;
 piss = 1.0101;
 rss = 1.0188;
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -72,5 +92,11 @@ var epsz_ = 10000*sigmaz^2;
 var interest_ = 10000*sigmar^2;
 end;
 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul (irf = 16, nograph, noprint) y m pi r;
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul (irf = 16, nograph, noprint) y m pi r;
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
