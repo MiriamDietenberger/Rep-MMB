@@ -112,8 +112,8 @@ end;
 //***************************
 //The following was commented out for use in Rep-MMB
 //Nov. 2024
-%stoch_simul(irf=12) y inflationq interest deltae;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(irf=12) y inflationq interest deltae;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 //***************************
 
 stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
