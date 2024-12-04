@@ -1,3 +1,14 @@
+% NK_GK13
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+
 //**************************************************************************
 // A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
 //
@@ -21,16 +32,11 @@
 
 
 
+%--------------------------------------------------------------------------
+% 1. Defining variables
+%--------------------------------------------------------------------------
 
-
-
-
-
-
-//--------------------------------------------------------------------------
-// 1. Defining variables
-//--------------------------------------------------------------------------
-
+//Define endogenous variables
 var
     Ym Y D K Keff L I C G Q varrho Lambda Z Ne Nn Rk Rb R qn mu_s mu_b nu
     phi x Omega Pm X F H ir ib prem_K prem_B w qn_rf iir prem_ib rb q qB N Kb
@@ -38,9 +44,11 @@ var
     shock_ir infl inflstar psi Gamma shock_psi shock_Gamma QKg_Y qBg_Y QKg_A 
     qBg_A zlb e_zlb1 e_zlb2 e_zlb3 e_zlb4;
 
+//Define exogenous variables
 varexo 
     e_a e_ksi e_g e_Ne e_ir e_psi e_Gamma e_zlb;
 
+//Define parameters
 parameters
     betta sig hh varphi zetta theta Delta alfa delta G_over_Y 
     eta_i Psi Sigma kappa_s kappa_b switch_Kh_bar epsilon gam gam_P kappa_pi
@@ -62,9 +70,9 @@ parameters
 
 
 
-//--------------------------------------------------------------------------
-// 2. Calibration
-//--------------------------------------------------------------------------
+%--------------------------------------------------------------------------
+% 2. Calibration and Estimation
+%--------------------------------------------------------------------------
 
 //  parameters:
     betta=0.99500000;
@@ -211,9 +219,9 @@ parameters
 
 
 
-//--------------------------------------------------------------------------
-// 3. Model
-//--------------------------------------------------------------------------
+%--------------------------------------------------------------------------
+% 3. Model
+%--------------------------------------------------------------------------
 
 model;
 
@@ -639,10 +647,14 @@ shocks;
 	var e_psi=sigma_psi^2;
 	var e_Gamma=sigma_Gamma^2;
 end;
+
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 //stoch_simul(order=1, periods=2000, irf=40, irf_shocks = (e_ir)) outputgap inflation interest output;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
 
-
-
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 
