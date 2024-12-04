@@ -828,7 +828,7 @@ end;
 //***************************
 //The following was commented out for use in Rep-MMB
 //Nov. 2024
-stoch_simul(order=1,irf_shocks=(nua_eM),irf=40) y_a_t c_a_t i_policy_t pi_a_t;
+//stoch_simul(order=1,irf_shocks=(nua_eM),irf=40) y_a_t c_a_t i_policy_t pi_a_t;
 //***************************
 
 stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
