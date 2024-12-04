@@ -109,10 +109,8 @@ seepsrEUR=pp.seepsrEUR;
 
 model(linear);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&%%%%%%%%%%%
-%  Analytical deterministic non-linear steady-state                              %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&%%%%%%%%%%%
 
+// Analytical deterministic non-linear steady-state   
 # ssR   = ssMU*sspieY/bet;
 # RPOIL = ssRS*ssRPOILS; 
 # RPMC  = ssUPSILONMC;  
@@ -171,9 +169,7 @@ model(linear);
 # LEVSS         = ssQ*RPC*EK8/NWSS;
 # BYSS          = BTOTSS / EY;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%% Dynamic Equations, Banking Sector   %%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//Dynamic Equations, Banking Sector  
 
 % Total loans
 # b1_coef=ssQ*EK8*RPC/BTOTSS;
@@ -228,9 +224,7 @@ lev_e = q + k + pC - nwe;
 % Credit-to-output ratio
 by = btot - y; 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%
-% Households %%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%
+//Households 
 
 % Private Consumption, Lagrange multiplier 
 psi = -(1/(1-bC/ssMU))*(cH-(bC/ssMU)*cH(-1)) - ((bC/ssMU)/(1-bC/ssMU))*mu+zetaCH;
@@ -262,9 +256,8 @@ wF-pC=(1/(1+bet))*(wF(-1)-pC(-1))
 
 rwage = wF-pC;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Domestic intermediate goods producer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//Domestic intermediate goods producer
+
 #sigmaY=1/(1+rhoY);
 #alphaK=RRK*RPC*EK8/(EY*ssMCY*ssMU); 
 #alphal=(1+ssTAXFR)*ERWF*EHF/(EY*ssMCY);  
@@ -286,9 +279,8 @@ pieY=(theta/(1+bet*theta))*(pieY(-1))
 % Aggregate nominal resource constraint
 y*EY = RPC*ECH*(pC+cH)+ECGF*cGF+RPI*(EI8+EIG)*pI+(RPI*EI8)*iH+(RPI*EIG)*iG+(ssRS*RPX*EX)*(pX+x+rs)-RPMC*EMC*(pM+mC)-RPMI*EMI*(pM+mI)-RPMX*EMX*(pM+mX) ;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Consumption goods retailer   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//Consumption goods retailer
+
 # sigmaC=1/(1+rhoC);
 
 % Conditional demand for domestic intermediate consumption good
@@ -308,9 +300,8 @@ pC=-(sYCZ/RPZ)*lamCY+sMCZ*(RPMC/RPZ)*(pM-lamCM+gamCM*((mC-cH)-(mC(-1)-cH(-1))));
 % Total consumption
 c = (1-ssGCF)*cH + ssGCF*cGF;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Investment goods retailer %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//Investment goods retailer
+
 # sigmaI=1/(1+rhoI);
 
 % Demand for domestic intermediate investment good
@@ -327,9 +318,8 @@ pI=-(sYII/RPI)*lamIY+sMII*(RPMI/RPI)*(pM-lamCM+gamIM*((mI-iT)-(mI(-1)-iT(-1))));
 % Investment identity
 iT = (1-ssIG)*iH + ssIG*iG;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   
-% Export markets %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//Export markets
+
 # sigmaX=1/(1+rhoX);
     
 % Demand for domestic intermediate good
@@ -348,17 +338,13 @@ x = -sigmaW*(pX) + mW + epsX;
 pieX = (thetaX/(1+bet*thetaX))*(pieX(-1))+(bet/(1+thetaX*bet))*pieX(+1)
        +((1-zetaX)*(1-zetaX*bet)/(zetaX*(1+bet*thetaX)))*(mcX-pX-rs+upsilonX);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-% Import goods' inflation  %%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//Import goods' inflation
 
 pieMC=(thetaMC/(1+bet*thetaMC))*(pieMC(-1))+(bet/(1+thetaMC*bet))*pieMC(+1)
           +((1-zetaMC)*(1-zetaMC*bet)/(zetaMC*(1+bet*thetaMC)))*(rs-pM+omegaOIL*pOILS+omegaRAW*pRAWS+upsilonMC)
           + ((1-omegaMC)/(1+bet*thetaMC))*(ds-bet*ds(+1));
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Foreign Trade related quantities  %%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//Foreign Trade related quantities
 
 % Trade balance per output
 tbY=(RPX*ssRS*EX/EY)*(pX+rs+x-y)-(RPMC*EMC/EY)*(pM+mC-y)-(RPMI*EMI/EY)*(pM+mI-y)-(RPMX*EMX/EY)*(pM+mX-y);
@@ -375,9 +361,8 @@ bstar = +(RPX*EX*ssRS)*(pX+rs+x)-RPMC*EMC*(pM+mC)-RPMI*EMI*(pM+mI)-RPMX*EMX*(pM+
 % Net foreign assets per Output
 astar=bstar/EY-y;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Relative prices, rates of inflation and real exhange rate  %%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//Relative prices, rates of inflation and real exhange rate
+
 pC=pC(-1)+pieC-pieY;  
 pX=pX(-1)+pieX-pieW;      % Note that definition of pX is in terms of pieW!
 pI=pI(-1)+pieI-pieY;
@@ -402,9 +387,7 @@ wG = wF;
 % Total hours
 h = ssHG*hG+(1-ssHG)*hF;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Shocks and exogenous processess   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//Shocks and exogenous processess
 
 % Markup at banking sector
 epsb = rhoepsB*epsb(-1) + epsEPSB; 
