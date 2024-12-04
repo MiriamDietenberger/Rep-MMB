@@ -1,12 +1,34 @@
+% NK_GSSZ17
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+
 // model file, A simple model of pricing under financial friction
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define parameters
 parameters alpha beta gam_x theta rho_s gam_h eta rho_A gam_p rho_r rho_y 
            rho_pi varrhobar sig rho_F rho_D Asig Rsig Fsig Dsig zeta eta_w gam_w;
 
+//Define endogenous variables
 var xi s c x pt y h pii A D w pS m dt z abar mu v lambda R varrho F xi_f 
     s_f c_f x_f pt_f y_f h_f pii_f w_f pS_f m_f dt_f z_f abar_f mu_f v_f lambda_f R_f phi pii_w pii_w_f lw; 
 
+//Define exogenous variables
 varexo eA eR eF eD;
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 alpha       = 0.85; //drs parameter
 beta        = 0.985; //time discount
@@ -31,6 +53,10 @@ Dsig        = 0.010/3; // vol of demand shock
 zeta        = 1.000; // utility weight on labor disutility
 eta_w       = 2.000; // market power of labor
 gam_w       = 30; // wage adjustment cost
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model;
 
@@ -108,5 +134,12 @@ var eD = 1;
 var eR = 1;
 
 end;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order=1,pruning,irf = 20,ar = 4,nograph,noprint,periods=50000);
+
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(order=1,pruning,irf = 20,ar = 4,nograph,noprint,periods=50000);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
