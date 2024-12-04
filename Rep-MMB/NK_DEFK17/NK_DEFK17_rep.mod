@@ -1,3 +1,13 @@
+% NK_DEFK17
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 % Non-linear DEFK
 % Capitalized gross profits
 % Fixed costs in retail sector
@@ -14,7 +24,7 @@
 %----------------------------------------------------------------
 % 1. Defining variables
 %----------------------------------------------------------------
-
+//Define endogenous variables
 var 
 
 % Quantities
@@ -25,10 +35,12 @@ C Inv S_Inv dS_Inv H Y tau K N Ng LY QK GDP
 
 R Q pI RK rK rr rr0 ERQ w infl_w X1w X2w mc infl X1p X2p Delta_p CY Spr phi;
 
+//Define exogenous variables
 % Shocks
 
 varexo e_phi;
 
+//Define parameters
 % Parameters
 
 parameters
@@ -50,7 +62,7 @@ Y_ss C_ss I_ss K_ss H_ss R_ss Q_ss RK_ss rK_ss w_ss tau_ss LY_ss A_ss phi_ss
 shock_val;
 
 %----------------------------------------------------------------
-% 2. Calibration
+% 2. Calibration and Estimation
 %----------------------------------------------------------------
 
 beta=0.99347;
@@ -254,5 +266,12 @@ shocks;
 var e_phi;
 stderr (shock_val);
 end;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%simul(periods=300);
+
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%simul(periods=300);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
