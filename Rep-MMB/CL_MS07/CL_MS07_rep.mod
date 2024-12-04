@@ -691,8 +691,8 @@ end;
 //***************************
 //The following was commented out for use in Rep-MMB
 //Nov. 2024
-%stoch_simul(irf=20) dy_hat, picz_hat, rer_hat, l_hat, ca_y_hat;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(irf=20) dy_hat, picz_hat, rer_hat, l_hat, ca_y_hat;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 //***************************
 
 stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
