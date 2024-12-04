@@ -1,3 +1,13 @@
+% NK_FLMF18
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Code to replicate the baseline model of:
 % Monetary policy spillovers, global commodity prices and cooperation
@@ -5,7 +15,11 @@
 % Paper: https://www.bis.org/publ/work696.pdf
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
+//Define endogenous variables
 var GG NGG Y C CY TY PI PIY MC 
 WP L R O OC OY X Q Z OMEGA A G ETA NY NC NCY 
 NTY NPI NN DD NPIY DELTA NMC NWP NL NR NO NOC
@@ -14,10 +28,15 @@ Y_gap NYe Ye NYfe Yfe NRn Rn NRe Re NRfe Rfe UTIL WELF ERR Z_CB
 ETA_CB A_CB G_CB Yfe_CB Y_gap_CB Rfe_CB ERR_CB ERR_CBS
 EYG EPI ERE EPIC R1 R2 ERN EY EYNG;
 
-
+//Define exogenous variables
 varexo EZ, EOMEGA, EA, EG, EERR, EGG;
 
+//Define parameters
 parameters scale_Y XI GAMMA KAPPA ALPHA NU PHI_HEAD PHI_CORE PHI_COMM RHO_Z RHO_OMEGA RHO_A RHO_ERR SZ SOMEGA SA SERR SERR_Z SERR_OMEGA SERR_A SERR_G ES MU EPS BETA THETA ZS AS RHO_G SG PHI_BENCH PHI_NAT PHI_EFF PHI_Y PHI_Yn PHI_Yfe Y_gapS M1_a M1_b M1_c M1 M2_a M2_b M2_c M2 PHI_MISP_a PHI_MISP_b PHI_MISP_c CORR_Z_ETA S_Z_ETA PHI_CB Z_CBS Yfe_CBS YfeS Y_gap_CBS Rfe_CBS RfeS YS NOMEGAS isexp;
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 % Main parameters
 scale_Y=1;    %scaling of CB response to output gap
@@ -109,7 +128,9 @@ RfeS    = Rfe;
 YS      = Y;
 NOMEGAS = NOMEGA;
 
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model;
 
@@ -325,10 +346,13 @@ var EGG; stderr SG;
 end;
 
 %SIMULATION
-%stoch_simul(noprint, irf=20, order=1, nograph) NY X Q R PI Y Y_gap;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//%stoch_simul(noprint, irf=20, order=1, nograph) NY X Q R PI Y Y_gap;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
 
-
-
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 
