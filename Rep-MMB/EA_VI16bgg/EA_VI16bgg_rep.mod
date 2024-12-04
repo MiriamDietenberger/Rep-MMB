@@ -12,9 +12,9 @@
 % Macroeconomic Dynamics, 20 (05), p. 1313-1340, 2016
 % Stefania Villa
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % SMETS-WOUTERS & BGG MODEL   [EA_VI16bgg]
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 %----------------------------------------------------------------
 % 1. Defining variables
@@ -100,7 +100,7 @@ model(linear);
 #K_N   = 1/N_K;
 #RK    = s_coef*R; 
 
-%%%%% Sticky Price Model %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//Sticky Price Model
 
 % 1 % Euler Equation
 c = (1/(1+h))*c(+1)+(h/(1+h))*c(-1)- ((1-h)/(1+h))*r ;  
@@ -166,7 +166,7 @@ eps_k = rho_k * eps_k(-1) - e_k;     % Capital quality shock
 
 
 
-%%% Flexible Price Model %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//Flexible Price Model
 
 % 9
 alpha * zkf = a-(1-alpha)*wf ;
@@ -201,7 +201,7 @@ kf = (1-delta)*(kf(-1)+eps_k) + I_K*if + I_K*ksi*eps_x ;
 
 end;
 
-%%% Shocks %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//Shocks
 shocks;
 var e_a; stderr 1.0;       %1.09;
 var e_k; stderr 1.0;       %0.24;
