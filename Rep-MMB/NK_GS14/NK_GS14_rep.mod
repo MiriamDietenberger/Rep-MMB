@@ -1,10 +1,24 @@
+% NK_GS14
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 % Model: NK_GS14
 % Replication of "Should MP Lean against the Wind? An Analysis based on a DSGE Model with Banking"
 % L. Gambacorta and F.M. Signoretti (2014), Journal of Economic Dynamics & Control 43, pp. 146-174
 
 % Code provided by the authors
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
+//Define endogenous variables
 var 
 c_p     //  1 Patient HHs
 d_p     //  2 Patient HHs
@@ -42,15 +56,20 @@ Y1      // 33 Auxiliary variable 1
 mk_y    // 34 Exogenous Process
 A_e;    // 35 Exogenous Process
 
-
+//Define exogenous variables
 varexo  e_A_e e_mk_y ;
 
+//Define parameters
 parameters  beta_p beta_e phi m_e_ss gamma_p gamma_e// HOUSEHOLDS & ENTREPRENEURS
             theta  vi   mcspread delta_b // BANKS 
             eps_y mk_y_ss ksi kappa_p kappa_i deltak piss // PRODUCTION & RETAILERS
             r_ib_ss rho_ib phi_pie phi_y phi_AP phi_B      // MON POLICY
             rho_A_e rho_mk_y;     // SHOCKS
-            
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+
 beta_p   = 0.996;
 beta_e   = 0.975;
 phi      = 1; // Robustness: High: 1.5, Low: 0.5
@@ -79,6 +98,9 @@ phi_B    = 0;    // MP RULE parameter, to be changed for simulations
 rho_A_e      = 0.95; // Robustness: rho_A_e  = 0, rho_A_e  = 0.50
 rho_mk_y     = 0.50; // Robustness: rho_mk_y = 0, rho_mk_y = 0.75
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model;
 
@@ -250,6 +272,13 @@ end;
 options_.nograph   = 1;
 //options_.nomoments = 1;
 //options_.noprint   = 1;
-%stoch_simul(order=1,irf=20, periods=10000) pie Y I lev r_ib r_b;
-%stoch_simul(order=1,irf=20);
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//%stoch_simul(order=1,irf=20, periods=10000) pie Y I lev r_ib r_b;
+//%stoch_simul(order=1,irf=20);
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
