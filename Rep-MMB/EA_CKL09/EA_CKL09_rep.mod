@@ -365,12 +365,12 @@ var inno_esept = 1;
 var inno_eCt   = 1;
 end;
 
+//check;
 //***************************
 //The following was commented out for use in Rep-MMB
 //Nov. 2024
-//check;
-%stoch_simul (irf = 0, ar=100);
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul (irf = 0, ar=100);
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 //***************************
 
 stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
