@@ -401,43 +401,43 @@ end;
 //stoch_simul(dr_algo=0,order=1, irf=40) yt pit cgn nt rnt ft zt qt st it ;
 //stoch_simul(order=2,irf=0) vf yt pit qt rnt st it ct ht ygap ;
 
-%stoch_simul(order=2, irf=20, noprint, nograph) yt llt pit cgn nt rnt ft zt qt st it ct ht kt rkt mct cg qtfp ygap ytfp bt taut et xt pref mpl kl mpk rw mcl mck mcb mcc mcd mce htb auxt qgap bt rkt expi lev ce ytfp ste efc;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(order=2, irf=20, noprint, nograph) yt llt pit cgn nt rnt ft zt qt st it ct ht kt rkt mct cg qtfp ygap ytfp bt taut et xt pref mpl kl mpk rw mcl mck mcb mcc mcd mce htb auxt qgap bt rkt expi lev ce ytfp ste efc;
+// stoch_simul (AR=100,IRF=0, noprint,nograph);
 /*
-mat_res_1 = [yt_epsft/y_ss pit_epsft/pi_ss cgn_epsft/cgn_ss nt_epsft/n_ss rnt_epsft/rn_ss ft_epsft qt_epsft/q_ss st_epsft/s_ss it_epsft/i_ss ct_epsft/c_ss ht_epsft/h_ss kt_epsft/k_ss rkt_epsft/rk_ss mct_epsft/mc_ss cg_epsft qtfp_epsft ygap_epsft/yfp_ss mpl_epsft/mpl_ss kl_epsft/kl_ss mpk_epsft/mpk_ss rw_epsft/rw_ss  mcl_epsft/mcl_ss mck_epsft/mck_ss mcb_epsft/mcb_ss mcc_epsft/mcc_ss mcd_epsft/mcd_ss mce_epsft/mce_ss htb_epsft/htb_ss auxt_epsft/aux_ss bt_epsft/bt_ss rkt_epsft/rk_ss expi_epsft/pi_ss lev_epsft/lev_ss ce_epsft ytfp_epsft/yfp_ss ste_epsft/ste_ss efc_epsft/efc_ss];
+// mat_res_1 = [yt_epsft/y_ss pit_epsft/pi_ss cgn_epsft/cgn_ss nt_epsft/n_ss rnt_epsft/rn_ss ft_epsft qt_epsft/q_ss st_epsft/s_ss it_epsft/i_ss ct_epsft/c_ss ht_epsft/h_ss kt_epsft/k_ss rkt_epsft/rk_ss mct_epsft/mc_ss cg_epsft qtfp_epsft ygap_epsft/yfp_ss mpl_epsft/mpl_ss kl_epsft/kl_ss mpk_epsft/mpk_ss rw_epsft/rw_ss  mcl_epsft/mcl_ss mck_epsft/mck_ss mcb_epsft/mcb_ss mcc_epsft/mcc_ss mcd_epsft/mcd_ss mce_epsft/mce_ss htb_epsft/htb_ss auxt_epsft/aux_ss bt_epsft/bt_ss rkt_epsft/rk_ss expi_epsft/pi_ss lev_epsft/lev_ss ce_epsft ytfp_epsft/yfp_ss ste_epsft/ste_ss efc_epsft/efc_ss];
 //Calculation IRF for financial shock
-yt_irf_f=yt_epsft/y_ss;
-pit_irf_f=pit_epsft/pi_ss;
-cgn_irf_f=cgn_epsft/cgn_ss;
-rnt_irf_f=rnt_epsft/rn_ss;
-nt_irf_f=nt_epsft/n_ss;
-ft_irf_f=ft_epsft;
-qt_irf_f=qt_epsft/q_ss;
-st_irf_f=st_epsft/s_ss;
-lev_irf_f=lev_epsft/lev_ss;
-ct_irf_f=ct_epsft/c_ss;
-it_irf_f=it_epsft/i_ss;
-ht_irf_f=ht_epsft/h_ss; 
-kt_irf_f=kt_epsft/k_ss; 
-mct_irf_f=mct_epsft/mc_ss; 
+// yt_irf_f=yt_epsft/y_ss;
+// pit_irf_f=pit_epsft/pi_ss;
+// cgn_irf_f=cgn_epsft/cgn_ss;
+// rnt_irf_f=rnt_epsft/rn_ss;
+// nt_irf_f=nt_epsft/n_ss;
+// ft_irf_f=ft_epsft;
+// qt_irf_f=qt_epsft/q_ss;
+// st_irf_f=st_epsft/s_ss;
+// lev_irf_f=lev_epsft/lev_ss;
+// ct_irf_f=ct_epsft/c_ss;
+// it_irf_f=it_epsft/i_ss;
+// ht_irf_f=ht_epsft/h_ss; 
+// kt_irf_f=kt_epsft/k_ss; 
+// mct_irf_f=mct_epsft/mc_ss; 
 
 //Calculation IRF for technology shock
-yt_irf_z=yt_epszt/y_ss;
-pit_irf_z=pit_epszt/pi_ss;
-cgn_irf_z=cgn_epszt/cgn_ss;
-rnt_irf_z=rnt_epszt/rn_ss;
-nt_irf_z=nt_epszt/n_ss;
-zt_irf_z=zt_epszt;
-qt_irf_z=qt_epszt/q_ss;
-st_irf_z=st_epszt/s_ss;
-lev_irf_z=lev_epszt/lev_ss;
-ct_irf_z=ct_epszt/c_ss;
-it_irf_z=it_epszt/i_ss;
-ht_irf_z=ht_epszt/h_ss; 
-kt_irf_z=kt_epszt/k_ss; 
-mct_irf_z=mct_epszt/mc_ss; 
+// yt_irf_z=yt_epszt/y_ss;
+// pit_irf_z=pit_epszt/pi_ss;
+// cgn_irf_z=cgn_epszt/cgn_ss;
+// rnt_irf_z=rnt_epszt/rn_ss;
+// nt_irf_z=nt_epszt/n_ss;
+// zt_irf_z=zt_epszt;
+// qt_irf_z=qt_epszt/q_ss;
+// st_irf_z=st_epszt/s_ss;
+// lev_irf_z=lev_epszt/lev_ss;
+// ct_irf_z=ct_epszt/c_ss;
+// it_irf_z=it_epszt/i_ss;
+// ht_irf_z=ht_epszt/h_ss; 
+// kt_irf_z=kt_epszt/k_ss; 
+// mct_irf_z=mct_epszt/mc_ss; 
 
-mat_res_2 = [yt_epszt/y_ss pit_epszt/pi_ss cgn_epszt/cgn_ss nt_epszt/n_ss rnt_epszt/rn_ss zt_epszt qt_epszt/q_ss st_epszt/s_ss it_epszt/i_ss ct_epszt/c_ss ht_epszt/h_ss kt_epszt/k_ss rkt_epszt/rk_ss mct_epszt/mc_ss cg_epszt qtfp_epszt ygap_epszt/yfp_ss mpl_epszt/mpl_ss kl_epszt/kl_ss mpk_epszt/mpk_ss rw_epszt/rw_ss  mcl_epszt/mcl_ss mck_epszt/mck_ss mcb_epszt/mcb_ss mcc_epszt/mcc_ss mcd_epszt/mcd_ss mce_epszt/mce_ss htb_epszt/htb_ss auxt_epszt/aux_ss bt_epszt/bt_ss rkt_epszt/rk_ss expi_epszt/pi_ss lev_epszt/lev_ss ce_epszt ytfp_epszt/yfp_ss ste_epszt/ste_ss efc_epszt/efc_ss];
+// mat_res_2 = [yt_epszt/y_ss pit_epszt/pi_ss cgn_epszt/cgn_ss nt_epszt/n_ss rnt_epszt/rn_ss zt_epszt qt_epszt/q_ss st_epszt/s_ss it_epszt/i_ss ct_epszt/c_ss ht_epszt/h_ss kt_epszt/k_ss rkt_epszt/rk_ss mct_epszt/mc_ss cg_epszt qtfp_epszt ygap_epszt/yfp_ss mpl_epszt/mpl_ss kl_epszt/kl_ss mpk_epszt/mpk_ss rw_epszt/rw_ss  mcl_epszt/mcl_ss mck_epszt/mck_ss mcb_epszt/mcb_ss mcc_epszt/mcc_ss mcd_epszt/mcd_ss mce_epszt/mce_ss htb_epszt/htb_ss auxt_epszt/aux_ss bt_epszt/bt_ss rkt_epszt/rk_ss expi_epszt/pi_ss lev_epszt/lev_ss ce_epszt ytfp_epszt/yfp_ss ste_epszt/ste_ss efc_epszt/efc_ss];
 */
 //***************************
 
