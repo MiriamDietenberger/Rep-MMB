@@ -1,10 +1,27 @@
+% UK_SM11
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+//**********************************************************************
 // The BBWE model described in Harrison, Thomas and de Weymarn (2008):
 // 'Energy price shocks in a small open economy with declining natural
 // resource extraction'
-
+//
 // This version is modified by Maria Barriel and Stephen Millard March 2009
 // to allow us to estimate the model using dynare's inbuilt bayesian estimation techniques
+//**********************************************************************
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var c lam pdot w cn cp ce cu pc pu pp va h k pvc wk q b e vn mn ip iu wdot
     mu qu ig vu qp io vp ppb rg xo xg s bfc z pe xn pm pg pudot ppbdot ppdot
     po pmfshock ashock ishock gshock poshock yfshock rfshock mushock pgshock bshock
@@ -15,9 +32,11 @@ var c lam pdot w cn cp ce cu pc pu pp va h k pvc wk q b e vn mn ip iu wdot
     contpp contpu contpq nomw rcw dfrgap pedot4 encost4 
     pmcost4 wcost4 profits pmdot4 vagap qgap invshock wshock;
 
+//Define exogenous variables
 varexo eps_a eps_i eps_g eps_po eps_yf eps_pmf eps_rf eps_pg eps_mu eps_b
        eps_inv eps_w;
 
+//Define parameters
 parameters beta delta chiz psie psip alphaq alphav alphab psin psiqp psiu
            psid sigmac psihab chibf chik epsilonk phiz sigmaw sigmah psiw
            epsilonw sigmae sigmap sigmav sigmaq epsilon chip epsilonu
@@ -27,8 +46,11 @@ parameters beta delta chiz psie psip alphaq alphav alphab psin psiqp psiu
            xnqratio mnqratio xoqratio xgqratio rhob psiwc thetay
            lshareq mshareq eshareq rhoinv rhow;
 
-// Parameters
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+// Parameters
 beta = 0.9925;
 delta = 0.013;
 chiz = 1/beta-1+delta;
@@ -50,7 +72,6 @@ sigmaq = 0.15;
 etax = 1.5;
 
 // Estimated parameters
-
 psiwc = 0.4974;
 sigmac = 0.6256;
 psihab = 0.5876;
@@ -81,7 +102,6 @@ rhow = 0.2247;
 rhoinv = 0.4323;
 
 //  Steady-state shares and ratios
- 
 cncratio=0.9474;
 cucratio=0.0215;
 vnvratio=0.9815;
@@ -101,32 +121,29 @@ lshareq = 0.4648;
 mshareq = 0.2581;
 eshareq = 0.0456;
 
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 //  Log-linearized model equations
 
 model (linear);
 
 // IS curve
-
 lam = psihab*(1/sigmac-1)*c(-1)-c/sigmac-pc;
 lam = rg+lam(1)-pdot(1)+bshock;
 
 // Real UIP
-
 s = s(1)-lam(1)+lam+chibf*bf-rfshock;
 
 // Investment and capital utilisation
-
 lam = lam(1)+(chik*(k(1)-(1+epsilonk)*k+epsilonk*k(-1))+chiz*wk(1))/(1-delta+chiz)-chik*(k-(1+epsilonk)*k(-1)+epsilonk*k(-2))+invshock;
 wk = phiz*z;                     // eq (3)
 
 // Wage setting
-
 wdot = psiw*(1-beta*(1-psiw))*(h/sigmah-lam-w)/((1+sigmaw/sigmah)*(1-psiw)*(1+epsilonw*beta))+epsilonw*wdot(-1)/(1+epsilonw*beta)+beta*wdot(1)/(1+epsilonw*beta)+wshock;
 w = wdot + w(-1) - pdot;         // eq (11)
 
 // Relative consumption and relative prices
-
 cn = (c-psie*ce)/(1-psie);  // eq (5) reordered for cn
 ce = (1-psip)*cu+psip*cp;   // eq (4)
 cu = sigmap*(cn/sigmae-pu-(1/sigmae-1/sigmap)*ce);
@@ -135,13 +152,11 @@ pc = cncratio*cn + cucratio*(pu+cu) + (1-cncratio-cucratio)*(pp+cp) - c;
 pe = psin*pp + (1-psin)*pu;
 
 // Production functions
-
 va = (1-alphav)*h+alphav*(z+k(-1));		// eq (19)
 q = (1-alphaq)*b+alphaq*e+ashock;		// eq (12)
 b = (1-alphab)*vn+alphab*mn;			// eq (13)
 
 // Factor demands
-
 qu = vu;
 qp = vp;
 ig = qu;
@@ -155,7 +170,6 @@ mn = mu+(1-1/sigmaq)*ashock+q/sigmaq+(1-1/sigmaq)*b-pm;
 pe = mu+(1-1/sigmaq)*ashock+q/sigmaq-e/sigmaq;
 
 // New Keynesian Phillips Curves
-
 pdot = epsilon*pdot(-1)/(1+beta*epsilon)+beta*pdot(1)/(1+beta*epsilon)+(1-chip)*(1-beta*chip)*mu/(chip*(1+beta*epsilon))+mushock;                                       // eq (18)
 pudot = epsilonu*pudot(-1)/(1+beta*epsilonu)+beta*pudot(1)/(1+beta*epsilonu)+(1-chiu)*(1-beta*chiu)*(psiu*pvc+(1-psiu)*pg-pu)/(chiu*(1+beta*epsilonu));                 // eq (27)
 pudot = pu-pu(-1)+pdot;
@@ -163,24 +177,20 @@ ppbdot = epsilonpp*ppbdot(-1)/(1+beta*epsilonpp)+beta*ppbdot(1)/(1+beta*epsilonp
 ppbdot = ppb-ppb(-1)+pdot;
 
 // Taylor rule
-
 rg = thetarg*rg(-1) + (1-thetarg)*(thetapdot*(pc+pdot-pc(-1))+thetay*(va-vaf)) + ishock;	// eq (30)
 //rg = 0.764*rg(-1) + 0.282*pcdot + 0.141*vagap + ishock;
 
 // Taxes and duties
-
 pp = (1-psid)*ppb;				// eq (31)
 ppdot = (1-psid)*ppbdot;
 
 // Rest of the world
-
 xn = psix*xn(-1)+(1-psix)*(yfshock-etax*s);		// eq (35)
 po = poshock - s;                               // eq (32)
 pg = pgshock - s;                               // eq (33)
 pdot = pm(-1)-pm+beta*(pm(1)+pdot(1)-pm)/(1+beta*epsilonpm)+epsilonpm*(pm(-1)+pdot(-1)-pm(-2))/(1+beta*epsilonpm)+(1-beta*(1-psipm))*psipm*(pmfshock-s-pm)/((1+beta*epsilonpm)*(1-psipm));
 
 //  Market clearing
-
 va = vnvratio*vn + vuvratio*vu + (1-vnvratio-vuvratio)*vp;                          // eq (37)
 q = cnqratio*cn+kqratio*(k-(1-delta)*k(-1)+chiz*z)+xnqratio*xn+cgqratio*gshock;		// eq (42)
 qp = cpqpratio*cp+(1-cpqpratio)*ip;							// eq (38)
@@ -213,28 +223,24 @@ pgshock = 0.5940*pgshock(-1) + eps_pg;       // eq (59)
 // pgshock = 0.9999*pgshock(-1) + eps_pg;          // eq (54)
 rfshock = 0.8738*rfshock(-1) + eps_rf;          // eq (55) and eq (60)
 
-// Flex-price version of the model
+
+/////Flex-price version of the model/////
 
 // IS curve
-
 lamf = psihab*(1/sigmac-1)*cf(-1)-cf/sigmac-pcf;
 lamf = rf+lamf(1)+bshock;
 
 // Real UIP
-
 sf = sf(1)-lamf(1)+lamf+chibf*bff-rfshock;
 
 // Investment and capital utilisation
-
 lamf = lamf(1)+(chik*(kf(1)-(1+epsilonk)*kf+epsilonk*kf(-1))+chiz*wkf(1))/(1-delta+chiz)-chik*(kf-(1+epsilonk)*kf(-1)+epsilonk*kf(-2))+invshock;
 wkf = phiz*zf;
 
 // Labour supply
-
 wf = hf/sigmah-lamf;
 
 // Relative consumption and relative prices
-
 cnf = (cf-psie*cef)/(1-psie);
 cef = (1-psip)*cuf+psip*cpf;
 cuf = sigmap*(cnf/sigmae-puf-(1/sigmae-1/sigmap)*cef);
@@ -243,13 +249,11 @@ pcf = cncratio*cnf + cucratio*(puf+cuf) + (1-cncratio-cucratio)*(ppf+cpf) - cf;
 pef = psin*ppf + (1-psin)*puf;
 
 // Production functions
-
 vaf = (1-alphav)*hf+alphav*(zf+kf(-1));
 qf = (1-alphaq)*bf+alphaq*ef+ashock;
 bf = (1-alphab)*vnf+alphab*mnf;
 
 // Factor demands
-
 quf = vuf;
 qpf = vpf;
 igf = quf;
@@ -263,23 +267,19 @@ mnf = (1-1/sigmaq)*ashock+qf/sigmaq+(1-1/sigmaq)*bf-pmf;
 pef = (1-1/sigmaq)*ashock+qf/sigmaq-ef/sigmaq;
 
 // Supply curves for petrol and utilities
-
 puf = psiu*pvcf+(1-psiu)*pgf;
 ppbf = psiqp*pvcf+(1-psiqp)*pof;
 
 // Petrol duty
-
 ppf = (1-psid)*ppbf;
 
 // Rest of the world
-
 xnf = psix*xnf(-1)+(1-psix)*(yfshock-etax*sf);
 pof = poshock - sf;
 pgf = pgshock - sf;
 pmf = pmfshock-sf;
 
 //  Market clearing
-
 vaf = vnvratio*vnf + vuvratio*vuf + (1-vnvratio-vuvratio)*vpf;
 qf = cnqratio*cnf+kqratio*(kf-(1-delta)*kf(-1)+chiz*zf)+xnqratio*xnf+cgqratio*gshock;
 qpf = cpqpratio*cpf+(1-cpqpratio)*ipf;
@@ -318,11 +318,8 @@ qgap = q-qf;
 end;
 
 // Shock variances
-
 shocks;
-
 //  Estimated Table D: 
-
 var eps_a = 0.0123^2;
 var eps_b = 0.0041^2;
 var eps_i = 0.0015^2;
@@ -337,7 +334,6 @@ var eps_pg = 0.2544^2;
 var eps_rf = 0.0012^2;
 
 //  Simplified 
-
 //var eps_a = 0;
 //var eps_b = 0;
 //var eps_i = 0;
@@ -354,8 +350,16 @@ end;
 
 //check;
 
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 // stoch_simul(irf=21) pcdot4 contpp contpu contpq h inv pdot4 encost4 pmcost4 wcost4 profits rcw nomw rga s cn dfrgap va c wdot4 vaf q;
-stoch_simul(irf=21) pcdot4 s rcw rga va c;
+//stoch_simul(irf=21) pcdot4 s rcw rga va c;
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
 
 
 

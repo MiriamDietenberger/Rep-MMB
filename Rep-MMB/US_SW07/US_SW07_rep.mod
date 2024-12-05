@@ -1,3 +1,14 @@
+% US_SW07
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+//**********************************************************************
 // Title: Shocks and Frictions in US Business Cycles: A Bayesian DSGE-Approach
 // Authors: Smets, Frank and Raf Wouters
 // Publication: The American Economic Review, June 2007, 97(3), 586-606.
@@ -6,14 +17,21 @@
 // This file simulates the dynamic response of the model to specific shocks
 
 // Replication of IRF to monetary policy shock (one standard deviation)
+//**********************************************************************
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var labobs robs pinfobs dy dc dinve dw ewma epinfma zcapf rkf kf pkf cf invef 
     yf labf wf rrf mc zcap rk k pk c inve y lab pinf w r a  b g qs  ms  spinf 
     sw kpf kp pinf4;
- 
+
+//Define exogenous variables
 varexo ea eb eqs eg em epinf ew;
   
- 
+ //Define parameters
 parameters curvw cgy curvp constelab constepinf constebeta cmaw cmap calfa 
            czcap cbeta csadjcost ctou csigma chabb ccs cinvs cfc cindw cprobw 
            cindp cprobp csigl clandaw crdpi crpi crdy cry crr crhoa crhob 
@@ -21,15 +39,17 @@ parameters curvw cgy curvp constelab constepinf constebeta cmaw cmap calfa
            cr cpie crk cw cikbar cik clk cky ciy ccy crkky cwhlc cwly; 
 
 
-
-// fixed parameters
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+// Fixed parameter values
 ctou=.025; //depreciation rate
 clandaw=1.5; // SS markup labor market
 cg=0.18; //exogenous spending GDP-ratio
 curvp=10; //curvature Kimball aggregator goods market
 curvw=10; //curvature Kimball aggregator labor market
 
-// estimated parameters initialisation
+// Estimated parameter values (Initialisation)
 ctrend=0.4312; //quarterly trend growth rate to GDP
 cgamma=ctrend/100+1;
 constebeta=0.1657;
@@ -84,6 +104,9 @@ cwhlc=(1/clandaw)*(1-calfa)/calfa*crk*cky/ccy;
 cwly=1-crk*cky;
 
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear); 
 
 // Original Model Code:
@@ -169,6 +192,8 @@ labobs = lab + constelab;
 
 end; 
 
+
+//Shocks
 shocks;
 //productivity shock
 var ea;
@@ -188,5 +213,13 @@ stderr 0.1410;
 var ew;
 stderr 0.2446;
 end;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(irf=20, noprint, nograph) r pinf lab y;
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul(irf=20, noprint, nograph) r pinf lab y;
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+

@@ -1,32 +1,37 @@
-//**************************************************************************
-// A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
-//
-// Volker Wieland, Tobias Cwik, Gernot J. Mueller, Sebastian Schmidt and
-// Maik Wolters
-//
-// Working Paper, 2009
-//**************************************************************************
+% US_ACELswm
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
-// Model: US_ACELswm
-
+//**********************************************************************
 // Further references:
 // Altig, D., L. Christiano, M. Eichenbaum, and J. Linde. 2004. "Firm-Specific Capital, Nominal Rigidities and the Business Cycle."
 // working paper.
-
+//
 // Last edited: 10/09/07 by S. Schmidt
-
-
+//
+//
 // This file simulates the dynamic response of the model to specific shocks
 // This code is a adoption of the code provided by L.J.Christiano on
 // http://faculty.wcas.northwestern.edu/~lchrist/research/ACEL/acelweb.htm
-
+//
 // This version produces the right impulse responses to monetary policy shocks
 // for the ACEL model without the cost channel (nu = 0).
 // Timing: Technology shock, agents' decisions, monetary policy shock.
 // This file produces wrong answers to technlogy shocks as variables are
 // predetermined.
+//**********************************************************************
 
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var c_t wtilde_t lambda_zstar_t m_t pi_t x_t s_t i_t h_t kbar_t1 q_t ytilde_t R_t mutilde_t rhotilde_t u_t
     x_M_t eps_M_t mu_z_t eps_muz_t x_z_t mu_ups_t eps_muups_t x_ups_t
     c_tlead c_tpred wtilde_tlead wtilde_tpred u_tlead u_tpred i_tlead i_tpred pi_tlead pi_tpred mutilde_tlead mutilde_tpred
@@ -34,14 +39,11 @@ var c_t wtilde_t lambda_zstar_t m_t pi_t x_t s_t i_t h_t kbar_t1 q_t ytilde_t R_
     cf_tlead cf_tpred wtildef_tlead wtildef_tpred uf_tlead uf_tpred if_tlead if_tpred pif_tlead pif_tpred mutildef_tlead mutildef_tpred
     epsilon_t;  // the last variable is the additional transitory neutral technology shock not considered in the original code
 
-
-
+//Define exogenous variables
 varexo  epsilon_M_ eps_muz_ eps_muups_ epsilon_t_;  // the last shock is the transitory technology shock, not in the original code
 
-
-
+//Define parameters
 parameters
-
            alpha b beta delta eps eta lambda_f lambda_w mu_ups mu_z nu psi_L
            sigma_L x xi_w V kappa sigma_a gamma squig vaartheta rho_M theta_M
            rho_muz theta_muz c_z cp_z rho_xz rho_muups theta_muups c_ups
@@ -53,8 +55,10 @@ parameters
            bf_w xif_w ETA1f ETA2f ETA3f ETA4f ETA5f ETA6f ETA7f ETA8f ETA9f ETA10f xif_p  rho_epsilon;
 
 
-
-rho_epsilon =   0.9767 ;     // coefficient for the transitory technology shock, not in the original code
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+rho_epsilon =   0.9767 ;       // coefficient for the transitory technology shock, not in the original code
 alpha       =   0.3600 ;
 b           =   0.7048 ;
 beta        =   0.9926 ;
@@ -65,18 +69,18 @@ lambda_f    =   1.0100 ;
 lambda_w    =   1.0500 ;
 mu_ups      =   1.0042 ;
 mu_z        =   1.0001 ;
-nu          =   0.0001 ; //shut down the wage channel; nu: proportion of wages financed in advance
+nu          =   0.0001 ;       //shut down the wage channel; nu: proportion of wages financed in advance
 psi_L       =   1.0000 ;
 sigma_L     =   1.0000 ;
 x           =   1.0170 ;
 xi_w        =   0.7234 ;
-xif_w       =   0      ;  //wage calvo parameter is zero in flexible price allocation
-xif_p       =   0.0001 ;  //price calvo parameter is zero in flexible price allocation; 0.0001 avoids indeterminacy
+xif_w       =   0      ;      //wage calvo parameter is zero in flexible price allocation
+xif_p       =   0.0001 ;      //price calvo parameter is zero in flexible price allocation; 0.0001 avoids indeterminacy
 V           =   0.4500 ;
 
 kappa       =   3.2756 ;
 sigma_a     =   2.0183 ;
-gamma       =   0.0401 ;  //homogeneous capital model
+gamma       =   0.0401 ;      //homogeneous capital model
 squig       =   1.0000 ;
 vaartheta    =   0.0000 ;
 
@@ -145,16 +149,18 @@ ETA9f  =   -bf_w*xif_w*(1-blewy); //eta7
 ETA10f  =  beta*bf_w*xif_w*(1-blewy); //eta8
 
 
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
-
-
 
 // Original Model Code:
 
 
-// STICKY PRICE MODEL ///////////////////////////
+/////STICKY PRICE MODEL/////
+
 // THE FIRM SECTOR
+
 //Capital Euler Equation: eq. (1) in technical appendix
 lambda_zstar_t(+1) + (1-delta)/(rhotilde+1-delta) * mutilde_t(+1) + rhotilde/(rhotilde+1-delta)*rhotilde_t(+1)
 - lambda_zstar_t - mutilde_t
@@ -186,7 +192,9 @@ wtilde_tpred - s_t + alpha/(1-alpha)*ytilde/(ytilde+phi)*ytilde_t + nu*R/(nu*R+1
 - alpha/(1-alpha) * kbar_t1(-1)
 = - alpha/(1-alpha) * mu_z_t - alpha/(1-alpha)^2 * mu_ups_t + 1/(1-alpha)*epsilon_t;
 
+
 // THE HOUSEHOLD SECTOR
+
 // Money demand: eq. (7) in technical appendix
 c_tpred - q_t = R/(R-1)/(2+sig_eta) * R_t;
 
@@ -248,8 +256,10 @@ mutilde_tlead = mutilde_t(+1);
 mutilde_tpred = mutilde_tlead(-1);
 
 
-// FLEXIBLE PRICE MODEL ///////////////////////////
+/////FLEXIBLE PRICE MODEL/////
+
 // THE FIRM SECTOR
+
 //Capital Euler Equation: eq. (1) in technical appendix
 lambda_zstarf_t(+1) + (1-delta)/(rhotilde+1-delta) * mutildef_t(+1) + rhotilde/(rhotilde+1-delta)*rhotildef_t(+1)
 - lambda_zstarf_t - mutildef_t
@@ -282,7 +292,9 @@ wtildef_tpred - sf_t + alpha/(1-alpha)*ytilde/(ytilde+phi)*ytildef_t + nu*R/(nu*
 - alpha/(1-alpha) * kbarf_t1(-1)
 = - alpha/(1-alpha) * mu_z_t - alpha/(1-alpha)^2 * mu_ups_t + 1/(1-alpha)*epsilon_t;
 
+
 // THE HOUSEHOLD SECTOR
+
 // Money demand: eq. (7) in technical appendix
 cf_tpred - qf_t = R/(R-1)/(2+sig_eta) * Rf_t;
 
@@ -343,9 +355,6 @@ pif_tpred = pif_tlead(-1);
 mutildef_tlead = mutildef_t(+1);
 mutildef_tpred = mutildef_tlead(-1);
 
-
-
-
 // Shock processes:
 x_M_t       = rho_M * x_M_t(-1) + theta_M* eps_M_t(-1) + epsilon_M_;
 eps_M_t     = epsilon_M_;
@@ -358,10 +367,10 @@ x_ups_t     = cp_ups * eps_muups_t(-1) + rho_xups *x_ups_t(-1) +  c_ups * eps_mu
 epsilon_t   = rho_epsilon * epsilon_t(-1) + 0.5187*epsilon_t_;
 end;
 
-
 //steady;
 //check;
 
+//Shocks
 shocks;
 var epsilon_M_;
 stderr .3285; // sig_M
@@ -370,5 +379,13 @@ stderr .0673; // sig_muz
 var eps_muups_;
 stderr .3027; //sig_muups
 end;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 //stoch_simul(irf = 20, ar=100); //noprint
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+

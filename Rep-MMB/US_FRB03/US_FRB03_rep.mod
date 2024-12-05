@@ -1,27 +1,32 @@
-//**************************************************************************
-// A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
-//
-// Volker Wieland, Tobias Cwik, Gernot J. Mueller, Sebastian Schmidt and 
-// Maik Wolters
-//
-// Working Paper, 2009
-//**************************************************************************
+% US_FRB03
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
-// Model: US_FRB03
-
+//**************************************************************************
 // Further references:
 // Levin, A., V. Wieland, and J. Williams. 2003. "The Performance of Forecast-Based Monetary Policy Rules under Model Uncertainty."
 // American Economic Review 93(3), pp. 622-645.
-
+//
 // Last edited: 10/09/10 by S. Schmidt
-
+//
 // Replication file. Note, all variances except the one for the monetary policy shock are set to zero. 
-
+//
 // This model file contains the linearized Version of the FRB-US Model. 
 // The model equations and parameters are equal to the ones used in LWW (2003).
 // This file simulates the dynamic response of the model to specific shocks.
+//**************************************************************************
 
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var xgap2 picnia rffe drffe xgap lur fpxr dlfpxr dlfpx	pcr qec ec qsdv ecdv 
     ecdo eh kcd kh epd	kpd vpd	eps kps	kimt kio ex hgxemo emo fninr xgdp xp 
     xb vpda veoa lhp lep lf leor lurnat xgpot xgdpt xgdpnr jccanr yhibnr ynicpnr 
@@ -46,11 +51,10 @@ var xgap2 picnia rffe drffe xgap lur fpxr dlfpxr dlfpx	pcr qec ec qsdv ecdv
     lprdgt qlhp qyhibnr yniinr qynidnr	qpxgr qpmor rgsint eg xg ecnia xbnr 
     xgnr yninr yhinr tryh yhl yh pgdpr gfintnr tspnr gssrpnr wpo 
 
-//**************************************************************************
 // Modelbase Variables                                                   //*    
    interest inflation inflationq outputgap output;                       //*
-//**************************************************************************
 
+//Define exogenous variables
 varexo 
 dlfgdp_  
 dlfpc_     
@@ -107,7 +111,7 @@ yhibnr_
 ynidnr_  
 ;
 
-
+//Define parameters
 parameters 
        stockoff pcrec pgasrec pwfix	iscurve shortlag xgaprho datet anton 
 	   taxon yhpntfix ltfpt1 plminr1 lurnat1 dmptay	dmpvar	qsector	gsector 
@@ -148,6 +152,9 @@ parameters
        profit1 profit2 profit3 profit4  rg51 rtb1;
 
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 stockoff = 0;
 pcrec	= 0.1;
 pgasrec	= 0.1;
@@ -562,30 +569,24 @@ rg51      = .96505977     ;
 rtb1      = .91875477     ;
 
 
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
 
-//**************************************************************************
 // Definition of Modelbase Variables in Terms of Original Model Variables //*
-                                                                         //*
 interest   = rffe;                                                       //*
 inflation  = (1/4)*(picnia+ picnia(-1)+ picnia(-2)+ picnia(-3));         //*
 inflationq = picnia;                                                     //*
 outputgap  = xgap2;                                                      //*
 output     = xgdp*100;                                                   //*
-//**************************************************************************
 
-
-
-// Monetary Policy Rule                                                                                                                 
-                                                                         	
+// Monetary Policy Rule                                                                                                                                                                                   	
 interest = (1-tayr1)*rstar + 0.755226*interest(-1)
 +0.602691/4*(inflationq+inflationq(-1)+inflationq(-2)+inflationq(-3))
 +1.17616*outputgap-0.972390*outputgap(-1)+interest_;
 
-
 // Original Model Code:
-
 drffe   = rffe - rffe(-1);
 qec     = zyh +  0.0584068790054*(zyht-zyh) -  0.0655950765465*(zyhp-zyh) +  0.0325302560675*(1+iscurve*.5)*(lwps + pxgr - pcr - zyh) +  0.1440652972670*(wpo-zyh);
 ec      = ec(-1) + 0.154173479486*(qec(-1)-ec(-1)) + 0.207837076245*(ec(-1)-ec(-2)) + datet*zec1 + (1-datet)*lzec1(-1) + 0.0080074377742*(datet*zgapc1 + (1-datet)*lzgapc1(-1)) + 0.0995119731721*(yh-yh(-1) -(datet*zec1+ (1-datet)*lzec1(-1))) - 0.0229678540295*(yh(-1)-yh(-2)) + ec_;
@@ -864,10 +865,19 @@ gssrpnr = gssrpn1*tspnr + gssrpn2*(trsci1*trsci + ynicpnr)  + gssrpn3*(trsib1*tr
 wpo     = wpo1*(gfdbtnr - pcr) + wpo2*(gsdbtnr - pcr)+ wpo3*(fninr - pcr)+ wpo4*(kh + pxbr - pcr)+ wpo5*(kcd + pxbr - pcr) + wpo6*xgpot;
 end;
 
+//Shocks
 shocks;
 var interest_ = 1;
 end;
 
 //options_.Schur_vec_tol = 1e-6;
-%stoch_simul (irf =16, nograph, noprint) interest inflationq outputgap;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (irf =16, nograph, noprint) interest inflationq outputgap;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+

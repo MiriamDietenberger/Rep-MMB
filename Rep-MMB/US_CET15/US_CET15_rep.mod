@@ -1,3 +1,14 @@
+% US_CET15
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version
+
+//*************************************************************************
 %Medium-sized model of Christiano, Eichenbaum and Trabandt (2015)       
 %'Understanding the Great Recession', American Economic Journal:        
 %Macroeconomics, forthcoming                                            
@@ -23,8 +34,14 @@
 %Note that both steady states (i.e. 'R' and 'F' economy) are identical
 
 %All Variables in logs.
- 
+ //*************************************************************************
 
+
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+// Define endogenous variables
 var 
 % Endogenous variables (R economy)
 lambda_CR cR RR piR iR pkR FR KR ukR wR kststR lR xR varthetR DispR yR JR UR GDPR 
@@ -40,9 +57,10 @@ muzF mupsiF muF nGF pi4F
 GDPAGG piAGG RAGG ukAGG lAGG wAGG cAGG 
 iAGG unempAGG vTotAGG fAGG pinvestAGG LAGG; 
 
-%Shocks
+//Define exogenous parameters (shocks)
 varexo epsR_eps muz_eps mupsi_eps;
 
+//Define parameters
 parameters 
 u L s rho Q sigma recSHAREpercent DSHARE M phiL elasttarget
 xi pibar kappaf varkappaf pibreve lambda nuf alfa deltak Spp sigmaa
@@ -55,6 +73,11 @@ x f v sigmam kappa J varthetp wp w D e unemp_stst vTot_stst cH
 alp1 alp2 alp3 alp4 omega lambda_C UcH gamma F K U N A V pl
 sig_eta theta1 theta2;   
 
+
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 deltak=0.025;   %depreciation rate of capital
 betta=0.996773254690569;    %discount factor households; implies 3% real rate
 rho=0.9;                %job survival rate
@@ -199,9 +222,14 @@ sig_eta =1000;                                                          % stddev
 theta1 =0;                                                              % root of AR(2) process of technology
 theta2=0;                                                               % root of AR(2) process of technology
 
+
+
+%----------------------------------------------------------------
+% 3. Model
+%-------------------------------------------------------------
 model;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%/
-%R economy, monetary policy shock, current realization not in info set/%%%%%%%/ 
+%R economy, monetary policy shock, current realization not in info set
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%/
 %information set in line with Choleski decomposition in VA_R
 %set exogenous variables to steady states (except monetary shock, of course)
@@ -560,7 +588,7 @@ pinvestAGG=-mupsiF;
 LAGG-STEADY_STATE(LF)=LR-STEADY_STATE(LF)+LF-STEADY_STATE(LF);
 end; 
 %%%%%%%%%%%%%%%%/
-%End Model            %%%%%
+%End Model          
 %%%%%%%%%%%%%%%%/
 
 initval;
@@ -672,8 +700,17 @@ end;
 %steady;
 resid;
 check;
-%stoch_simul(order = 1, irf=15, noprint, nograph) GDPAGG unempAGG piAGG RAGG lAGG wAGG cAGG LAGG iAGG ukAGG fAGG vTotAGG;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul(order = 1, irf=15, noprint, nograph) GDPAGG unempAGG piAGG RAGG lAGG wAGG cAGG LAGG iAGG ukAGG fAGG vTotAGG;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary)
+
+
 /*
 figure;
 suptitle('Monetary Policy Shock')

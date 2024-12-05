@@ -1,7 +1,25 @@
+% NK_KRS12
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+//**********************************************************************
 //Replication of the result of the paper by Kannan, Rabanal and Scott
 //Monetary and Macroprudential Policy Rules in a Model with House Price Booms;
 //Qianchao Qu, May 21st, 2012;
 //This file is for replicating the impulse responses under the augmented Taylor rule plus macroprudential policy regime; 
+//**********************************************************************
+
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var 
    q
    c
@@ -43,11 +61,17 @@ var
    yDstar
    dstar
    deltabB;
-   
+
+//Define exogenous variables
 varexo eps_A eps_D eps_v;
 
+//Define parameters
 parameters epsilon eta beta delta lL phi alpha gamma betaB CB IB RL BB W LB kappa kappaC kappaD phiC phiD lambda thetaC thetaD C D DB L gammaR gammapi gammay gammab tau rhoC rhoD rhov;
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 epsilon = 0.8;
 eta = 0.5;
 beta = 0.99;
@@ -77,6 +101,7 @@ phiD = 1;
 lambda = 0.5;
 thetaC = 0.75;
 thetaD = 0.75;
+
 //monetary policy and macroprudential policy
 gammaR = 0.7;
 gammapi = 1.3;
@@ -87,7 +112,12 @@ rhoC = 0.98;
 rhoD = 0.95;
 rhov = 0.95;
 
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 Model(linear);
+
 // For Savers
 q=pD-pC;
 deltac=c-c(-1);
@@ -117,13 +147,16 @@ rL=r+kappa*(bB-dB-q)-v+tau*(bB(-1)-bB(-2)+deltapC(-1));
 deltap=gamma*deltapC+(1-gamma)*deltapD;
 
 //the relatvie price of housing
-//q=q(-1)+deltapD-deltapC;
+%q=q(-1)+deltapD-deltapC;
+
 //the production functions
 yC=aC+lCtot;
 yD=lDtot;
+
 //the pricing equations
 deltapC-phiC*deltapC(-1)=beta*(deltapC(+1)-phiC*deltapC)+kappaC*(wC-aC);
 deltapD-phiD*deltapD(-1)=beta*(deltapD(+1)-phiD*deltapD)+kappaD*(wD-q);
+
 //the market clearing conditons
 yC=(lambda*C*c+(1-lambda)*CB*cB)/(lambda*C+(1-lambda)*CB);
 yD=(lambda*delta*D*i+(1-lambda)*delta*DB*iB)/(lambda*delta*D+(1-lambda)*delta*DB);
@@ -147,21 +180,32 @@ ystar=alpha*yCstar+(1-alpha)*yDstar;
 yCstar = (0.326667*aC(-1)+2/3*yCstar(-1)+1/3*eps_A);
 yDstar = (-0.344897*dstar(-1)+0.24879*xiD(-1)+0.2653*yDstar(-1)+0.26188*eps_D);
 dstar=(1-delta)*dstar(-1)+delta*yDstar;
+
 //shocks
 aC=rhoC*aC(-1)+eps_A;
 xiD=rhoD*xiD(-1)+eps_D;
 v=rhov*v(-1)+eps_v;
 end;
 
+
+//Shocks
 shocks;
 var eps_A;stderr 1.5;
 var eps_D;stderr 2.5;
 var eps_v;stderr 0.25;
 end;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order=1, irf=24,nograph);
 
-close all;
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul(order=1, irf=24,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
+
+
 
 %prudaugtaylor=oo_.irfs;
 %save prudaugtaylor.mat prudaugtaylor;

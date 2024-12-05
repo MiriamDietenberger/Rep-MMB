@@ -1,15 +1,29 @@
-//DEL NEGRO et al. 2015 Replication with both sticky and flexible price output in Dynare
+% US_DNGS15_SW
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
+//**************************************************************************
+//DEL NEGRO et al. 2015 Replication with both sticky and flexible price output in Dynare
+//
 // DEL NEGRO, M., M. GIANNONI & F. SCHORFHEIDE 2015.: Inflation in the Great Recession and New Keynesian Models,
 // American Economic Journal: Macroeconomics
 // 2015, 7(1): 168-196.
-
+//
 // This is the DNGS15 version of the SW (2007) model  estimated using the same observables as
-%Smets and Wouters but with the 2012Q3 vintage of data.
+//Smets and Wouters but with the 2012Q3 vintage of data.
+//**************************************************************************
 
-//------------------------------------------------------------------------------------------------------------------------
-//1. Variable declaration
-//------------------------------------------------------------------------------------------------------------------------
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+// Define endogenous variables
 var c R pi $\pi$ L qk $q^k$ i Rktil $\tilde{R}^k$ rk $r^k$ kbar $\bar{k}$ y k u mc w wh z ztil mu sigw laf law g b
 
 //% the flexble-price counterparts
@@ -17,25 +31,20 @@ c_f r_f L_f qk_f i_f rk_f y_f k_f u_f kbar_f w_f rm pist ;
 
 //% government spending shock
 
-
-%
-
-
-
+// Define exogenous variables
 varexo psi_b psi_mu psi_z psi_laf psi_law  psi_sigw psi_rm  psi_g ;
 % psi_rm ;
 
-
-
-//------------------------------------------------------------------------------------------------------------------------
-// 2. Parameter declaration and calibration
-//-------------------------------------------------------------------------------------------------------------------------
+// Define parameters
 parameters
-
 alp $\alpha$ zeta_p $\zeta_p$ iota_p $\iota_p$ del $\delta$ Bigphi $\Phi$ s2 h ppsi $\psi$ nu_l $\nu_l$ zeta_w $\zeta_w$ iota_w $\iota_w$ bet $\beta$ psi1 $\psi_1$ psi2 $\psi_2$ psi3 $\psi_3$ sigmac $\sigma_c$ rho $\rho$ epsp epsw
 star $g$ rho_g $\rho_g$ rho_b $\rho_b$ rho_mu $\rho_\mu$ rho_z $\rho_z$ rho_laf $\rho_{\lambda_f}$ rho_law $\rho_{\lambda_w}$ rho_rm $\rho_{r^m}$ rho_sigw $\rho_{\sigma_w}$ rho_pist $\rho_{\pi^*}$ eta_gz eta_laf eta_law zstar $\gamma$ rkstar $r^k$ wl_c $\frac{wl}{c}$
 cstar $c$ wstar $w$ Lstar $L$ kstar $k$ kbarstar $\bar{k}$ istar $i$ rstar $r$ ystar $y$ gstar;
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 alp = 0.1608;
 zeta_p = 0.7077;
 iota_p = 0.2907;
@@ -92,13 +101,10 @@ wl_c = 0.8285;
 
 
 
-//-----------------------------------------------------------------------------------------------------------------------
-// 3. The model
-//-----------------------------------------------------------------------------------------------------------------------
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
-
-
 
 //consumption Euler equation
 c = -(1-h*exp(-zstar))/(sigmac*(1+h*exp(-zstar)))*(R-pi(+1))+b+(h*exp(-zstar))/(1+h*exp(-zstar))*(c(-1)-z)
@@ -208,16 +214,10 @@ qk_f = rkstar/(rkstar+1-del)*rk_f(+1)+(1-del)/(rkstar+1-del)*qk_f(+1)-r_f+(sigma
 
 end;
 
-//--------------------------------------------------------------------------------------------------------------------------
-// 4. Steady state
-//---------------------------------------------------------------------------------------------------------------------------
-
+//Steady State
 steady;
 
-//---------------------------------------------------------------------------------------------------------------------------
-// 5. shocks
-//---------------------------------------------------------------------------------------------------------------------------
-
+//Shocks
 shocks;
 
 %var psi_g; stderr 2.908;
@@ -233,5 +233,13 @@ end;
 
 //write_latex_dynamic_model;
 //check;
+
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 //stoch_simul(irf=20) R pi L y;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

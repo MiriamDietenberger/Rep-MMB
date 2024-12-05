@@ -1,20 +1,36 @@
+% US_FGKR15
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+//**************************************************************************
 // CODE TO REPLICATE FGKR AER
 // NEED DYNARE VERSION 4.4.3
+//**************************************************************************
 
-// 0. Set paths
 warning off ;
 
-// 1. Define variables, parameters, etc
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var         bdt ct dt gt ht
             inflt invt kt kbt lamt mct
             miut miubt proft Rt
             rkt sigct siggt sigkt
             sigwt tauct taukt tauwt utilt
             wt yt gzt gyt gct git gwt ;
- 
+
+//Define exogenous variables
 varexo      ect edt egt ekt emt ewt ezt uct
             ugt ukt uwt;
 
+//Define parameters
 parameters  alph bds bet cs phisigk
             deductdepr 
             nom_depreciation
@@ -35,7 +51,10 @@ parameters  alph bds bet cs phisigk
             ws ys habit kappa
             rspnd_y rspnd_b gzs;
 
-// 2. Set Parameters
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 // Growth rate of the economy
 gzs  = 1.005 ; // steady-state TFP growth rate
 
@@ -71,7 +90,6 @@ phisigk = -0.025 ; // response to tax volatility
 // lump-sum taxes 
 phibd = 0.0005; // response of lump-sum taxes to debt (tbd=Omega, the steady-state level of lump-sum taxes is determined with ss below)
                  // use 0.01 w/o feedback
-   
 // government spending process
 gs    = 0.2 ;       // steady-state level of spending
 
@@ -107,7 +125,6 @@ sigcs = -7.12 ;    // steady-state vola
 rhogc = 0.73 ;     // persistence of vola shock
 etac  = 0.45 ;    // std of inno to vola
 
-
 // labor taxes
 tauws= 0.21 ;     // steady-state level of tax
 
@@ -138,7 +155,6 @@ rspnd_y    = 1.0;// taxes and spending respond to output
 rspnd_b    = 1.0;// taxes and spending respond to debt
 
 // compute steady state
-
 Rs      = gzs^ome*infls/bet ;   
 miubs_lams   = bet*deltau*tauks*deductdepr/(infls^nom_depreciation*gzs^ome)/(1-bet*(1-deltau)/infls^nom_depreciation/gzs^ome);
 mius_lams    = 1 - miubs_lams;
@@ -168,7 +184,10 @@ tbd     = gs*ys - (ws*hs*tauws + ks*tauks* (  rks*utils -  deductdepr*deltau/inf
                                + bds*(1 - Rs/infls/gzs)) ;
 phiRotw = epsw*phil*hs^(1+ups)*thetw*(1+epsw*ups)/ys/lams/(1-bet*thetw*gzs^(1-ome))/(1-thetw)/infls^nomw/gzs^2; 
 
-// 4. Define Model
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model ;
 
 // household sector
@@ -248,7 +267,6 @@ exp(kt) =     (1 - delt - phiu1*(exp(utilt) - 1) - phiu2/2*(exp(utilt)-1)^2 )*ex
             + (1 - kappa/2*(exp(gzt)*exp(invt)/exp(invt(-1))-gzs)^2)*exp(invt) ; 
 exp(kbt)= (1-deltau)*exp(kbt(-1))/(exp(inflt)^nom_depreciation*exp(gzt)) + exp(invt) ; 
 
-
 // structural shocks
 gzt = log(gzs) + ezt ;
 dt = rhod*dt(-1) + edt ;
@@ -306,6 +324,7 @@ git  = log(gzs) ;
 gwt  = log(gzs) ;
 end ;
 
+//Shocks
 shocks ;
 var ezt = sigz^2 ;
 var edt = sigd^2 ;
@@ -323,7 +342,16 @@ end;
 // resid(1) ;
 
 // steady ;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+
+
+//Simulation
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
 /*
 //---------------------------------------------------------------------
 // 5. Run Dynare with pruning

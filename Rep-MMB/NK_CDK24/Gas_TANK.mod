@@ -1,11 +1,24 @@
-%===================================================================================================
-% Dynare Code for Small Open-Economy Gas-TANK Model without capital
-% Authors: Chan, Diz, Kanngiesser
-% April 2023 
-%===================================================================================================
-%===================================================================================================
+% NK_CDK24
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
-% Decide whether to use cobb-douglas production function
+//**************************************************************************
+// Dynare Code for Small Open-Economy Gas-TANK Model without capital
+// Authors: Chan, Diz, Kanngiesser
+// April 2023 
+//**************************************************************************
+
+
+%----------------------------------------------------------------
+% 0. Decide whether to use cobb-douglas production function
+%----------------------------------------------------------------
+
 % use CES
 @#ifndef CES
     @#define CES_yes = 1
@@ -30,12 +43,11 @@
 @#define cobb_douglas_yes = 0
 
 
-%===================================================================================================
-% VARIABLES
-%===================================================================================================
-
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var
-
 
 % New Variables ------------------------------------------------------------------------------------
 
@@ -67,7 +79,6 @@ Pi_CPI_flex     ${\Pi}^{CPI,flex}$     (long_name='CPI Inflation')
 Pi_CPI_lag1_flex${\Pi}^{CPI,lag1,flex}$(long_name='CPI Inflation, lag1')
 Pi_CPI_lag2_flex${\Pi}^{CPI,lag2,flex}$(long_name='CPI Inflation, lag2')
 Pi_CPI_ann_flex ${\Pi}^{CPI,ann,flex}$ (long_name='CPI Inflation, annual')
-
 
 Pi_CES_u       $\Pi^{CES_u}$           (long_name='Price inflation of CES bundle, unconstrained HH')
 Pi_CES_u_flex  $\Pi^{CES_u}_{flex}$    (long_name='Price inflation of CES bundle, unconstrained HH, flexP')
@@ -154,8 +165,7 @@ Pi_z_flex      ${\Pi^{Z,flex}}$        (long_name='FlexP Final Output Good Infla
 Pi_z_ann       ${\Pi^{Z,ann}}$         (long_name='Final Output Inflation,	annualised')
 Pi_z_lag1      $piz_lag1$              (long_name='Final Output Inflation, lag1')
 Pi_z_lag2      $piz_lag2$              (long_name='Final Output Inflation, lag2')
-
-                                      
+                                    
 pE             $p^{E}$                 (long_name='Price of imports in terms of final output')
 pE_flex        $p^{E,flex}$            (long_name='FlexP Price of imports in terms of final output')
 pEf            $p^{E^{*}}$             (long_name='Foreign Energy Good Price')
@@ -194,13 +204,12 @@ I_gap          $\hat{I}$               (long_name='Income gap')
 
 C_gap_CES      $\Gamma^{CES}$          (long_name='CES Consumption gap') 
 
-
-% auxiliary-------
+% auxiliary-------------------------------------------------
 C_lag1         $C^{lag1}$              (long_name='Lag1 of Total Consumption')
 C_u_lag1       $C^{u,lag1}$            (long_name='Lag1 of unconstrained Consumption')
 C_c_lag1       $C^{c,lag1}$            (long_name='Lag1 of constrained Consumption')
 
-% measurements-------
+% measurements---------------------------------------------
 dlnckp         $dlnckp$                (long_name='Consumption growth') 
 dlnhrs         $dlnhrs$                (long_name='Hours worked growth')       
 dlnhrs_u       $dlnhrs$                (long_name='Hours worked growth, u')       
@@ -237,7 +246,6 @@ dlnwh
 markup_Z
 %markup_W
 
-
 inc_u
 inc_c
 
@@ -264,7 +272,6 @@ Pi_w_over_Pi_z
 markup_Z_effective     
 dlnMarkup_Z_effective  
 
-
 % Forcing Processes --------------------------------------------------------------------------------
 eps_tfp        ${\varepsilon}^{TFP}$     (long_name='TFP forcing process')                      
 eps_pEf        ${\varepsilon}^{P^{X^F}}$ (long_name='World Export Price level forcing process')
@@ -272,10 +279,7 @@ eps_muz        ${\varepsilon}^{MZ}$      (long_name='Price Markup forcing proces
 eps_R          ${\varepsilon}^{R}$       (long_name='Monetary Policy forcing process')              
 ;
 
-%===================================================================================================
-% EXO VARIABLES
-%===================================================================================================
-
+//Define exogenous variables
 varexo 
 eta_tfp        $\eta^{TFP}$             (long_name='TFP Shock')
 eta_pEf        $\eta^{P^{F}_{X}}$       (long_name='World energy/export price Shock') 
@@ -285,10 +289,7 @@ eta_R          $\eta^{\mathcal{M}}$     (long_name='Monetary Policy Shock')
 eta_pEf_news   $\eta^{P^{E}_{*}}$       (long_name='World energy/export price NEWS Shock') 
 ;
 
-%===================================================================================================
-% PARAMETERS
-%===================================================================================================
-
+//Define parameters
 parameters 
 
 % New parameters ----------------------------------------------------------------------------
@@ -296,12 +297,9 @@ ppsi_ec       $\psi_{ec}$              (long_name='Elas of sub beteen Non-energy
 alppha_uec    $\alpha_{u,ec}$          (long_name='Energy Share in consumption, unconstrained HH')
 alppha_cec    $\alpha_{c,ec}$          (long_name='Energy Share in consumption, constrained HH')
 
-
 % Structural parameters ----------------------------------------------------------------------------
 ppsi_ez       $\psi_{ez}$              (long_name='Elas of sub beteen Lab and Energy in prod, CES')
 alppha_ez     $\alpha_{ez}$            (long_name='Firm Energy Share in production')
-
-
 
 bond_adj_u    $\vartheta_u^*$          (long_name='Worker bond adjustment cost')    
 cbeta         $\beta$                  (long_name='Households subjective discount factor')                      
@@ -309,7 +307,6 @@ siggma        $\sigma$                 (long_name='Coefficient of relative risk-
 varphi        $\varphi$                (long_name='Inverse of Frisch elasticity')                    
 chi_u         $\chi$                   (long_name='Disutility of labour')                                       
 chi_c         $\chi$                   (long_name='Disutility of labour')                                       
-
 
 epsilonf      $\varsigma^*$            (long_name='Price elasticity of world demand for UK exports') 
 omega         $\omega$                 (long_name='Share of constrained HH households')              
@@ -356,9 +353,10 @@ CD_yes_para    $CD$                    (long_name='CD')
 ramsey_yes_para$ramsey$                (long_name='ramsey')
 ;
 
-%===================================================================================================
-% CALIBRATION
-%===================================================================================================
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 @#include "set_parameters.m"
 
@@ -383,41 +381,15 @@ ramsey_yes_para=0;
 @#endif
 
 
-%===================================================================================================
-% MODEL EQUATIONS
-%===================================================================================================
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model;
-         
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 %% -------------------------------------------------------------------------------------------------
 %% Households --------------------------------------------------------------------------------------
 
 % Unconstrained HHs ------------------------------------
-
 
 % EQUATION 1
 [name='C demand, unconstrained HH']
@@ -603,7 +575,6 @@ Borrowing_component = C_gap-I_gap;
 
 Hours_credit_component = -omega*steady_state(C)/steady_state(Z)*log((C_u/C_c)/(steady_state(C_u)/steady_state(C_c)));
 
-
 %% ------------------------------------------------------------------------------------------------
 %% Labour Union -----------------------------------------------------------------------------------
 
@@ -784,7 +755,6 @@ Pi_CPI_lag2_flex= Pi_CPI_lag1_flex(-1);
 (X)      = (kappaf_ss)*((pExp)/(pEf_ss))^(-epsilonf)*(vf_ss);  
 (X_flex) = (kappaf_ss)*((pExp_flex)/(pEf_ss))^(-epsilonf)*(vf_ss);  
  
-
 %% Shocks ----------------------------------------------------------------------------------------
 
 [name='TFP forcing process']
@@ -803,9 +773,6 @@ log((eps_pEf)) = sigma_pEf*(eta_pEf+eta_pEf_news(-1));
 log((eps_R)) = rho_R*log((eps_R(-1)))-sigma_R*eta_R; 
 
 %% Aux -------------------------------------------------------------------------------------------
-
-
-
 
 R_real            = (R_nom     /(Pi_CES_u(+1)));
 Expected_Pi_CES_u = (Pi_CES_u(+1));
@@ -873,15 +840,11 @@ z_hat         = log(Z/steady_state(Z));
 n_hat         = log(N/steady_state(N));
 z_minus_n_hat = 1/ppsi_ez*(z_hat-n_hat);
 
-
 Pi_w_over_Pi_z = (Pi_w)/(Pi_z); 
-
 
 
 markup_Z_effective     = (taumuz_ss*eps_muz)/mcz; % effective markup definition
 dlnMarkup_Z_effective  = 100*(log(markup_Z_effective/markup_Z_effective(-1)));
-
-
 
 
 end;
@@ -891,10 +854,7 @@ steady;
 check;
 
 
-%===================================================================================================
-% SPECIFY SHOCKS
-%===================================================================================================
-
+//Shocks
 shocks;
 var      eta_tfp;          stderr 1;    %  TFP shock
 var      eta_muz;          stderr 1;    %  Price Markup shock
@@ -903,10 +863,8 @@ var      eta_pEf_news;     stderr 1;    %
 var      eta_R;            stderr 1;    %   
 end;
 
-%===================================================================================================
-% SOLUTION, STOCHASTIC SIMULATION, IRFs
-%===================================================================================================
 
+//SOLUTION, STOCHASTIC SIMULATION, IRFs
 
 %%---------------------------
 %% TANK Case
@@ -945,7 +903,8 @@ end;
 
     //set up Ramsey optimal policy problem with interest rate R as the instrument,...
     // defining the discount factor in the planner objective to be the one of private agents        
-    ramsey_model(instruments=(R_nom),planner_discount=cbeta);   
+    ramsey_model(instruments=(R_nom),planner_discount=cbeta); 
+
     //conduct stochastic simulations of the Ramsey problem
     stoch_simul(order=1,irf=2000,nograph,periods=10000); 
     oo_TANK_Ramsey_=oo_;

@@ -1,16 +1,39 @@
+% US_RA07
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+//**********************************************************************
 //Implementation of Pau Rabanal paper (2007) by Martina Jancokova
 //NEW: p eliminated, only left pi=p-p(-1)(hence only 15 endog.var.s and 15 equat.s)
 //n=l as additional equation to solve the model (due to inconsistency in notation of labor)
+//**********************************************************************
 
-var pi mc rk w r a u n c l q i k y g; //15 endogenous variables (lambda disregarded, not needed for further calculations)
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define 15 endogenous variables
+var pi mc rk w r a u n c l q i k y g; //lambda disregarded, not needed for further calculations
+
+//Define exogenous variables
 varexo epsp epsz epsa epsg;    //shocks or innovations
 
+//Define 25 parameters
 parameters gammab gammaf kappap beta omegap thetap lambdaSS alpha gamma psi omegaw kappaw sigma
-    b eta phi delta vaphi rhor gammap gammay ISS GSS thetaw rhoa rhog;  //25 parameters 
+    b eta phi delta vaphi rhor gammap gammay ISS GSS thetaw rhoa rhog;  
 
-//*****************************************************************
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+//Parameter values
 //figure 4: estimated Baseline model
-//*****************************************************************
 beta= 0.9926;       //discount factor
 omegap=0.99;      //price indexation
 thetap=0.83;      //Calvo prob. of not being able to reset the price
@@ -40,81 +63,55 @@ kappaw=(1-thetaw*beta)*(1-thetaw)/((1+phi*(eta-1))*thetaw);
 ISS=delta*alpha*lambdaSS/((lambdaSS-1)*(1/beta-(1-delta))); //steady state value of investment-output ratio
 
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
-//*****************************************************************
+
 //Phillips Curve
-//*****************************************************************
 pi=gammab*pi(-1)+gammaf*pi(+1)+kappap*mc+kappap*epsp;
 
-//*****************************************************************
 //Marginal Cost
-//*****************************************************************
 mc=alpha*rk+(1-alpha)*(w+gamma*r)-a;
 
-//*****************************************************************
 //Capital Utilization
-//*****************************************************************
 u=psi*rk;
 
-//*****************************************************************
 //Wage Phillips Curve
-//*****************************************************************
 (1+beta)*w=w(-1)+beta*w(+1)+omegaw*pi(-1)-(1+beta*omegaw)*pi+beta*pi(+1)
           -kappaw*(w-sigma/(1-b)*(c-b*c(-1))-eta*n);
 
-//*****************************************************************
 //Optimal Capital-Labor Ratio
-//*****************************************************************
 l-u-k(-1)=rk-(w+gamma*r);
 
-//*****************************************************************
 //due to Inconsistent Notation of Labor
-//*****************************************************************
 n=l; 
 
-//*****************************************************************
 //Consumption Euler Equation
-//*****************************************************************
 (1+b)*c=b*c(-1)+c(+1)-(1-b)*1/sigma*(r-pi(+1)); 
 
-//*****************************************************************
 //Tobin's Q
-//*****************************************************************
 q=beta*(1-delta)*q(+1)+(1-beta*(1-delta))*rk(+1)-(r-pi(+1));
 
-//*****************************************************************
 //Capital Accumulation
-//*****************************************************************
 k=(1-delta)*k(-1)+delta*i;
 
-//*****************************************************************
 //Investment 
-//*****************************************************************
 i=1/(1+beta)*(beta*i(+1)+i(-1)+vaphi*q);
 
-//*****************************************************************
 //Production Function
-//*****************************************************************
 y=a+alpha*(u+k(-1))+(1-alpha)*n;
 
-//*****************************************************************
 //Monetary Policy Rule (Taylor rule)
-//*****************************************************************
 r=rhor*r(-1)+(1-rhor)*gammap*pi+(1-rhor)*gammay*y+epsz;
 
-//*****************************************************************
 //Resource constraint
-//*****************************************************************
 y=(1-ISS-GSS)*c+ISS*i+GSS*g+alpha*lambdaSS/(lambdaSS-1)*u;
 
-//*****************************************************************
 //Technology Shock
-//*****************************************************************
 a=rhoa*a(-1)+epsa;
 
-//*****************************************************************
 //Fiscal Shock
-//*****************************************************************
 g=rhog*g(-1)+epsg;
 
 end;
@@ -339,10 +336,16 @@ ISS=delta*alpha*lambdaSS/((lambdaSS-1)*(1/beta-(1-delta))); //steady state value
 
 
     @#endif
-    
 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-    %stoch_simul(irf = 25,nograph);
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul(irf = 25,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
 /*
     // figure 1: Baseline
     @#if i==1

@@ -1,36 +1,50 @@
-// Model: US_LWY13
+% US_LWY13
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
+//**********************************************************************
+// Model: US_LWY13
+//
 // References:
 // Title: "Fiscal Foresight and Information Flows"
 // Journal published: Econometrica, Vol. 81, No. 3 (May 2013), pp. 1115-1145
 // Authors: Eric M. Leeper, Todd B. Walker and Shu-Chun Susan Yang 
-
+//
 // Created by Balint Tatar
 // Last edited: 20/04/18 by Balint Tatar
+//**********************************************************************
 
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var cr cnr R i k v l y g c q rk w pi b sb tauk taul r kbar z mc Tk Tl ua ub um ui uw up ug utk utl uz 
 
 //%flexible-price counterparts
-
 crstar cnrstar istar kstar vstar lstar ystar gstar cstar qstar rkstar wstar bstar sbstar taukstar taulstar rstar kbarstar zstar Tkstar Tlstar mcstar ygap
-
 
 //**************************************************************************
 // Modelbase Variables                                                   //*
         interest inflation inflationq outputgap output fispol;           //*
 //**************************************************************************
  
-
+//Define exogenous variables
 varexo epsilona epsilonb epsiloni epsilonw epsilonp epsilontk epsilontl epsilonz
 // epsilonm epsilong 
-
 
 //**************************************************************************
 // Modelbase Shocks                                                      //*       
        interest_ fiscal_;//                                              //*
 //**************************************************************************
-   
+
+//Define parameters
 parameters 
 //************************************************************************** 
 // Modelbase Parameters                                                  //*
@@ -44,9 +58,12 @@ parameters
         cofintoutpf1 cofintoutpf2 cofintoutpf3 cofintoutpf4              //*
         std_r_ std_r_quart coffispol                                     //*
 //**************************************************************************
-
 alph bet gamm kappa omegaw omegap etaw etap mu phipi phiy sgss sbss taulss taukss taucss theta gpsi s chiw chip delt rhoa rhob rhor rhoi rhow rhop rhog rhotk rhotl rhoz gammg gammtk gammtl gammz psitk psitl psigc psiz siga sigb sigm sigi sigw sigp sigg sigtk sigtl sigz phipid phiyd phia Rss rkss psi1ss wss kyss lyss cyss yss strss cryss cnryss crss cnrss kss ivss lss css zss bss gss lambrss lambnrss;
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 //Load Parameter File
 
 load paramfile_leeper;
@@ -153,6 +170,10 @@ coffispol = 1/sgss;                                                        //*
 %coffispol = sigg;
 //**************************************************************************
 
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear); 
 
 //**************************************************************************
@@ -480,8 +501,7 @@ ygap= y-ystar;
 
 end;
 
-
-
+//Shocks
 shocks;
 var epsilona = 1; 
 var epsilonb = 1;
@@ -495,7 +515,8 @@ var epsilontl = 1;
 var epsilonz = 1;
 var interest_ = 1;
 var fiscal_ = 1;
-
 end;
+
+//Simulation
 stoch_simul (AR=100,IRF=0, noprint,nograph);
 %stoch_simul(order=1,irf=100,solve_algo=1) ygap inflation interest y;

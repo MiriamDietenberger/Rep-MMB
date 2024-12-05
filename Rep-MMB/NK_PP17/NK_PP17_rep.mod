@@ -1,11 +1,28 @@
+% NK_PP17
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+//**********************************************************************
 // Replication of
 // PAOLI, B. D. and PAUSTIAN, M. (2017)
 // Coordinating Monetary and Macroprudential Policies.
 // Journal of Money, Credit and Banking, 49: 319�349.
-
+//
 // Model replication coded by: Philipp Lieberknecht, 
-//                             e_mail: philipp.lieberknecht@gmail.com
+// e_mail: philipp.lieberknecht@gmail.com
+//**********************************************************************
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var 
 y       // output
 yg      // output gap
@@ -24,6 +41,7 @@ eps_R   // monetary policy shock
 lam     // divertable fraction of loans, moral hazard shock
 ;
 
+//Define exogenous variables
 varexo
 eta_a   // technology shock innovation
 eta_m   // mark-up shock innovation
@@ -32,6 +50,7 @@ eta_R   // monetary policy shock innovation
 eta_l   // moral hazard shock innovation
 ;
 
+//Define parameters
 parameters
 betta   $\beta$             // discount factor
 sig     $\sigma$            // CRRA utility parameter
@@ -52,6 +71,9 @@ tau     $\tau$              // Taylor rule coefficient inflation
 tau_g   $\tau_g$            // Taylor rule coefficient output gap
 ;
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 betta   = 0.99;
 sig     = 1;
 alfa    = 0.50;
@@ -71,8 +93,10 @@ tau     = 1.5;
 tau_g   = 0.125;
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Model %%%
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear); 
 
 [name='(22) Phillips curve']
@@ -107,6 +131,7 @@ lam = rho_l*lam(-1) + eta_l;
 
 end;
 
+//Shocks
 shocks;
 var eta_a;      stderr 0.5;
 var eta_m;      stderr 0.5;
@@ -118,5 +143,13 @@ end;
 check;
 steady;
 close all;
-%stoch_simul(order=1,irf=21, noprint, nograph);
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul(order=1,irf=21, noprint, nograph);
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

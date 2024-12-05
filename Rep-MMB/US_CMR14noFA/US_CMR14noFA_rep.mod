@@ -1,18 +1,29 @@
+% US_CMR14noFA
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version
+
+
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+// Define endogenous variabl
 var  c consumption_obs epsil Fp Fw g gdp_obs h hours_obs i inflation_obs investment_obs kbar lambdaf lambdaz
      muup muzstar phi pi pinvest_obs pitarget pstar q Re Re_obs RealRe_obs rk Rk s u wage_obs wtilde wstar 
      zetac zetai y
      cf hf i_f kbarf lambdazf phif qf Ref  rkf Rkf  sf uf Fwf wtildef Fpf;
 
-
-
-
+// Define exogenous variables
 varexo e_epsil e_lambdaf e_muup e_muzstar e_pitarget e_zetac e_zetai e_g;     // e_xp
 
-
-
+// Define parameters
 parameters 
-
-
        actil_p adptil_p adytil_p alpha_p aptil_p aytil_p b_p beta_p c_p delta_p epsil_p etag_p g_p
            i_p iota_p iotamu_p iotaw_p lambdaf_p lambdaw_p mu_p muup_p muzstar_p pi_p pibar_p pitarget_p
            psik_p psil_p psiL_p Re_p rhoepsil_p rhog_p rholambdaf_p rhomuup_p rhomuzstar_p rhopitarget_p
@@ -20,8 +31,12 @@ parameters
            stdmuup_p stdmuzstar_p stdpitarget_p stdterm_p stdxp_p stdzetac_p stdzetai_p tauc_p taud_p tauk_p
            taul_p tauo_p term_p upsil_p we_p xip_p xiw_p zeta_p zetac_p zetai_p;
 
-% 2. Set parameters
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%---------------------------------------------------------------
+
+% Set parameters
 % when stopshock = 1, then non-risk shocks are all turned off
 @# define stopshock = 0
 
@@ -73,7 +88,6 @@ rhoterm_p      = 0.9743991813961140 ;
 stdsigma1_p    = 0.0700061676650730 ;	 
 	
 		 
-
 // Calibrated parameters.
 actil_p           = 0;
 adptil_p          = 0;
@@ -118,15 +132,15 @@ zetai_p           = 1;
 
 
 
-//---------------------------------------------------------------------
-// 3. Model declaration
-//---------------------------------------------------------------------
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
-model;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Auxiliary expressions.  These simplify the equations without adding
 % additional variables.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
   # pitilde    = (pitarget^iota_p * pi(-1)^(1-iota_p) * pibar_p^(1-iota_p-(1-iota_p)));
   # Kp         = (Fp * ((1 - xip_p * (pitilde / pi)^(1/(1-lambdaf))) / (1 - xip_p))^(1-lambdaf));
 
@@ -420,6 +434,7 @@ steady(maxit=1000,solve_algo=1);
 resid;
 %check;
 
+//Shocks
 shocks; 
 //var e_xp;       stderr stdxp_p;
 var e_lambdaf;  stderr stdlambdaf_p;
@@ -433,4 +448,13 @@ var e_zetai;    stderr stdzetai_p;
 %var interest_; stderr 0;
 %var fiscal_;  stderr (stdg_p/coffispol);
 end;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+

@@ -1,23 +1,29 @@
-//**************************************************************************
-// A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
-//
-// Volker Wieland, Tobias Cwik, Gernot J. Mueller, Sebastian Schmidt and
-// Maik Wolters
-//
-// Working Paper, 2009
-//**************************************************************************
+% US_VMDop
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
+//**************************************************************************
 // Model: US_VMDop ("optimistic times")
-
+//
 // Further references:
 //      Verona, Martins and Drumond, "(Un)anticipated monetary policy in a DSGE model with a shadow banking system",
 //      International Journal of Central Banking 9 (3), 78-124, September 2013
-
+//
 // implemented by Fabio Verona (in September 2012), email: fabio.verona@bof.fi
 // Last edited: 12/10/22 by M. Burgert
+//**************************************************************************
 
-// Variables
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+// Define endogenous variables
 var piU, iU, omegabarSU, RkSXU, nSU, qU,
          cU, wU,rkSU,kbarBU, hU, kbarSU, ReXU,
         FpXU, FwXU,  RcouponXU,uSU,uBU,
@@ -30,19 +36,14 @@ var piU, iU, omegabarSU, RkSXU, nSU, qU,
           KwXflexU, KpXflexU,chiflexU,KtotflexU,YflexU,eps_analystflexU,eps_couponflexU,RanalystXflexU,nBflexU,stockcapitalflexU,ntotflexU,RkBXflexU,
             btotAflexU,btotBflexU,btotSflexU,levAflexU,levBflexU,levSflexU,CostFinancingSflexU,SpreadflexU, lambdanflexU,PextSflexU;
 
-
-
+// Define exogenous variables
 varexo e_xpU;
 
-
-
+// Define parameters
 parameters  KtotUU, ntotUU,KwXUU,KpXUU, RcouponXUU, eps_couponUU,levBUU,btotBUU,btotSUU,levSUU,
             piUU, sUU, rkSUU,rkBUU, iUU, uSUU,uBUU, omegabarSUU, RkSXUU,RkBXUU, nSUU,nBUU, qUU, lambdanUU, cUU, wUU, hUU,
             kbarSUU,kbarBUU, ReXUU,  FpXUU, FwXUU, PextSUU,YUU,eps_analystUU, RanalystXUU, chiUU, eps_biasedUU, RbiasedXUU ,
               gammaSUU,gammaBUU,  sigmaSUU,  sigmaCUU,levAUU,btotAUU,CostFinancingSUU,SpreadUU,stockcapitalUU,gUU;
-
-
-//PARAMETERS
 
 parameters lambdawUU, sigmaLXUU, betaUU, xiwUU, bUU,lambdafUU,
       psiLXUU, iotaw1UU,  weSUU,weBUU, sigmaaSUU,sigmaaBUU, SdouprXUU,
@@ -51,16 +52,14 @@ parameters lambdawUU, sigmaLXUU, betaUU, xiwUU, bUU,lambdafUU,
       rhoEIS,etaSE, rho_chi, alpha3, alpha4,KwXflexUU,KpXflexUU,FpXflexUU, FwXflexUU %,OMEGA
 	  std1_xpU;
 
-
-
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+//Parameter values
 std1_xpU=0.25;
 
 alpha3=24;
 alpha4=30000;
-
-
-
-
 
 M_.params(76)=alpha3;
 M_.params(75)=0;
@@ -80,9 +79,11 @@ for jj=1:length(M_.param_names)
 set_param_value(M_.param_names{jj},eval(M_.param_names{jj})); 
 end;
 
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model;
-
-
 
 
 -nBU + gammaBUU/piU*kbarBU(-1)*qU(-1)*(RkBXU-RcouponXU(-1)) + gammaBUU/piU*(1+RcouponXU(-1))*nBU(-1) + weBUU;
@@ -260,7 +261,7 @@ PextSflexU=PextSUU;
 
 end;
 
-
+// Shocks
 shocks;
 var e_xpU; stderr std1_xpU;
 
@@ -269,7 +270,14 @@ end;
 //check;
 //steady(solve_algo=4);
 
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 //stoch_simul(order=1,irf=20) YU cU iU hU ReXU piU nSU btotAU RkXU;
-
+//
 //stoch_simul(order=1,irf=40) YU cU iU YflexU cflexU iflexU ReXU piU piflexU;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+

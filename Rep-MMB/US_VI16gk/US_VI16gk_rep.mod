@@ -1,7 +1,18 @@
-% Financial frictions in the Euro Area and the United States: a Bayesian assessment
-% Macroeconomic Dynamics, 20 (05), p. 1313-1340, 2016
-% Stefania Villa
+% US_VI16gk
+%
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
+//**********************************************************************
+//Financial frictions in the Euro Area and the United States: a Bayesian assessment
+//Macroeconomic Dynamics, 20 (05), p. 1313-1340, 2016
+//Stefania Villa
+//**********************************************************************
 
 % note 1: as in the original code of the author, eq. 13 is shifted one period backwards. (this is consistent with the notation in Gertler/Karadi (2011))
 
@@ -12,19 +23,31 @@
 % note 3: In eq 19, capital is forward looking in the original code [k(+1)]. 
 % Here, I have changed this is changed to a static variable [k] to make the notation consistent with the rest of the code 
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var 
 y  i   ext_pr  c  lev  q  Lambda  l  d  v  rk  x  z  nn  mu  n  ne  k  u  w  r  zk  rn pi 
 yf i_f ext_prf cf levf qf Lambdaf lf df vf rkf xf zf nnf muf nf nef kf uf wf rf zkf
 a g eps_p eps_w eps_k eps_r eps_x
 hobsgm robs piobs dy dc dfi dw; 
 
+//Define exogenous variables
 varexo e_x e_r e_k e_g e_a e_w e_p;
 
+//Define parameters
 parameters 
 beta phi chi alpha delta epsilon epsilon_w G_Y h lambda theta zeta ksi sig_p sig_pi sig_w sig_wi M  
 rho_r rho_ri rho_PI rho_Y rho_A rho_G rho_X rho_k rho_W rho_P THETA  rho_DY 
 RK constelab picbar trend;
- 
+
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+//Parameter values
 alpha       = 0.33;       %capital share
 beta        = 0.99;       %Discount rate
 delta       = 0.025;      %Steady state depreciation rate
@@ -60,13 +83,17 @@ rho_P       = 0.31;
 rho_k       = 0.99;
 rho_ri      = 0.23;
 
-% Steady State declared as parameters:
+// Steady State declared as parameters:
 RK          = 1.013860066271978;
 constelab   = 0;
- 
+
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model (linear);
 
-%%%%%%transformed parameters%%%%%
+//transformed parameters
 #gamma      = 1 + trend/100;
 #pic_ss     = 1+picbar/100;
 #R          = 1/beta;
@@ -153,15 +180,16 @@ eps_p   = rho_P*eps_p(-1) + e_p;
 eps_w   = rho_W*eps_w(-1) + e_w;
 eps_k   = rho_k*eps_k(-1)- e_k;       
 
-%%%%%%%%%%%%%%%%%%%%%%%%%
-%%FLEXIBLE PRICE MODEL%%%
-%%%%%%%%%%%%%%%%%%%%%%%%% 
-%%%%%%%%HOUSEHOLDS%%%%%%%
+
+//FLEXIBLE PRICE MODEL
+
+//HOUSEHOLDS
 (1-h)*muf=h*cf(-1)-cf;                                              
 Lambdaf = muf-muf(-1);                            
 Lambdaf(+1)+ rf = 0;                             
 wf = phi*lf-muf;
-%%%%%%%%FINANCIAL INTERMEDIARIES%%%%%%%
+
+//FINANCIAL INTERMEDIARIES
 vf = beta*theta*X*(Lambdaf(+1)+xf+vf(+1))+((1-theta)/V)*beta*(RK*rkf-R*rf(-1))+((1-theta)/V)*beta*(RK-R)*Lambdaf(+1);
 df = theta*beta*Z*(Lambdaf(+1)+zf+df(+1));
 zf = (1/Z)*((LEV*RK/1)*rkf+(R*(1-LEV/1))*rf(-1)+
@@ -172,22 +200,25 @@ nef = nf(-1)+zf;
 kf+qf=nf+levf; 
 nf=(N_e_Y/N_Y)*nef+(NN_Y/N_Y)*nnf;   
 nnf = kf+qf;                                     
-ext_prf = rkf(+1)-rf;                             
-%%%%%%%%INTERMEDIATE GOODS FIRMS%%%%%%%
+ext_prf = rkf(+1)-rf;        
+
+//INTERMEDIATE GOODS FIRMS
 yf = THETA*(a + alpha*(kf(-1)+eps_k)+alpha*uf  +(1-alpha)*lf);   
 rkf = (ZK/RK)*zkf + (1-delta)/RK*(qf+eps_k)-qf(-1); 
 uf = (1/(zeta/(1-zeta)))*zkf  ;          
 a=alpha*zkf+ (1-alpha)*wf  ;   
-zkf=wf+lf-kf(-1)-uf;                    
-%CAPITAL PRODUCERS
+zkf=wf+lf-kf(-1)-uf;  
+
+//CAPITAL PRODUCERS
 i_f = (1/(1+beta))* (i_f(-1) + beta*i_f(+1)+(1/(ksi))*(qf +eps_x))  ;
 %kf  =  ((1-delta)/1)*(kf(-1)+eps_k)+I_K*i_f + I_K*ksi*eps_x ;
 kf  =((1-delta)/1)*(kf(-1)+eps_k)+delta*(i_f)+ I_K*ksi*eps_x  ; 
-% RESOURCE CONSTRAINTS
+
+//RESOURCE CONSTRAINTS
 yf=(C_Y)*cf+(I_Y)*i_f+G_Y*g+K_Y*ZK*uf;       
 
 
-% measurement equations
+//measurement equations
 dy     = y-y(-1)+trend;
 dc     = c-c(-1)+trend;
 dfi    = i-i(-1)+trend;
@@ -202,6 +233,7 @@ steady;
 
 check;
 
+//Shocks
 shocks;
 var e_a; stderr 0.639;
 var e_x; stderr 0.8913;
@@ -257,6 +289,14 @@ options_.plot_priors=0;
 % mh_drop=0.25,moments_varendo) y i c pi rn ext_pr n;
 
 %it gives IRF and variance decomposition,,conditional_variance_decomposition=[1 4 8 40 80]
-%stoch_simul(irf=20,nograph) y i pi n ext_pr;
-%stoch_simul(irf=20) y i pi c robs q n ext_pr;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul(irf=20,nograph) y i pi n ext_pr;
+//stoch_simul(irf=20) y i pi c robs q n ext_pr;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+

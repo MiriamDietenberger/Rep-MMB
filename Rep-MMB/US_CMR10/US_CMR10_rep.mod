@@ -1,19 +1,28 @@
-//-------------------------------------------------------------------------------------------------------------------------
-//      THIS DYNARE FILE REPLICATES
-//
-//      Christiano, Motto and Rostagno (2010), "Financial Factors in Economic Fluctuations", ECB WP N�1192 - BASELINE MODEL
-//
-//      ADAPTED for the Macro Model Data Base
-//
-//      THIS FILE WAS WRITTEN FOR DYNARE 4.2.5 AND MATLAB 7.12 BY:
-//
-//      Fabio Verona, email: f8fabio@yahoo.it
-//
-//      August 2012
-//
-//---------------------------------------------------------------------------------------------------------------------------
+% US_CMR10
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
-// Variables
+//**************************************************************************
+// THIS DYNARE FILE REPLICATES
+// Christiano, Motto and Rostagno (2010), "Financial Factors in Economic Fluctuations", ECB WP N�1192 - BASELINE MODEL
+// ADAPTED for the Macro Model Data Base
+// THIS FILE WAS WRITTEN FOR DYNARE 4.2.5 AND MATLAB 7.12 BY:
+// Fabio Verona, email: f8fabio@yahoo.it
+// August 2012
+//**************************************************************************
+
+
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+// Define endogenous variables
 var   piU, sU, rkU, iU, uU, omegabarU, RkXU, nU, qU, vlU, evU, mbU, RXU, uzcU, lambdazU, mU, RaXU, cU, wU,
       hU, kbarU, ReXU, xU, dmU, RmXU,  pstarU, wstarU, FpXU, FwXU,YU, btotU,
       lambdafU, pitargetU, xbU, muupU, chiiU, gU, muzstarU, gammaU, epsilU,sigmaU, zetacU, zetaiU, tauoU
@@ -22,11 +31,10 @@ var   piU, sU, rkU, iU, uU, omegabarU, RkXU, nU, qU, vlU, evU, mbU, RXU, uzcU, l
       hflexU, kbarflexU, ReXflexU, xflexU, dmflexU, RmXflexU, FpXflexU, FwXflexU,YflexU, btotflexU;
 
 
+// Define exogenous variables
 varexo e_lambdafU, e_pitargetU, e_xbU, e_muupU, e_chiiU, e_gU, e_muzstarU, e_gammaU, e_epsilU, e_sigmaU,  e_zetaiU, e_tauoU e_xpU;// e_zetacU,
 
-
-
-
+//Define parameters
 parameters btotUU, YUU, piUU, sUU, rkUU, iUU, uUU, omegabarUU, RkXUU, nUU, qUU, vlUU, evUU, mbUU, RXUU, uzcUU, lambdazUU, mUU, RaXUU, cUU, wUU, hUU, kbarUU, ReXUU, xUU, dmUU, RmXUU, pstarUU, wstarUU, FpXUU, FwXUU,  lambdafUU, pitargetUU, xbUU, muupUU, chiiUU, gUU, muzstarUU, gammaUU, epsilUU, sigmaUU, zetacUU, zetaiUU, tauoUU
 
            FpXflexUU,FwXflexUU,
@@ -41,7 +49,9 @@ parameters btotUU, YUU, piUU, sUU, rkUU, iUU, uUU, omegabarUU, RkXUU, nUU, qUU, 
 
 
 
-
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 // load the steady state values
 pp=load('ss_CMR_baseline_US.mat');
 
@@ -60,9 +70,10 @@ end;
 
 
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model;
-
-
 
 // A.1: A measure of marginal cost
 -sU+((1-alphaUU)^(alphaUU-1)*alphaUU^(-alphaUU))*((rkU*(1+psikUU*RXU))^alphaUU)*((wU*(1+psilUU*RXU))^(1-alphaUU))/epsilU;
@@ -285,6 +296,7 @@ tauoU = tauoUU;
 
 end;
 
+//Shocks
 shocks;
 var e_xpU = 0.519^2;
 var e_lambdafU; stderr std1_lambdafU;
@@ -303,10 +315,18 @@ var e_tauoU; stderr std1_tauoU;
 
 //var interest_ = 0;//var interest_; stderr 1;
 end;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 //check;
 //steady(solve_algo=4);
-
 //stoch_simul(order=1,irf=20) YU cU iU hU ReXU piU nU btotU RkXU;
-
+//
 //some_plots
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+

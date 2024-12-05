@@ -1,6 +1,14 @@
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Dynare code to replicate 
-//
+% US_RE09
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+//**********************************************************************
 // Ricardo Reis
 // A Sticky-Information General-Equilibrium Model for Policy Analysis.
 // In: Monetary Policy under Uncertainty and Learning, edited by K. Schmidt-Heubel, C. Walsh and N. Loayza, Central Bank of Chile, Santiago, 2009
@@ -8,12 +16,16 @@
 // Written by: Fabio Verona (fabio.verona@bof.fi) 
 //             and
 //             Maik H. Wolters (maik.wolters.ifw-kiel.de)
-// 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Allows for 16 lagged information sets to restrict computational time, adjust as desired (note: if so also adjust the parameter value of T in line 51)
 @#define lags = 1:16
+//**********************************************************************
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var y a l p w yinfn i R pi outputgap yclas deltaa g nuu gam eps z zwage zoutput;
 //y: output, a: productivity, l: labor, p: price, w: wage, yinfn: output 100 periods ahead (steady state output)
 //i: interest rate, R: recursive long real interest rate, pi: inflation, outputgap: outputgap 
@@ -23,15 +35,22 @@ var y a l p w yinfn i R pi outputgap yclas deltaa g nuu gam eps z zwage zoutput;
 //zwage: generic variable to compute the wage under sticky information (sticky information wage curve)
 //zoutput: generic variable to compute output under sticky information (sticky information IS curve)
 
+//Define exogenous variables
 varexo e_deltaa e_g e_nuu e_gam e_eps;
 //e_deltaa: producitivity shock
 //e_g: aggregate demand shock
 //e_nuu: goods markup shock
 //e_gam: wage markup shock
 //e_eps: monetary policy shock
-   
+
+//Define parameters
 parameters beta nu lambda theta delta omega gamma psi phi_pi phi_y rho_deltaa rho_eps rho_g rho_nuu rho_gam T;
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+//Parameter values
 // POSTERIOR MEAN, see Table 2 in paper
 theta      =   1.00000000000000;
 psi        =   5.15202697986071;
@@ -51,6 +70,9 @@ lambda     =   0.516437987152365;
 T=16;
 
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
 //production function
 y = a + beta*l;
@@ -111,6 +133,8 @@ end;
 //check;
 //steady;
 
+
+//Shocks
 shocks;
 var e_deltaa;  stderr 0.660134106707378;
 var e_g;       stderr 0.833976978078512;
@@ -119,10 +143,15 @@ var e_gam;     stderr 12.3169555240614;
 var e_eps; stderr 0.437308817102200;
 end;
 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order=1,nomoments,noprint, nograph, irf=32);
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul(order=1,nomoments,noprint, nograph, irf=32);
 //stoch_simul(order=1,noprint,nograph,irf=32);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
-%differenceSIGE
-
+//differenceSIGE
 //Comment on legend for the IRFs: R09 corresponds to replicated IRFs from Reis (2009), while VW14 refers to replicated IRFs using Verona and Wolters (2014) approximation (truncating lagged expectations)  

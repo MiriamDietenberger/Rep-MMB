@@ -1,3 +1,18 @@
+% US_MR07
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var x pi y yn i l p w R g a e v gam da
     p1 w1 l1 R1 y1 
     p2 w2 l2 R2 y2   
@@ -30,11 +45,17 @@ var x pi y yn i l p w R g a e v gam da
     p29 w29 l29 R29 y29  
     p30 w30 l30 R30 y30  
     y100;
-    
+
+//Define exogenous variables
 varexo g_e a_e e_e v_e gam_e;
 
+//Define parameters
 parameters delta lambda omega beta phi_p phi_y mu theta psi gamma rho_g rho_a rho_e rho_v rho_gam;
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 delta  = 0.184; //0.176
 lambda = 0.702; //0.657
 omega  = 0.195; //0.210
@@ -51,6 +72,10 @@ rho_e  = 0.918;
 rho_v  = 0.630; //0.676
 rho_gam = 0.667; //0.638
 
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
 
 //long run output
@@ -219,6 +244,7 @@ end;
 
 check;
 
+//Shocks
 shocks;
 var e_e = 0.012^2;
 //var g_e = 0.014^2;
@@ -226,5 +252,7 @@ var e_e = 0.012^2;
 //var v_e = 1.819^2; 
 //var gam_e = 0.187^2;
 end;
+
+//Simulation
 stoch_simul (IRF=0, noprint,nograph);
 %stoch_simul(periods = 2100, nograph, noprint) x pi l;
