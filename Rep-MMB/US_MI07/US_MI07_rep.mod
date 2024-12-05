@@ -9,13 +9,6 @@
 % (at your option) any later version.
 
 //**************************************************************************
-// A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
-//
-// Volker Wieland, Tobias Cwik, Gernot J. Mueller, Sebastian Schmidt and
-// Maik Wolters
-//
-// Working Paper, 2009
-//
 // Model: US_MI07 - Rational Expectations version of Milani (2007)
 //
 // Further references:
@@ -74,12 +67,21 @@ u=phi_u*u(-1)+v_u;
 i= rho_i*i(-1) + (1-rho_i)*(rho_pi*pi + rho_x*x);
 end;
 
+
 //Shocks
 shocks;
 var v_r= 1.67^2;
 var v_u=1.15^2;
 end;
 
+
 //Simulation
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 //stoch_simul (irf = 0, ar=100, noprint);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
+
