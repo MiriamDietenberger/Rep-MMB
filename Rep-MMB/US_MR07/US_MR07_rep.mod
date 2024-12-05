@@ -253,6 +253,14 @@ var e_e = 0.012^2;
 //var gam_e = 0.187^2;
 end;
 
+
 //Simulation
-stoch_simul (IRF=0, noprint,nograph);
-%stoch_simul(periods = 2100, nograph, noprint) x pi l;
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (IRF=0, noprint,nograph);
+//stoch_simul(periods = 2100, nograph, noprint) x pi l;
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
+
