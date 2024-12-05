@@ -218,7 +218,6 @@ Lambda  =   varrho-varrho(-1);
 //labor supply
 varphi*l    = varrho + w;
 
-
 //capital good producers and retailers
 
 //investment dynamics
