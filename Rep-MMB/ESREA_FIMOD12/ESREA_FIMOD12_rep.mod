@@ -1,10 +1,26 @@
-// Model: ESREA_FIMOD12
+% ESREA_FIMOD12
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
+
+//**********************************************************************
 // References:
 // Stähler, N. and C. Thomas (2012): “FiMod—A DSGE model for fiscal policy simulations,” Economic Modelling, 29, 239–261.
-
+//
 // Last edited: 2023/11/20 by K. Bankowski
+//**********************************************************************
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variable
 var     dYtot, dYt, dCtot, dIt, dEx, dIm, dutot, dwpt, dULC, dpBt, 
         dDebttoGDP, dDeficit, dPrimDefRatio, dCgtoGDP, dtauct, dtaut, dwgt, dngt, dIgt,
         fdYtot, fdYt, fdCtot, fdIt, fdEx, fdIm, fdutot, fdwpt, fdULC, fdDebttoGDP, 
@@ -42,7 +58,8 @@ var     dYtot, dYt, dCtot, dIt, dEx, dIm, dutot, dwpt, dULC, dpBt,
         Inflation_f, Investment_f, Wage_f, ToT, Employment_f, dev_xt, dev_fxt, Unemployment_f
         Rev_t, Exp_t, Rev_GDP_t, Exp_GDP_t qYtot fqYtot qCgt fqCgt qIgt fqIgt
 ;
-        
+
+//Define exogenous variables
 varexo  epsiA, epsiG, epsing, epsik, 
         epsisc, epsic, epsiwg, epsiIg, 
         epsiconsum, epsib, epsitw, epsisub, fepsisub,
@@ -51,6 +68,7 @@ varexo  epsiA, epsiG, epsing, epsik,
         fepsiconsum, fepsib, fepsitw epsii
 ;   
 
+//Define parameters
 parameters
             betta, epsi, phi, alphaa, rhoi, phipie, kappaep, sg,
             varphip, sp, sigmac, xoui, kappaB, delta,
@@ -101,24 +119,19 @@ parameters
             Rev_ts, Exp_ts, Rev_GDP_ts, Exp_GDP_ts
 ;
 
-//***********************************************************
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 // Parameter calibration and setting steady-state values
-//**********************************************************
 
-// ######################################################################
+//------------------------------------------------------------
 // Calibrated values (Baseline)
-// ######################################################################
+// Parameter values-------------------------------------------
 
-// ######################################################################
-// Parameter values
-// ######################################################################
-
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Home country
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     // Shock persistence
-
     rhoA = 0.9;                             // Persistence technology
     rhocon = 0.99; // 0.9375;               // Persistence of preference shock
 
@@ -183,9 +196,8 @@ parameters
     
     tq = 4.9396;                        // Investment adjustment costs
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 // Foreign country (parameter naming analogous to home country)
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     // Shock persistence
     frhoG = rhoG;
@@ -249,15 +261,10 @@ parameters
 
     ftq = 4.9480;
      
+//---------------------------------------------------------------
+// Targeted values-----------------------------------------------
 
-// ######################################################################
-// Targeted values
-// ######################################################################
-
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Home country
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 
     // Country size
     omega = 0.275;                          // Size of home counrty
@@ -296,16 +303,14 @@ parameters
     qps = 0.7;                              // SS vacancy filling rate (private)
     qgs = 0.8;                              // SS vacancy filling rate (public)
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 // Foreign country (parameter/variable naming analogous to home country)
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     // Implied by pieAs:
     pieBs = pieAs;
     fpies = pieBs;
 
     fYtots = 0.895;
-
 
     fomegaCg  = 0.102;                 
     fomegai   = 0.028;                   
@@ -330,12 +335,10 @@ parameters
     fqps = qps;
     fqgs = qgs;
     
-// ######################################################################
-// International relations
-// ######################################################################
-//***********************************************************************
+//---------------------------------------------------
+// International relations---------------------------
+
 // Note: when setting dds<>0, the SS calculation has to be adapted!!!
-//***********************************************************************
 
     dds = 0;                                // Targeted current account
     pBs = 1;                                // Targeted terms of trade
@@ -352,8 +355,6 @@ parameters
     Ys = Ytots - Gs + Igs + Cgs;            // SS per capita private output(home)
     fYs = fYtots - fGs + fIgs + fCgs;       // SS per capita private output(foreign)
 
-
-
 //    If targeting dds and pBs differently (note that, then, we NEED to set home bias in advance!!)
 //    AA_tot = (1-omega-Psi)*(Ys-Cgs-Igs);
 //    fAA_tot= (omega-fPsi)*(fYs-fCgs-fIgs);
@@ -367,14 +368,10 @@ parameters
 
     fdds = -omega/(1-omega)*dds;
 
+//----------------------------------------------------------------------------
+// Calculating initial SS-----------------------------------------------------
 
-// ######################################################################
-// Calculating initial SS
-// ######################################################################
-
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Home country
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     Ss = 0;                                 // Investment adjustment costs
     S1s = 0;                                // Investment adjustment costs (derivative)
@@ -475,9 +472,8 @@ parameters
     VCs = kappav*vps;
     dtgdps = Debts/Ys;
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-// Foreign country (analogous to gome country)
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+// Foreign country (analogous to home country)
 
     fSs = Ss;
     fS1s = S1s;
@@ -576,11 +572,10 @@ parameters
     fVCs = fkappav*fvps;
     fdtgdps = fDebts/fYs;
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-// Price setting, consumption decompiosition, public sector and 
-// international relations; home and foreign 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
+//----------------------------------------------------------------------------------
+// Price setting, consumption decompiosition, public sector and -------------------
+// international relations; home and foreign ---------------------------------------
+
     q1s = pies^epsi*lambdas*Ys*mcs/(1-betta*phi*pies^epsi);
     q2s = pies^(epsi-1)*lambdas*(Ys)/(1-betta*phi*pieAs^(epsi-1));
 
@@ -653,25 +648,20 @@ parameters
     Rev_GDP_ts = pBs^(1-omega-Psi)*Rev_ts/Ytots;
     Exp_GDP_ts = pBs^(1-omega-Psi)*Exp_ts/Ytots;
 
-// ######################################################################  
-// Include model equations
-// ######################################################################  
+
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model;
-// ##############################################################################################  
-// ##############################################################################################  
-// ##############################################################################################  
-// Households
-// ##############################################################################################  
-// ##############################################################################################  
-// ##############################################################################################  
-// ######################################################################
+
+
+//--------------------------------------------------------------
+// Households---------------------------------------------------
+
 // Home country
-// ######################################################################
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Household consumption and investment decomposition
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 Ct = ((1/pBt)^(1-omega-Psi)*CAt + pBt^(omega+Psi)*CBt);
 // alternative way of writting (should yield the same result)
 // = (CAt/(omega+Psi))^(omega+Psi)*(CBt/(1-omega-Psi))^(1-omega-Psi);
@@ -690,11 +680,9 @@ IBtot = (1-mu)*IoBt;
 Crt =  ((1/pBt)^(1-omega-Psi)*CrAt + pBt^(omega+Psi)*CrBt);
 CrAt/CrBt = (Psi+omega)/(1-omega-Psi)*pBt;
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 // First-order conditions of households: Euler conditions, optimal capital 
 // investment, marginal utility of consumption (optimizers and RoTs)
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 betta*(lambdat(+1)/lambdat) - piet(+1)/(Rt*(1-taubt(+1))+taubt(+1));
 lambdat = (cont*(Ct-h*Ct(-1))^(-sigmac) - betta*h*cont(+1)*(Ct(+1)-h*Ct)^(-sigmac))/(1+tauct);
 
@@ -706,11 +694,9 @@ lambdat = betta*lambdat(+1)*(RECBt/piet(+1))*exp(-Psi2*(ddt-dds)/Yt);
 lambdart = (cont*(Crt-h*Crt(-1))^(-sigmac) - betta*h*cont(+1)*(Crt(+1)-h*Crt)^(-sigmac))/(1+tauct);
 Crt = (nprt*wpt*(1-taut) + ngrt*wgt*(1-taut) + (1-nprt-ngrt)*kappaB)/(1+tauct);
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 // Capital law of motion, investment adjustment costs
 // and aggregation
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 kt = (1-delta)*kt(-1) + (1-St)*It;
 
 St = (tq/2)*(It/It(-1)-1)^2;
@@ -725,14 +711,9 @@ nptot = (1-mu)*npt + mu*nprt;
 ngtot = (1-mu)*ngt + mu*ngrt;
 
 
-// ######################################################################
 // Foreign country
-// ######################################################################
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Household consumption and investment decomposition
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 fCt = ((1/pBt)^(1-omega+fPsi)*fCAt + pBt^(omega-fPsi)*fCBt);
 fCAt/fCBt = (omega-fPsi)/(1-omega+fPsi)*pBt;
 
@@ -748,11 +729,9 @@ fIBtot = (1-fmu)*fIoBt;
 fCrt = ((1/pBt)^(1-omega+fPsi)*fCrAt + pBt^(omega-fPsi)*fCrBt);
 fCrAt/fCrBt = (omega-fPsi)/(1-omega+fPsi)*pBt;
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 // First-order conditions of households: Euler conditions, optimal capital 
 // investment, marginal utility of consumption (optimizers and RoTs)
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 fbetta*(flambdat(+1)/flambdat) - fpiet(+1)/(fRt*(1-ftaubt(+1))+ftaubt(+1));
 flambdat = (fcont*(fCt-fh*fCt(-1))^(-fsigmac) - fbetta*fh*fcont(+1)*(fCt(+1)-fh*fCt)^(-fsigmac))/(1+ftauct);
 
@@ -765,11 +744,9 @@ flambdat = fbetta*flambdat(+1)*(RECBt/fpiet(+1))*exp(fPsi2*omega/(1-omega)*(ddt/
 flambdart = (fcont*(fCrt-fh*fCrt(-1))^(-fsigmac) - fbetta*fh*fcont(+1)*(fCrt(+1)-fh*fCrt)^(-fsigmac))/(1+ftauct);
 fCrt = (fnprt*fwpt*(1-ftaut) + fngrt*fwgt*(1-ftaut) + (1-fnprt-fngrt)*fkappaB)/(1+ftauct);
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 // Capital law of motion, investment adjustment costs
 // and aggregation
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 fkt = (1-fdelta)*fkt(-1) + (1-fSt)*fIt;
 
 fSt = (ftq/2)*(fIt/fIt(-1)-1)^2;
@@ -783,21 +760,13 @@ fDebt = (1-fmu)*fDebtot;
 fnptot = (1-fmu)*fnpt + fmu*fnprt;
 fngtot = (1-fmu)*fngt + fmu*fngrt;
 
-// ##############################################################################################  
-// ##############################################################################################  
-// ##############################################################################################  
-// Production
-// ##############################################################################################  
-// ##############################################################################################  
-// ##############################################################################################  
-// ######################################################################
+
+//------------------------------------------------------------------------
+// Production-------------------------------------------------------------
+
 // Home country
-// ######################################################################
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Aggregate output, use and marginal costs of production factors
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 Ytot = Yt + ggt;
 Yt = Cgt + CAtot + IAtot + Igt + (1-omega)/omega*(fCAtot + fIAtot);
 Yt*Dt = At*(kt(-1))^alphaa*kgt(-1)^(eta)*nptot^(1-alphaa);
@@ -805,10 +774,8 @@ Yt*Dt = At*(kt(-1))^alphaa*kgt(-1)^(eta)*nptot^(1-alphaa);
 rt = mct*alphaa*Yt/kt(-1);
 xt = mct*(1-alphaa)*Yt/nptot;
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-// Pricing
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+// Pricing
 //price dynamics (generalized Calvo)
 q1t - lambdat*Yt*mct - phi*betta*pieAt(+1)^(epsi)*q1t(+1);
 q2t - lambdat*Yt*pBt^(-(1-omega-Psi)) - phi*betta*pieAt(+1)^(epsi-1)*q2t(+1);
@@ -824,14 +791,9 @@ Dt-(1-phi)*(ptildt)^(-epsi)-phi*pieAt^(epsi)*pies^(-epsi*gamma2)*pieAt(-1)^(-eps
 piet = pieAt*(pBt/pBt(-1))^(1-omega-Psi);
 
 
-// ######################################################################
 // Foreign country
-// ######################################################################
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Aggregate output, use and marginal costs of production factors
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 fYtot = fYt + fggt;
 fYt = fCgt + fCBtot + fIBtot + fIgt  + omega/(1-omega)*(CBtot + IBtot);
 fYt*fDt = fAt*(fkt(-1))^falphaa*fkgt(-1)^(feta)*fnptot^(1-falphaa);
@@ -839,10 +801,7 @@ fYt*fDt = fAt*(fkt(-1))^falphaa*fkgt(-1)^(feta)*fnptot^(1-falphaa);
 frt = fmct*falphaa*fYt/(fkt(-1));
 fxt = fmct*(1-falphaa)*fYt/fnptot;
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Pricing
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 //price dynamics (generalized Calvo)
 fq1t - flambdat*fYt*fmct - fphi*fbetta*pieBt(+1)^(fepsi)*fq1t(+1);
 fq2t - flambdat*fYt*pBt^(omega-fPsi) - fphi*fbetta*pieBt(+1)^(fepsi-1)*fq2t(+1);
@@ -857,21 +816,13 @@ fDt-(1-fphi)*(fptilfdt)^(-fepsi)-fphi*pieBt^(fepsi)*fpies^(-fepsi*fgamma2)*pieBt
 // Foreign PPI
 fpiet = pieBt*(pBt(-1)/pBt)^(omega-fPsi);
 
-// ##############################################################################################  
-// ##############################################################################################  
-// ##############################################################################################  
-// Labour
-// ##############################################################################################  
-// ##############################################################################################  
-// ##############################################################################################  
-// ######################################################################
+
+//----------------------------------------------------------
+// Labour---------------------------------------------------
+
 // Home country
-// ######################################################################
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Matching as well as laws of motion for employment and average wages
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 // probability of matching for a vacancy (qt)
 qpt = Mpt/vpt;
 qgt = Mgt/vgt;
@@ -898,10 +849,8 @@ Utildt = 1-(1-sp)*nptot(-1)- (1-sg)*ngtot(-1) ;
 // Private real wage law of motion
 nptot*wpt = (1-sp)*((1-phiw)*wopt + phiw*(piet(-1)^gammaw/piet)*wpt(-1))*nptot(-1) + Mpt*((1-phiwn)*wopt + phiwn*(piet(-1)^gammaw/piet)*wpt(-1));
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-// Wage bargaining
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+// Wage bargaining
 // Adjunct recursive (labor market) variables capturing that a wage fixed in t prevail for more than one period dependinf on phiw and phiwn;
 // necessary only due to staggered wage bargaining assumption
 A1t = Jt + betta*(lambdat(+1)/lambdat)*phiw*(1-sp)*A1t(+1);
@@ -915,10 +864,8 @@ A7t = (1+tausct) + betta*(lambdat(+1)/lambdat)*  phiw*(1-sp)*(pies^gammaw/piet(+
 // Wage sharing rule
 Wptot = xoui/(1-xoui)*(((1-mu)*A4t+mu*A6t)/A7t)*Jt;
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-// Value functions of firms and workers
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+// Value functions of firms and workers
 // Value functions of firms
 Jt = A2t - A7t*wopt + A1t(+1)*(1-sp)*(1-phiw)*betta*(lambdat(+1)/lambdat);
 Jot = A2t - A7t*wpt(-1)*piet^(-1) + A1t(+1)*(1-sp)*(1-phiw)*betta*(lambdat(+1)/lambdat);
@@ -940,24 +887,16 @@ Wprot = A6t*wpt(-1)*piet^(-1) - A5t*kappaB  + Aauxrt;
 
 Wptot = (1-mu)*Wpt + mu*Wprt;
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-// Job creation
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+// Job creation
 // Vacancies FOC (private sector)
 kappav/qpt + tc - Vact;
 Vact = (1-phiwn)*Jt + phiwn*Jot;
 
 
-
-// ######################################################################
 // Foreign country
-// ######################################################################
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Matching as well as laws of motion for employment and average wages
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 // probability of matching for a vacancy (qt)
 fqpt = fMpt/fvpt;
 fqgt = fMgt/fvgt;
@@ -985,10 +924,8 @@ fUtilfdt = 1-(1-fsp)*fnptot(-1)- (1-fsg)*fngtot(-1) ;
 // Private real wage law of motion
 fnptot*fwpt = (1-fsp)*((1-fphiw)*fwopt + fphiw*(fpiet(-1)^fgammaw/fpiet)*fwpt(-1))*fnptot(-1) + fMpt*((1-fphiwn)*fwopt + fphiwn*(fpiet(-1)^fgammaw/fpiet)*fwpt(-1));
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-// Wage bargaining
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+// Wage bargaining
 // Adjunct recursive (labor market) variables capturing that a wage fixed in t prevail for more than one period dependinf on phiw and phiwn;
 // necessary only due to staggered wage bargaining assumption
 fA1t = fJt + fbetta*(flambdat(+1)/flambdat)*fphiw*(1-fsp)*fA1t(+1);
@@ -1002,10 +939,8 @@ fA7t = (1+ftausct) + fbetta*(flambdat(+1)/flambdat)*fphiw*(1-fsp)*(fpies^fgammaw
 // Wage sharing rule
 fWptot = fxoui/(1-fxoui)*(((1-fmu)*fA4t+fmu*fA6t)/fA7t)*fJt;
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-// Value functions of firms and workers
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+// Value functions of firms and workers
 // Value functions of firms
 fJt = fA2t - fA7t*fwopt + fA1t(+1)*(1-fsp)*(1-fphiw)*fbetta*(flambdat(+1)/flambdat);
 fJot = fA2t - fA7t*fwpt(-1)*fpiet^(-1) + fA1t(+1)*(1-fsp)*(1-fphiw)*fbetta*(flambdat(+1)/flambdat);
@@ -1028,29 +963,18 @@ fWprot = fA6t*fwpt(-1)*fpiet^(-1) - fA5t*fkappaB  + fAauxrt;
 fWptot = (1-fmu)*fWpt + fmu*fWprt;
 
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Job creation
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 // Vacancies FOC (private sector)
 fkappav/fqpt + ftc - fVact;
 fVact = (1-fphiwn)*fJt + fphiwn*fJot;
 
-// ##############################################################################################  
-// ##############################################################################################  
-// ##############################################################################################  
-// Fiscal
-// ##############################################################################################  
-// ##############################################################################################  
-// ##############################################################################################  
-// ######################################################################
+
+//-----------------------------------------------------------------
+// Fiscal-----------------------------------------------------------
+
 // Home country
-// ######################################################################
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Gov. budget constraint and fiscal rules
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 Tt + taut*(wpt*nptot+wgt*ngtot) + tauct*Ctot + tausct*(wpt*nptot+wgt*ngtot) +  taukt*(rt-delta)*kt(-1) + Debt + taubt*((Rt(-1)-1)/piet)*Debt(-1) =  (Rt(-1)/piet)*Debt(-1) + utot*kappaB + Gt*pBt^(-(1-omega-Psi)) + Sub;
 // with
 Gt = (Cgt + Igt) + ggt ;
@@ -1066,7 +990,6 @@ log(Cgt/Cgs) = rhoG*log(Cgt(-1)/Cgs)  - xi_bg*log(Debt(-1)/Debts)  - xi_ycg*log(
 log(Igt/Igs) = rhoIg*log(Igt(-1)/Igs) - xi_big*log(Debt(-1)/Debts) - xi_yig*log(Ytot(-1)/Ytots) + psi_ig*epsiIg + (1-psi_ig)*epsiIg(-1);
 log(ngt/ngs) = rhon*log(ngt(-1)/ngs)  - xi_bn*log(Debt(-1)/Debts)  - xi_yn*log(Ytot(-1)/Ytots)  + psi_n*epsing  + (1-psi_n)*epsing(-1);
 
-
 taukt-tauks = rhok*(taukt(-1)-tauks) + (1-rhok)*xi_bk*(Debt(-1)/(Ytot(-1))*pBt(-1)^(1-omega-Psi) - omegad) +  epsik;
 taubt-taubs = rhob*(taubt(-1)-taubs) + (1-rhob)*xi_bb*(Debt(-1)/(Ytot(-1))*pBt(-1)^(1-omega-Psi) - omegad) +  epsib;
 Sub/Subs = (Sub(-1)/Subs)^rhos*(Debt(-1)/(omegad*Ytot(-1))*pBt(-1)^(1-omega-Psi))^((1-rhos)*xi_sub)*exp(epsisub);
@@ -1076,20 +999,14 @@ Sub/Subs = (Sub(-1)/Subs)^rhos*(Debt(-1)/(omegad*Ytot(-1))*pBt(-1)^(1-omega-Psi)
 // (Cgt/omegag*Yt)-((Cgt(-1)/omegag*Yt(-1))^rhoG)*exp(epsiG);
 // (Igt/omegai*Yt)-((Igt(-1)/omegai*Yt(-1))^rhoIg)*exp(epsiIg);
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-// Public capital law of motion
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+// Public capital law of motion
 kgt = (1-deltag)*kgt(-1) + Igt;
 
-// ######################################################################
+
 // Foreign country
-// ######################################################################
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Gov. budget constraint and fiscal rules
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 fTt + ftaut*(fwpt*fnptot+fwgt*fngtot) + ftauct*fCtot + ftausct*(fwpt*fnptot+fwgt*fngtot) +  ftaukt*(frt-fdelta)*fkt(-1) + fDebt + ftaubt*((fRt(-1)-1)/fpiet)*fDebt(-1) = (fRt(-1)/fpiet)*fDebt(-1) + futot*fkappaB + fGt*pBt^(omega-fPsi) + fSub;
 // with
 fGt = (fCgt + fIgt) + fggt;
@@ -1114,39 +1031,27 @@ fwgt = fwgs*(fwgt(-1)/fwgs)^frhow*exp(fepsiwg);
 (fIgt/fIgs)-((fIgt(-1)/fIgs)^frhoIg)*exp(fepsiIg);
 // (fIgt/fomegai*fYt)-((fIgt(-1)/fomegai*fYt(-1))^frhoIg)*exp(fepsiIg);
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-// Public capital law of motion
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+// Public capital law of motion
 fkgt = (1-fdeltag)*fkgt(-1) + fIgt;
 
-// ##############################################################################################  
-// ##############################################################################################  
-// ##############################################################################################  
-// International
-// ##############################################################################################  
-// ##############################################################################################  
-// ############################################################################################## 
-// ######################################################################
-// Current account per capita
-// ######################################################################
 
-// home
+//---------------------------------------------------
+// International-------------------------------------
+
+// Current account per capita
+
+// Home country
 ddt = (RECBt(-1)*exp(-Psi2*(ddt(-1)-dds)/Yt(-1))/pieAt)*ddt(-1) + (1-omega)/omega*(fCAtot+fIAtot) - pBt*(CBtot + IBtot);
 
-// foreign
+// Foreign country
 pBt*fddt = - omega/(1-omega) * ddt;
 
-// ######################################################################
-// Terms of trade
-// ######################################################################
 
+// Terms of trade
 pBt = pieBt/pieAt*pBt(-1);
 
-// ######################################################################
 // Monetary policy
-// ######################################################################
-
 // Define if CPI taken into account by MP includes VAT or not
 cpiinf = piet; // *((1+tauct)/(1+tauct(-1))); 
 fcpiinf = fpiet; // *((1+ftauct)/(1+ftauct(-1)));
@@ -1154,21 +1059,13 @@ fcpiinf = fpiet; // *((1+ftauct)/(1+ftauct(-1)));
 // Taylor rule (here: non-linear, but there are a million ways to define the rule...)
 RECBt/RECBs = (RECBt(-1)/RECBs)^rhoi*(((cpiinf/cpiinfs)^omega*(fcpiinf/fcpiinfs)^(1-omega))^phipie*((Ytot/Ytot(-1))^omega*(fYtot/fYtot(-1))^(1-omega))^phiy)^((1-rhoi))*exp(epsii);
 
-// ##############################################################################################  
-// ##############################################################################################  
-// ##############################################################################################  
-// Obs
-// ##############################################################################################  
-// ##############################################################################################  
-// ############################################################################################## 
-// ######################################################################
+
+//---------------------------------------------------------------------
+// Obs------------------------------------------------------------------
+
 // Home country
-// ######################################################################
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Define some adjunct variables (mainly for plotting reasons)
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 PrimDef = Debt-Rt(-1)/piet*Debt(-1);
 
 // omegadt = (1/pBt)^(1-omega-Psi)*Debt/Ytot;
@@ -1189,10 +1086,7 @@ Exp_t = utot*kappaB + Gt*pBt^(-(1-omega-Psi)) + Sub;
 Rev_GDP_t = pBt^(1-omega-Psi)*Rev_t/Ytot;
 Exp_GDP_t = pBt^(1-omega-Psi)*Exp_t/Ytot;
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Observables
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 dYtot = 100*(Ytot - Ytots)/Ytots;
 dYt = 100*(Yt - Ys)/Ys;
 dCtot = 100*(Ctot - Ctots)/Ctots;
@@ -1237,10 +1131,8 @@ fqCgt = 100*(fCgt/fCgt(-1)-1);
 qIgt = 100*(Igt/Igt(-1)-1);
 fqIgt = 100*(fIgt/fIgt(-1)-1);
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-// Observables 2
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+// Observables 2
 Consumption = (log(Ctot)-log(Ctots))*100;
 dmOutput = (log(Ytot)-log(Ytots))*100;
 dmInflation = (piet-pies)*400;
@@ -1250,14 +1142,10 @@ Employment = (log(ntot)-log(ntots))*100;
 dev_xt = (log(xt)-log(xs))*100;
 Unemployment = (utot-utots)*100;
 
-// ######################################################################
+
 // Foreign country
-// ######################################################################
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Define some adjunct variables (mainly for plotting reasons)
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 fPrimDef = fDebt-fRt(-1)/fpiet*fDebt(-1);
 
 // fomegadt = fDebt/fYtot;
@@ -1270,10 +1158,8 @@ fDeficit = ((fRt(-1)-1)*fDebt(-1)+fPrimDef)/fYtot;
 fPrimDefrat = (1/pBt)^(omega-fPsi)*fPrimDef/fYtot;
 fPurchtoGDO = fCgt/fYtot;
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-// Observables
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+// Observables
 fdYtot = 100*(fYtot - fYtots)/fYtots;
 fdYt = 100*(fYt - fYs)/fYs;
 fdCtot = 100*(fCtot - fCtots)/fCtots;
@@ -1304,10 +1190,7 @@ dgdp = (Ys/Ytots*Yt/Ys + (1-Ys/Ytots)*ngtot/ngtots -1)*100;
 fdgdp = (fYs/fYtots*fYt/fYs + (1-fYs/fYtots)*fngtot/fngtots -1)*100;
 
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Observables 2
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 Consumption_f = (log(fCtot)-log(fCtots))*100;
 Output_f = (log(fYtot)-log(fYtots))*100;
 Inflation_f = (fpiet-fpies)*400;
@@ -1318,27 +1201,21 @@ Employment_f = (log(fntot)-log(fntots))*100;
 dev_fxt = (log(fxt)-log(fxs))*100;
 Unemployment_f = (futot-futots)*100;
 
-// ##############################################################################################  
-// ##############################################################################################  
-// ##############################################################################################  
-// Shocks
-// ##############################################################################################  
-// ##############################################################################################  
-// ############################################################################################## 
-// ######################################################################
-// Home country
-// ######################################################################
 
-    //consumption shock; 39
+//-----------------------------------------------------------------
+// Shocks----------------------------------------------------------
+
+// Home country
+
+//consumption shock; 39
 (cont/cons)-((cont(-1)/cons)^rhocon)*exp(epsiconsum);
 
-    //technology shock; 40
+//technology shock; 40
 // (At/As)-((At(-1)/As)^rhoA)*exp(epsiA);
 At = rhoA*At(-1) + (1-rhoA)*As + epsiA;
 
-// ######################################################################
+
 // Foreign country
-// ######################################################################
 
 //consumption shock
 (fcont/fcons)-((fcont(-1)/fcons)^frhocon)*exp(fepsiconsum);
@@ -1348,10 +1225,8 @@ At = rhoA*At(-1) + (1-rhoA)*As + epsiA;
 
 end;
 
-// ######################################################################  
-// Set initial steady-sate values
-// ######################################################################  
 
+// Set initial steady-sate values
 initval;
     q1t         = q1s;
     q2t         = q2s;
@@ -1572,10 +1447,8 @@ initval;
     fqIgt        = 0;
 end;
 
-// ######################################################################  
-// Calculate steady state
-// ###################################################################### 
 
+// Calculate steady state
 resid(1);
 // steady(solve_algo=0);
 steady;
@@ -1583,11 +1456,8 @@ steady;
 // resid(1);
 
 
-
-// ######################################################################
 // Simulation (stochastic) exercise and plotting
-// ######################################################################
-
+//Shocks
 shocks;
 var epsiA  = 0;
 var epsii = (0.01/4)^2;
@@ -1614,4 +1484,12 @@ var fepsib = 0;
 var fepsitw = 0;
 end;
 
-stoch_simul(order = 1, irf_shocks=(epsii),irf=20) dRECBt Consumption dmOutput dmInflation Ytot;
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul(order = 1, irf_shocks=(epsii),irf=20) dRECBt Consumption dmOutput dmInflation Ytot;
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
