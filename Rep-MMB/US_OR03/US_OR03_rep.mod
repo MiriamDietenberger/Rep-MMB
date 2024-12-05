@@ -9,15 +9,6 @@
 % (at your option) any later version.
 
 //**************************************************************************
-// A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
-//
-// Volker Wieland, Tobias Cwik, Gernot J. Mueller, Sebastian Schmidt and
-// Maik Wolters
-//
-// Working Paper, 2009
-//
-// Model: ORP03
-//
 // Further references:
 // Orphanides, A. 2003. "The quest for prosperity without inflation."
 // Journal of Monetary Economics 50 (2003) 633-663
@@ -74,19 +65,17 @@ ay4 = -0.1245;
 %----------------------------------------------------------------
 model(linear);
 
-
-
 // Original Model Code:
 
 y = b0 + bpi1*pi(-1) + bpi2*pi(-2) + bpi3*pi(-3) + bpi4*pi(-4) + by1*y(-1) + by2*y(-2) + by3*y(-3) + by4*y(-4) + bf1*f(-1) + bf2*f(-2) + bf3*f(-3) + bf4*f(-4) + u;
 pi = api1*pi(-1) + api2*pi(-2) + api3*pi(-3) + api4*pi(-4) + ay0*y + ay1*y(-1) + ay2*y(-2) + ay3*y(-3) + ay4*y(-4) + e;
-
 
 // original interest rate rules
 f = 2 + pi + 0.5*(pi - 2) + 0.5*y + interest_; //Taylor rule
 //f = 2 + pi + 0.5*(pi - 2) + 1.0*outputgap + interest_; //Revised Taylor rule
 
 end;
+
 
 //Shocks
 shocks;
@@ -95,6 +84,14 @@ var e = 1.4069906748^2;
 var interest_ = 0;
 end;
 
+
 //Simulation
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 //stoch_simul (irf = 60);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
+
