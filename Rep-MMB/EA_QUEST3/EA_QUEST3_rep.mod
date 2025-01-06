@@ -1,3 +1,13 @@
+% EA_QUEST3
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //
 // DYNARE SOURCE CODE for QUEST III, the macroeconomic model of the European Commission
 //
@@ -9,6 +19,11 @@
 //
 // Replication of IRF
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var  
 E_BGYN E_BWRY E_CLCSN E_DBGYN  E_LER E_ETA E_GC E_GCL E_GCLC E_GCNLC E_GE E_GEX E_GEXL E_GG E_GGL E_GI E_GIG E_GIL 
 E_GIM E_GIML E_GK E_GKG E_GL E_GSN E_GTAX E_GTFP E_GTFPUCAP E_GTR E_GUC E_GUCAP E_GWRY E_GY E_GYL E_GYPOT E_GYW 
@@ -24,7 +39,7 @@ E_ZEPS_IG E_ZEPS_L E_ZEPS_M E_ZEPS_PPI E_ZEPS_RPREME E_ZEPS_RPREMK	E_ZEPS_TR   E
     interest inflation inflationq outputgap;                             //*
 //**************************************************************************    
  
-    
+//Define exogenous variables    
 varexo
 E_EPS_C  E_EPS_ETA  E_EPS_ETAM E_EPS_ETAX  E_EPS_EX  E_EPS_G E_EPS_IG E_EPS_INOMW E_EPS_L E_EPS_LOL E_EPS_M  E_EPS_PPI 
 E_EPS_PW    E_EPS_RPREME	E_EPS_RPREMK	E_EPS_TR    E_EPS_W   E_EPS_Y  E_EPS_YW 
@@ -35,7 +50,7 @@ E_EPS_PW    E_EPS_RPREME	E_EPS_RPREMK	E_EPS_TR    E_EPS_W   E_EPS_Y  E_EPS_YW
     interest_ fiscal_  ;                                                 //*
 //**************************************************************************
       
-  
+//Define parameters  
 parameters
 A1E A2E  ALPHAX  ALPHAE  ALPHAGE  BETAE BGADJ1 BGADJ2 BGTAR DELTAE DELTAGE DGEX DGIM DGPM  DGPX DDYN  E_EX_INOMW
 E_EX_R   E_EX_RW G1E  GAMI2E  GAMIE  GAMLE GAMPE  GAMPME GAMPXE  GAMWE GP0 GPCPI0 GPOP0  GPW0 GSLAG  GVECM  
@@ -48,7 +63,9 @@ TAUE TP  THETAE TINFE TR1E TRSN RHOTR TYE1 TYE2 TVAT TW0 TW1 UCAP0 WRLAG ZETE in
 // Modelbase Parameters                                                  //*
 // not needed for replication
 
-
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 //estimated parameters (mean posterior distribution)
 A2E        =   0.0453;
@@ -183,6 +200,10 @@ RHOPPI4 =  0.09282876044442;                                                    
 
 interestq_exog=1.00901606;
 inflationannual_exog=1.02;
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model;
 
@@ -687,9 +708,15 @@ stderr 0.0121;
 
 end;
 
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 //steady;
 //check;
- stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul (order=1, irf = 41, ar=0, periods=5000, noprint, nograph) E_INOM E_PHIC E_LYGAP E_PHI E_GY E_GC E_GI E_GCNLC E_GCLC E_TBYN E_GG E_GIG E_GTR E_GL E_GWRY E_DBGYN E_PHI E_INOM E_R E_GE;
+ //stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul (order=1, irf = 41, ar=0, periods=5000, noprint, nograph) E_INOM E_PHIC E_LYGAP E_PHI E_GY E_GC E_GI E_GCNLC E_GCLC E_TBYN E_GG E_GIG E_GTR E_GL E_GWRY E_DBGYN E_PHI E_INOM E_R E_GE;
 //stoch_simul inflation interest outputgap;
 //stoch_simul(order=1) E_INOM E_PHIC E_LYGAP E_GY E_GTR E_GL;
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

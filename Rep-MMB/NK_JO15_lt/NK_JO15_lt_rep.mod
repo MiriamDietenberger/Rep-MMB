@@ -1,3 +1,13 @@
+% NK_JO15_lt
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // Model: NK_JO15_lt
 
 // Title: Productivity Shocks and Monetary Policy in a Two-Country Model 
@@ -10,14 +20,24 @@
 
 // Version of the model: Low level of trade (alpha=0.1)
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
+//Define endogenous variables
 var x pi_H r pi x_star pi_F_star r_star pi_star r_bar r_bar_star a a_star mc mc_star y y_star y_bar y_bar_star
 p p_star e s q;
 
+//Define exogenous variables
 varexo m m_star xi xi_star;
 
+//Define parameters
 parameters sigma eta beta theta_H theta_F alpha varphi kappa_H kappa_F omega_2 omega_4 psi varsigma 
 delta sigma_omega oomega_2 rho rho_star phi_pi phi_pi_star phi_x phi_x_star varrho varrho_star;
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 sigma = 4.5;
 eta = 2.5;
@@ -43,6 +63,10 @@ phi_x = 0.5;
 phi_x_star = 0.5;
 varrho = 0.4;
 varrho_star = 0.4;
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model (linear);
 
@@ -103,5 +127,11 @@ var xi_star;
 stderr 1;
 end;
 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(irf=40, nograph) p_star e s q;
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(irf=40, nograph) p_star e s q;
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

@@ -1,3 +1,13 @@
+% NK_CW09
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 %Replication of "Credit Frictions and optimal monetary policy" by 
 %Vasco Curdia and Michael Woodford
 %Model: NK_CW09
@@ -18,6 +28,7 @@
 % 1. Defining variables
 %----------------------------------------------------------------
 
+//Define endogenous variables
 var i_d i_d_hat_a lambda_b lambda_s Pi Pi_hat_a Y K F Delta b G chi_tilde
     omega_hat_a C_bar_s C_bar_b H_bar mu_w tau epsilon_m omega Z b_g B 
     Lambda lambda_tilde i_d_hat lambda_b_hat lambda_s_hat Pi_hat Y_hat
@@ -25,9 +36,11 @@ var i_d i_d_hat_a lambda_b lambda_s Pi Pi_hat_a Y K F Delta b G chi_tilde
     C_bar_s_hat C_bar_b_hat H_bar_hat mu_w_hat tau_hat omega_hat Z_hat
     b_g_hat i_b_hat Lambda_hat lambda_tilde_hat Y_n_hat x_hat;
 
+//Define exogenous variables
 varexo   e_C_bar_s e_C_bar_b e_G e_H_bar e_mu_w e_tau e_epsilon_m 
          e_Xi_tilde e_chi_tilde e_Z e_b_g;
 
+//Define parameters
 parameters beta phi delta pi_b pi_s mu_p omega_y nu theta alpha
            sigma_b sigma_s psi_b psi_s psi eta varchi phi_pi phi_y
            rho_C_bar_s rho_C_bar_b rho_G rho_H_bar rho_mu_w rho_tau 
@@ -40,7 +53,7 @@ parameters beta phi delta pi_b pi_s mu_p omega_y nu theta alpha
 
 
 %----------------------------------------------------------------
-% 2. Calibration
+% 2. Calibration and Estimation
 %----------------------------------------------------------------
 //Persistence of AR(1)-Processes 
 rho_C_bar_s     = 0.9;
@@ -269,11 +282,15 @@ var e_chi_tilde = 1;
 var e_Z         = 1;
 var e_b_g       = 4^2;
 end;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order=1,irf=17,irf_shocks=(e_epsilon_m,e_Z,e_G,e_C_bar_s,e_b_g,e_mu_w,e_C_bar_b,e_chi_tilde),nograph) 
- %          Y_hat Pi_hat_a i_d_hat_a omega_hat_a b_hat;
+
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(order=1,irf=17,irf_shocks=(e_epsilon_m,e_Z,e_G,e_C_bar_s,e_b_g,e_mu_w,e_C_bar_b,e_chi_tilde),nograph) 
+//%          Y_hat Pi_hat_a i_d_hat_a omega_hat_a b_hat;
 
 // save('NK_CW09_FF_results.mat','oo_');
+//***************************
 
-
-  
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);  

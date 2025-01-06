@@ -1,3 +1,13 @@
+% EA_CW05ta
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // Title: A Small Estimated Euro Area Model with Rational Expectations and Nominal Rigidities 
 // Authors: Guenter Coenen and Volker Wieland
 // Publication: European Economic Review, Vol. 49 (5), July 2005, pp. 1081-1104.
@@ -11,6 +21,11 @@
 
 // Replication of IRF in Kuester, Wieland (2005)
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var q lagq1 cwp lagcwp1 lagcwp2 pi1 lagpi11 lagpi12 infl is lagis1 dis il rl 
 
 //**************************************************************************
@@ -18,7 +33,7 @@ var q lagq1 cwp lagcwp1 lagcwp2 pi1 lagpi11 lagpi12 infl is lagis1 dis il rl
    interest inflation outputgap;                         	             //*
 //**************************************************************************
 
-
+//Define exogenous variables
 varexo e_cw
 
 //**************************************************************************
@@ -26,8 +41,12 @@ varexo e_cw
        interest_ fiscal_;                                                //*
 //**************************************************************************
 
-
+//Define parameters
 parameters s f0 f1 f2 f3 gamma1 sigma_e_cw delta0 delta1 delta2 delta3 sigma_e_d sigma_e_cw;
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 s = 0.0456;
 f0 = 0.25+(1.5-0)*s;
@@ -42,6 +61,9 @@ delta3 = -0.0947;
 sigma_e_d  = 1.00;
 sigma_e_cw = 1.00;
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -79,5 +101,12 @@ var e_cw = 2.36391556785721e-05; 	// demand shock
 var interest_ = 1; //for IRF to monetary shock (unit) set equal to 1
 end;
 
-%stoch_simul (irf = 41, ar=0, noprint, nograph) inflation outputgap interest;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//%stoch_simul (irf = 41, ar=0, noprint, nograph) inflation outputgap interest;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

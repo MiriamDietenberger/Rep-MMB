@@ -1,3 +1,13 @@
+% G7_TAY93
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // Title: Macroeconomic Policy in a World Economy, New York: Norton, 1993 (chapter 3)
 // Authors: John B. Taylor
 
@@ -7,6 +17,11 @@
 
 // This file simulates the dynamic response of the model to specific shocks
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var ygap0 pdot0 drs0 lretw0 dretw0 dletw0 fgdp0 fpdot0 frs0 dfrs0 lp0 dygap0 
     rr20 rr50 rr100 rs0 rs1 rs2 rs3 rs4 rs5 rs6 rl0 rl1 rl2 rl3 rl4 rl5 rl6 
     cd0 cn0 cs0 cd1 cn1 cs1 cd2 cn2 cs2 c3 c4 cd5 cn5 cs5 cd6 cn6 cs6 ine0 
@@ -38,7 +53,7 @@ var ygap0 pdot0 drs0 lretw0 dretw0 dletw0 fgdp0 fpdot0 frs0 dfrs0 lp0 dygap0
    interest inflation inflationq outputgap output pinf4;                 //*
 //**************************************************************************
     
-
+//Define exogenous variables
 varexo	//rs0_ 
     interest_
     rs1_ rs2_ rs3_ rs4_ rs5_ rs6_ ule1_ ule2_ ule3_ ule4_ ule5_ ule6_ rl0_ rl1_ 
@@ -55,7 +70,8 @@ varexo	//rs0_
        ; // the Modelbase Shocks can be found above for not having to    //*
          // change the order of the variance covariance matrix           //*
 //**************************************************************************
-  
+
+//Define parameters
 parameters tayrule1 mrulep1 mruley1 ybar1 tayrule2 mrulep2 mruley2 ybar2 tayrule3 
            mrulep3 mruley3 ybar3 tayrule4 mrulep4 mruley4 ybar4 tayrule5 mrulep5 
            mruley5 ybar5 tayrule6 mrulep6 mruley6 ybar6 yt0 dummy0 yt1 dummy1 
@@ -84,6 +100,10 @@ parameters tayrule1 mrulep1 mruley1 ybar1 tayrule2 mrulep2 mruley2 ybar2 tayrule
         std_r_ std_r_quart;                                              //*
                                                                          //*
 // load Modelbase Monetary Policy Parameters                             //*
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 cofintintb1 =  0.755226; 
 cofintintb2 = 0; 
 cofintintb3 = 0; 
@@ -312,6 +332,10 @@ taywd00  = 0;
 taywd10  = 0;          
 taypi00  = 0;          
 taypfx0  = 0;  
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -773,5 +797,11 @@ shocks;
 var interest_ = 1;
 end;
 
-stoch_simul (AR=100,IRF=0, noprint,nograph);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-%stoch_simul (irf = 17, noprint, nograph) inflation inflationq interest outputgap; 
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+//%stoch_simul (irf = 17, noprint, nograph) inflation inflationq interest outputgap; 
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

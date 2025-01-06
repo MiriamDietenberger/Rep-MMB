@@ -1,3 +1,13 @@
+% G3_CW03
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // Title: Inflation dynamics and international linkages: a model of the United States, the euro area and Japan
 // Authors: G�nther Coenen and Volker Wieland
 // Publication: ECB Working Paper 181, September 2002
@@ -5,11 +15,16 @@
 
 // Replication of 0.5 percentage points demand shock
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var q_eu cwp_eu pi1_eu pi4_eu is_eu il_eu rl_eu reer_eu q_ja cwp_ja pi1_ja pi4_ja is_ja il_ja rl_ja reer_ja
     q_us cwp_us index_us pi1_us pi4_us is_us il_us rl_us reer_us rer_euja rer_euus rer_jaus one;
 
 
-
+//Define exogenous variables
 varexo e_cw_eu e_d_ja e_cw_ja e_d_us e_cw_us
 
 //**************************************************************************
@@ -17,6 +32,7 @@ varexo e_cw_eu e_d_ja e_cw_ja e_d_us e_cw_us
        interest_ e_d_eu;                                                 //*
 //************************************************************************** 
 
+//Define parameters
 parameters f0_eu f1_eu f2_eu f3_eu gamma_eu sigma_e_cw_eu delta0_eu delta1_eu delta2_eu delta3_eu delta4_eu delta5_eu 
 	   sigma_e_d_eu rho_eu alpha_eu beta_eu pitarget_eu rlbar_eu w_euja w_euus 
 	   f0_ja f1_ja f2_ja f3_ja gamma_ja sigma_e_cw_ja delta0_ja delta1_ja delta2_ja delta3_ja delta4_ja delta5_ja 
@@ -24,7 +40,9 @@ parameters f0_eu f1_eu f2_eu f3_eu gamma_eu sigma_e_cw_eu delta0_eu delta1_eu de
 	   f0_us f1_us f2_us f3_us gamma_us sigma_e_cw_us delta0_us delta1_us delta2_us delta3_us delta4_us delta5_us 
 	   sigma_e_d_us rho_us alpha_us beta_us pitarget_us rlbar_us w_useu w_usja;
 
-
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 %----------
 % Euro Area
@@ -129,7 +147,9 @@ rlbar_us = -delta0_us/delta4_us;
 w_useu = 0.2442;
 w_usja = 0.2339;
 
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -179,5 +199,12 @@ var e_cw_ja = 1;
 var e_d_us  = 0.25; //1;
 var e_cw_us = 1;
 end;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul (order=1, irf = 28, ar=0, nograph, noprint) is_eu pi4_eu q_eu is_ja pi4_ja q_ja is_us pi4_us q_us;
+
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul (order=1, irf = 28, ar=0, nograph, noprint) is_eu pi4_eu q_eu is_ja pi4_ja q_ja is_us pi4_us q_us;
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

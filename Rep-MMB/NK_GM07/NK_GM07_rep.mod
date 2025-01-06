@@ -1,3 +1,13 @@
+% NK_GM07
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 % Model: NK_GM07
 
 % Further Reference: 
@@ -14,17 +24,26 @@
 % Fig 7: mu_1 = 1.5;    mu_2 = 0.5; mu_3 = 0.8;
 
 %********************************************************************************************************************
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
+//Define endogenous variables
 var dp, mc, omega, lambda, xi, w, n, m, c, q, p, h, b, a1, a2, a3, EFP, rT, rIB, rL, rB;
 
+//Define exogenous variables
 varexo eps_h, eps_a1, eps_a2, eps_a3, eps_i;
 
+//Define parameters
 parameters 
 phi, eta, theta, beta, kappa, alpha, k, delta, gamma, rr, V, boc F
 K, n_ss, m_ss, c_ss, w_ss, b_ss, omega_ss, lambda_ss, mc_ss, EFP_ss, rT_ss, rIB_ss, rL_ss, rB_ss,
 rho_h, rho_a1, rho_a2, rho_a3,
 mu_0, mu_1, mu_2, mu_3;
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 // parameters
 
@@ -75,12 +94,15 @@ rIB_ss = 0.0021;
 rL_ss = 0.0066;
 rB_ss = 0.0052;
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model;
 
-//########################
-//#### baseline model ####
-//########################
+
+//baseline model
+
 
 //(32)
 dp = beta * dp(+1) + kappa * mc;
@@ -121,9 +143,9 @@ dp = p - p(-1);
 
 rIB = (1 - mu_3) * ((1 + mu_1) * dp(+1) + mu_2 * (mc)) + mu_3 * (rIB(-1)) + eps_i;
 
-//########################
-//#### interest-rates ####
-//########################
+
+//interest-rates
+
 
 //Definition of the EFP
 EFP = (w + m - c);
@@ -147,9 +169,9 @@ rL - rIB =  EFP;
 
 
 
-//########################
-//##### policy rules #####
-//########################
+
+//policy rules
+
 
 
 //Policy determination of constant bonds to consumption
@@ -157,9 +179,8 @@ b = 0;
 
 
 
-//########################
-//### shock-processes ####
-//########################
+//shock-processes
+
 
 a1 = rho_a1 * a1(-1) + eps_a1;
 a2 = rho_a2 * a2(-1) + eps_a2;
@@ -182,5 +203,12 @@ var	eps_a1;  stderr 1;
 end;
 
 %check;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order=1,nograph, irf=20) n, w, m, q, rIB, mc, c, lambda, EFP, rB, dp, rT;
+
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(order=1,nograph, irf=20) n, w, m, q, rIB, mc, c, lambda, EFP, rB, dp, rT;
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

@@ -1,3 +1,13 @@
+% NK_ET14
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // Ellison, M. and Tischbirek, A.: ``Unconventional government debt 
 //        purchases as a supplement to conventional monetary policy''
 // In: Journal of Economic Dynamics and Control (2014), no. 43, pp. 199�217.
@@ -18,14 +28,19 @@ clc;
 % 1. Defining variables
 %----------------------------------------------------------------
 
+//Define endogenous variables
 var Y C s G Pi L ChiC Ps PQ PB w ChiL F K A b q qbar qCB i iQ D theta nu ksi Pss; // Ps*s included, thus 26 var
+
+//Define exogenous variables
 varexo epsC epsL epsA epsthet epsG epsnu epsksi; // 7 shocks
+
+//Define parameters
 parameters beta delta psi SStheta phi alpha SSPi tau gbar trho f a1 a2 
             gB gQ rhonu rhoksi rhoC rhoL rhoG rhoA rhotheta gampi gamY gampiQE 
             gamYQE SSY SSG SSC SSD SSL SSw SSs SSqbar SSPB SSPQ SSi;
 
 %----------------------------------------------------------------
-% 2. Calibration
+% 2. Calibration and Estimation
 %----------------------------------------------------------------
 
 beta = 0.99;
@@ -55,10 +70,7 @@ gamY = 0.3;
 gampiQE = 0;
 gamYQE = 60;
 
-%----------------------------------------------------------------
-% 3. Steady State Values
-%----------------------------------------------------------------
-
+//Steady State values
 SSA = 1; //(B.26)
 SSChiC = 1; //(B.26)
 SSChiL = 1; //(B.26)
@@ -83,8 +95,9 @@ SSPB = 0.9878; //(B.41)
 SSPQ = 0.8927; //(B.42)
 SSi = (1/SSPB)-1; //(B.43)
 SSiQ = 0.011058944907359073835186213923637; // (B.44)
+
 %----------------------------------------------------------------
-% 4. Model
+% 3. Model
 %----------------------------------------------------------------
 
 model;
@@ -116,10 +129,7 @@ log(nu) = rhonu*log(nu(-1)) - epsnu; //(B.24) The minus sign is to get expansion
 log(ksi) = rhoksi*log(ksi(-1))-epsksi; //(B.25) The minus sign is to get expansionary shock
 end;
 
-%----------------------------------------------------------------
-% 5. Steady State Initialization
-%----------------------------------------------------------------
-
+//Steady State Initialization
 initval;
 A = SSA;
 ChiC = SSChiC;
@@ -150,7 +160,7 @@ iQ = SSiQ;
 end;
 
 %----------------------------------------------------------------
-% 6. Computation
+% 4. Computation
 %----------------------------------------------------------------
 
 shocks;
@@ -163,10 +173,14 @@ var epsksi; stderr 0.0025;
 %var epsthet; stderr 0.06;
 end;
 
-%----------------------------------------------------------------
-% 6. Run Program
-%----------------------------------------------------------------
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order=1, irf=21, nocorr, nofunctions,nomoments,noprint, nograph); 
-%irf1 = oo_.irfs
-%save ET2014_rep_irf
+//Run Program
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(order=1, irf=21, nocorr, nofunctions,nomoments,noprint, nograph); 
+//%irf1 = oo_.irfs
+//%save ET2014_rep_irf
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

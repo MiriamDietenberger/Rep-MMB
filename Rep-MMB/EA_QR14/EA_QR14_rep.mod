@@ -1,3 +1,13 @@
+% EA_QR14
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 % New Keynesian Model with Housing. Two country model, with borrowers and savers.
 % The model is programmed non-linearly so we can take higher order approximations
 %
@@ -14,6 +24,7 @@ close all
 % 1. Defining variables
 %----------------------------------------------------------------
 
+//Define endogenous variables
 var q,c,d,c_borr,d_borr,dpd,dpc,dph,lc_tot,ld_tot,l,l_borr,lc,ld,lc_borr,ld_borr,wc,wd,yc,yd,varrho,inv,varrho_borr,inv_borr,
 q_s,c_s,d_s,c_s_borr,d_s_borr,dpd_s,dpc_s,dpf,lc_s_tot,ld_s_tot,l_s,l_s_borr,lc_s,ld_s,
 lc_s_borr,ld_s_borr,wc_s,wd_s,yc_s,yd_s,varrho_s,inv_s,varrho_s_borr,inv_s_borr,
@@ -25,8 +36,10 @@ prefd,prefd_s,premium,risk,risk_s,prefc,prefc_s,techc,techd,techc_s,techd_s;
 
 //taken out: spread,spread_s,spread_int,CtoY,CtoY_s,
 
+//Define exogenous variables
 varexo e_m,e_premium,e_risk,e_risk_s,e_prefd,e_prefd_s,e_prefc,e_prefc_s,e_techc,e_techd,e_techc_s,e_techd_s,e_tech,e_prefd_com,e_techc_com;
 
+//Define parameters
 parameters beta,beta_borr,lambda,delta,chi,sigma,kappa_b,gamma,alpha,phi,tau,epsilon,epsilon_borr,psi,theta_c,phi_c,theta_d,phi_d,
 gamma_s,alpha_s,tau_s,theta_c_s,phi_c_s,theta_d_s,phi_d_s,gamma_r,gamma_pi,iota_C,iota_L,
 RR_bar,RL_bar,upsilon,upsilon_borr,upsilon_s,upsilon_borr_s,rho_premium,rho_risk,rho_risk_s,rho_prefd,rho_prefd_s,
@@ -34,14 +47,11 @@ rho_prefc,rho_prefc_s,rho_techc,rho_techc_s,rho_techd,rho_techd_s,W_bar,L_total_
 C_borr_bar,L_s_total_bar,L_s_bar,L_s_borr_bar,C_s_bar,D_s_bar,S_s_borr_bar,Z_s_bar,D_s_borr_bar,
 C_s_borr_bar,n,gamma_y,gamma_eta,gamma_eta_s,RL_s_bar,RD_bar,prem,F_bar,G_bar,sigma_bar,mu,omega_bar;
 
-%----------------------------------------------------------------
-% 2. Declaration of External Function
-%----------------------------------------------------------------
-
+//Declaration of External Function
 external_function(name=logncdf, nargs=3);
 
 %----------------------------------------------------------------
-% 3. Calibration
+% 2. Calibration and Estimation
 %----------------------------------------------------------------
 
 // Calibrated Parameters
@@ -102,9 +112,8 @@ rho_techc_s=rho_techc;    % AR coefficient, TFP shock nondurable sector Foreign 
 rho_techd=0.8624;        % AR coefficient, TFP shock durable sector Home country
 rho_techd_s=rho_techd;    % AR coefficient, TFP shock durable sector Foreign country
 
-%----------------------------------------------------------------
-% 4. Steady State Parameters
-%----------------------------------------------------------------
+
+//Steady State Parameters
 gamma = 0.754933479153949;
 gamma_s = 0.754933479153949;
 RR_bar = 1.010101010101010;
@@ -142,7 +151,7 @@ L_s_total_bar = 1.695083417690212;
 
 
 %----------------------------------------------------------------
-% 5. Model
+% 3. Model
 %----------------------------------------------------------------
 
 
@@ -678,6 +687,12 @@ var e_techd_s;stderr 0.0143;
 var e_tech;stderr 0.0083;
 end;
 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order=1,nograph,irf=13) y y_s dpc dpc_s dpd dpd_s r spread_int spread spread_s CtoY CtoY_s c_tot c c_borr c_s_tot c_s c_s_borr yd inv inv_borr yd_s inv_s inv_s_borr l l_borr l_s l_s_borr;
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(order=1,nograph,irf=13) y y_s dpc dpc_s dpd dpd_s r spread_int spread spread_s CtoY CtoY_s c_tot c c_borr c_s_tot c_s c_s_borr yd inv inv_borr yd_s inv_s inv_s_borr l l_borr l_s l_s_borr;
 //stoch_simul(order=2,irf=0) welf_cor welf_per welf_emu;
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

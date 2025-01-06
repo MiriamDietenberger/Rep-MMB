@@ -1,19 +1,38 @@
+% NK_DT12
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // DE FIORE TRISTANI II
 // Revision for EJ, June 2011
 // With coefficients a' la Woodford
 
-// Endogenous variables
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var cons_h, i_dep, infl, omeg_t, s_t, chi_t, thet1_t, thet2_t, 
 y_t, spread, q_t, ygap, cons_e, mon_cost, Bankrupt, fo_t, ho_t,  i_l, credit, stdoi_t, %% deleted fo_prime
 Util, Welf,
 i_e, y_e, a_t, mu_t, pol_t, tau_t; 
 
+// Define exogenous variables
 // Disturbances;
 varexo epsA, epsmu,epspol,epstau,epsstd;
 
-//PARAMETERS
+//Define parameters
 parameters psai, phi, sig, mu_hat, bet, zet, rho_mu, epsil, thet, Omega1, 
 mu_oi, std_oi, rho_a, tau, poly, rhoint, nbeta, zet_hous, zet_gap, rho_pol, y_t_ss, y_e_ss;
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model;           
 // Welfare
@@ -67,6 +86,10 @@ var epstau; stderr 1.0;
 var epspol; stderr 0.25; // in percentage terms
 var epsstd; stderr 0.6;
 end;
+
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 stoch_simul (AR=100,IRF=0, noprint,nograph);
 %stoch_simul(order=1,irf=12, irf_shocks = (epsA, epspol, epstau)) infl ygap i_dep spread credit cons_h q_t chi_t tau_t a_t pol_t stdoi_t  Bankrupt cons_e omeg_t s_t y_t y_e; 
 /*
@@ -128,84 +151,84 @@ close(1);
 % axis tight;
 % title('c','FontSize',14);
 
- close all;
+% close all;
 
-figure(100);
-subplot(3,3,1);
-p1=plot(-infl_epsA ,'LineWidth',2);
-ylabel('%');
-line(1:1:12,zeros(size(infl_epsA)),'Color','r','LineWidth',1);
-legend([p1],{'DT'});
-axis tight;     % 
-ylim([-inf 0.24]);
-title('infl','FontSize',10);
+% figure(100);
+% subplot(3,3,1);
+% p1=plot(-infl_epsA ,'LineWidth',2);
+% ylabel('%');
+% line(1:1:12,zeros(size(infl_epsA)),'Color','r','LineWidth',1);
+% legend([p1],{'DT'});
+% axis tight;     % 
+% ylim([-inf 0.24]);
+% title('infl','FontSize',10);
 
-subplot(3,3,2);
-plot(-ygap_epsA,'LineWidth',2); 
-ylabel('%');
-line(1:1:12,zeros(size(infl_epsA)),'Color','r','LineWidth',1);
-axis tight;     % 
-ylim([-0.5 inf]);
-title('ygap','FontSize',10);
+% subplot(3,3,2);
+% plot(-ygap_epsA,'LineWidth',2); 
+% ylabel('%');
+% line(1:1:12,zeros(size(infl_epsA)),'Color','r','LineWidth',1);
+% axis tight;     % 
+% ylim([-0.5 inf]);
+% title('ygap','FontSize',10);
 
-subplot(3,3,3);
-plot(-i_dep_epsA ,'LineWidth',2);
-ylabel('%');
-line(1:1:12,zeros(size(infl_epsA)),'Color','r','LineWidth',1);
-axis tight;     % 
-ylim([0 0.3]);
-title('i dep','FontSize',10);
+% subplot(3,3,3);
+% plot(-i_dep_epsA ,'LineWidth',2);
+% ylabel('%');
+% line(1:1:12,zeros(size(infl_epsA)),'Color','r','LineWidth',1);
+% axis tight;     % 
+% ylim([0 0.3]);
+% title('i dep','FontSize',10);
 
-subplot(3,3,4);
-plot(-spread_epsA,'LineWidth',2);
-ylabel('%');    
-line(1:1:12,zeros(size(infl_epsA)),'Color','r','LineWidth',1);
-axis tight;     % 
-ylim([-inf 0]);
-title('spread','FontSize',10);
+% subplot(3,3,4);
+% plot(-spread_epsA,'LineWidth',2);
+% ylabel('%');    
+% line(1:1:12,zeros(size(infl_epsA)),'Color','r','LineWidth',1);
+% axis tight;     % 
+% ylim([-inf 0]);
+% title('spread','FontSize',10);
 
-subplot(3,3,5);
-plot(-credit_epsA ,'LineWidth',2);
-ylabel('%');
-line(1:1:12,zeros(size(infl_epsA)),'Color','r','LineWidth',1);
-axis tight;     % 
-ylim([-4.3 0]);
-title('credit','FontSize',10);
+% subplot(3,3,5);
+% plot(-credit_epsA ,'LineWidth',2);
+% ylabel('%');
+% line(1:1:12,zeros(size(infl_epsA)),'Color','r','LineWidth',1);
+% axis tight;     % 
+% ylim([-4.3 0]);
+% title('credit','FontSize',10);
 
-subplot(3,3,6);
-plot(-cons_h_epsA ,'LineWidth',2);
-ylabel('%');
-line(1:1:12,zeros(size(infl_epsA)),'Color','r','LineWidth',1);
-axis tight;     % 
-ylim([-4.3 0]);
-title('c','FontSize',10);
+% subplot(3,3,6);
+% plot(-cons_h_epsA ,'LineWidth',2);
+% ylabel('%');
+% line(1:1:12,zeros(size(infl_epsA)),'Color','r','LineWidth',1);
+% axis tight;     % 
+% ylim([-4.3 0]);
+% title('c','FontSize',10);
 
-subplot(3,3,7);
-plot(-q_t_epsA,'LineWidth',2);
-line(1:1:12,zeros(size(infl_epsA)),'Color','r','LineWidth',1)
-axis tight;     % 
-ylim([-inf 0]);
-title('q','FontSize',10);
+% subplot(3,3,7);
+% plot(-q_t_epsA,'LineWidth',2);
+% line(1:1:12,zeros(size(infl_epsA)),'Color','r','LineWidth',1)
+% axis tight;     % 
+% ylim([-inf 0]);
+% title('q','FontSize',10);
 
-subplot(3,3,8);
-plot(chi_t_epsA,'LineWidth',2);
-line(1:1:12,zeros(size(infl_epsA)),'Color','r','LineWidth',1)
-axis tight;     % 
-ylim([-inf 0.15]);
-title('-\chi','FontSize',10);
+% subplot(3,3,8);
+% plot(chi_t_epsA,'LineWidth',2);
+% line(1:1:12,zeros(size(infl_epsA)),'Color','r','LineWidth',1)
+% axis tight;     % 
+% ylim([-inf 0.15]);
+% title('-\chi','FontSize',10);
 
-subplot(3,3,9);
-plot(-a_t_epsA+q_t_epsA+chi_t_epsA,'LineWidth',2);
-line(1:1:12,zeros(size(infl_epsA)),'Color','r','LineWidth',1)
-axis tight;     % 
-ylim([-1.1 0]);
-legend('DT');
-title('w','FontSize',10);
+% subplot(3,3,9);
+% plot(-a_t_epsA+q_t_epsA+chi_t_epsA,'LineWidth',2);
+% line(1:1:12,zeros(size(infl_epsA)),'Color','r','LineWidth',1)
+% axis tight;     % 
+% ylim([-1.1 0]);
+% legend('DT');
+% title('w','FontSize',10);
 
- orient(figure(100),'portrait');
+%  orient(figure(100),'portrait');
 % //print -dpsc2 TaylA -r1200;
 % //print -dpdf TaylA ;
- print -depsc2 ..\Graphs\TaylA -r1200;
+%  print -depsc2 ..\Graphs\TaylA -r1200;
 
 % figure(101);
 % subplot(3,3,1);
@@ -310,18 +333,18 @@ title('w','FontSize',10);
 % //print -dpsc2 TaylF -r1200;
 % //print -dpdf TaylF ;
 
- infl_Tayl_epstau = infl_epstau ; 
- ygap_Tayl_epstau = ygap_epstau ; 
- i_dep_Tayl_epstau = i_dep_epstau ; 
- spread_Tayl_epstau = spread_epstau ; 
- tau_t_Tayl_epstau = tau_t_epstau ; 
- credit_Tayl_epstau = credit_epstau ; 
- Bankrupt_Tayl_epstau = Bankrupt_epstau ; 
- cons_h_Tayl_epstau = cons_h_epstau ; 
- q_t_Tayl_epstau = q_t_epstau ; 
- chi_t_Tayl_epstau= chi_t_epstau ; 
+% infl_Tayl_epstau = infl_epstau ; 
+% ygap_Tayl_epstau = ygap_epstau ; 
+% i_dep_Tayl_epstau = i_dep_epstau ; 
+% spread_Tayl_epstau = spread_epstau ; 
+% tau_t_Tayl_epstau = tau_t_epstau ; 
+% credit_Tayl_epstau = credit_epstau ; 
+% Bankrupt_Tayl_epstau = Bankrupt_epstau ; 
+% cons_h_Tayl_epstau = cons_h_epstau ; 
+% q_t_Tayl_epstau = q_t_epstau ; 
+% chi_t_Tayl_epstau= chi_t_epstau ; 
 
- save Taylor_DT infl_Tayl_epstau ygap_Tayl_epstau i_dep_Tayl_epstau spread_Tayl_epstau tau_t_Tayl_epstau credit_Tayl_epstau Bankrupt_Tayl_epstau cons_h_Tayl_epstau q_t_Tayl_epstau chi_t_Tayl_epstau ; 
+% save Taylor_DT infl_Tayl_epstau ygap_Tayl_epstau i_dep_Tayl_epstau spread_Tayl_epstau tau_t_Tayl_epstau credit_Tayl_epstau Bankrupt_Tayl_epstau cons_h_Tayl_epstau q_t_Tayl_epstau chi_t_Tayl_epstau ; 
 
 % // CHANGE TO inflL, OUTPUT GAP, I RATE, with sticky and flex prices, 3 models
 
@@ -435,56 +458,58 @@ title('w','FontSize',10);
 % axis tight;
 % title('w','FontSize',14);
 
- load Taylor_flex_DT; % load Taylor_flex_NK; load Taylor_flex_CC; 
+% load Taylor_flex_DT; % load Taylor_flex_NK; load Taylor_flex_CC; 
 
-figure(103);
-subplot(3,2,1);
- p1=plot(infl_epspol,'LineWidth',2);
- ylabel('%');
- line(1:1:12,zeros(size(infl_epspol)),'Color','r','LineWidth',1)
- legend([p1],{'DT'});
- axis([1 12 -0.6 0]);
- title({'(a) sticky prices: infl'},'FontSize',10,'FontName','Serif','FontAngle','italic');
+% figure(103);
+% subplot(3,2,1);
+% p1=plot(infl_epspol,'LineWidth',2);
+% ylabel('%');
+% line(1:1:12,zeros(size(infl_epspol)),'Color','r','LineWidth',1)
+% legend([p1],{'DT'});
+% axis([1 12 -0.6 0]);
+% title({'(a) sticky prices: infl'},'FontSize',10,'FontName','Serif','FontAngle','italic');
 
-subplot(3,2,3);
- plot(ygap_epspol,'LineWidth',2); 
- ylabel('%');
- line(1:1:12,zeros(size(infl_epspol)),'Color','r','LineWidth',1)
- axis([1 12 -1.0 1.5]);
- title('ygap','FontSize',10,'FontName','Serif','FontAngle','italic');
+% subplot(3,2,3);
+% plot(ygap_epspol,'LineWidth',2); 
+% ylabel('%');
+% line(1:1:12,zeros(size(infl_epspol)),'Color','r','LineWidth',1)
+% axis([1 12 -1.0 1.5]);
+% title('ygap','FontSize',10,'FontName','Serif','FontAngle','italic');
 
-subplot(3,2,5);
- plot(i_dep_epspol,'LineWidth',2);
- ylabel('%');
- line(1:1:12,zeros(size(infl_epspol)),'Color','r','LineWidth',1)
- axis([1 12 -0.4 0.04]);
- title('i dep','FontSize',10,'FontName','Serif','FontAngle','italic');
+% subplot(3,2,5);
+% plot(i_dep_epspol,'LineWidth',2);
+% ylabel('%');
+% line(1:1:12,zeros(size(infl_epspol)),'Color','r','LineWidth',1)
+% axis([1 12 -0.4 0.04]);
+% title('i dep','FontSize',10,'FontName','Serif','FontAngle','italic');
 
-subplot(3,2,2);
- p2=plot(infl_flex_epspol,'LineWidth',2);
- ylabel('%');
- line(1:1:12,zeros(size(infl_epspol)),'Color','r','LineWidth',1)
- legend([p2],{'DT'});
- axis([1 12 -0.6 0]);
- title({'(b) flexible prices: infl'},'FontSize',10,'FontName','Serif','FontAngle','italic');
+% subplot(3,2,2);
+% p2=plot(infl_flex_epspol,'LineWidth',2);
+% ylabel('%');
+% line(1:1:12,zeros(size(infl_epspol)),'Color','r','LineWidth',1)
+% legend([p2],{'DT'});
+% axis([1 12 -0.6 0]);
+% title({'(b) flexible prices: infl'},'FontSize',10,'FontName','Serif','FontAngle','italic');
 
-subplot(3,2,4);
- plot(ygap_flex_epspol,'LineWidth',2); 
- ylabel('%');
- line(1:1:12,zeros(size(infl_epspol)),'Color','r','LineWidth',1)
- axis([1 12 -1.0 1.5]);
- title('ygap','FontSize',10,'FontName','Serif','FontAngle','italic');
+% subplot(3,2,4);
+% plot(ygap_flex_epspol,'LineWidth',2); 
+% ylabel('%');
+% line(1:1:12,zeros(size(infl_epspol)),'Color','r','LineWidth',1)
+% axis([1 12 -1.0 1.5]);
+% title('ygap','FontSize',10,'FontName','Serif','FontAngle','italic');
 
- subplot(3,2,6);
- plot(i_dep_flex_epspol,'LineWidth',2);
- ylabel('%');
- line(1:1:12,zeros(size(infl_epspol)),'Color','r','LineWidth',1)
- axis([1 12 -0.4 0.04]);
- title('i dep','FontSize',10,'FontName','Serif','FontAngle','italic');
+% subplot(3,2,6);
+% plot(i_dep_flex_epspol,'LineWidth',2);
+% ylabel('%');
+% line(1:1:12,zeros(size(infl_epspol)),'Color','r','LineWidth',1)
+% axis([1 12 -0.4 0.04]);
+% title('i dep','FontSize',10,'FontName','Serif','FontAngle','italic');
 
- orient(figure(103),'portrait');
+% orient(figure(103),'portrait');
 % //print -dpsc2 TaylP -r1200;
 % //print -dpdf TaylP ;
  print -depsc2 ..\Graphs\TaylP -r1200;
 */
+//***************************
 
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

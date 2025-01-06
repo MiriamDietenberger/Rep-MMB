@@ -1,3 +1,14 @@
+% NK_AFL15
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+
 //**************************************************************************
 // A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
 //
@@ -15,16 +26,24 @@
 // Journal of Economic Dynamics and Control, vol. 52 Issue C, 2015, pp. 285-307
 //**************************************************************************
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
 global mcss SIG ALFA PHI CoY zss;  
 
+//Define endogenous variables
 var c pai rn k z y mc n q inv rok a g uc un Fk Fn bk d deprat ra br fai rd crun cpai rsh;  
+
+//Define exogenous variables
 varexo ua ug ur;                           
-//------------------------------------------------------------------------------------------------------------------------
 
-//2. Parameter declaration
-
-//------------------------------------------------------------------------------------------------------------------------
+//Define parameters
 parameters PSI calvo ritcapss YoK IoK CoY PAIss css rnss kss zss yss mcss nss qss invss rokss gss ucss unss Fkss Fnss bkss dss depratss rass brss faiss rdss crunss cpaiss XXss OMP SIG PHI BETTA RHOa ALFA RHOg GY OMK THETA  DELTA EPSI  BET HH vP vY vQ vR VV CR a_ss;
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 a_ss	= 0;
 SIG     = 1;			%intertemporal elasticity of consumption
@@ -95,11 +114,10 @@ OMP     = yss*(EPSI-1)*calvo/((1-BETTA*calvo)*(1-calvo));
 PSI=THETA*qss*kss*(-0.135);
 crunss=CR*brss*rass*qss*kss;
 cpaiss=0;
-//------------------------------------------------------------------------------------------------------------------------
 
-//3. Defining the model
-
-//------------------------------------------------------------------------------------------------------------------------
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model;
 // 1.Marginal utility consumption
@@ -224,6 +242,12 @@ end;
 
 steady(nocheck);
 
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 //Computes IRF
-%stoch_simul(irf=41,order=1, nograph) y pai c inv deprat br;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(irf=41,order=1, nograph) y pai c inv deprat br;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

@@ -1,3 +1,13 @@
+% NK_BGUS10
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //**************************************************************************
 // A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
 //
@@ -19,18 +29,26 @@
 // See Blanchard & Gal� (2010) pp. 13 for the model equations.
 // This version implements the US specification of the model (fluid labor market specification)
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var pi mc xhat c a n uhat i xhatf cf nf uhatf r y yf;
 
 
-
+//Define exogenous variables
 varexo a_;
 
 
 
-
+//Define parameters
 parameters
-
 gam alf the bet phi eps lam M gdel ra x_ u del g B chi bphi alfux gmu xi0 xi1 k0 kl kf rho;
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 x_  = 0.7;
 u  = 0.05;
@@ -64,7 +82,9 @@ kl = lam*((alf/del)*gmu*(1-del)*(1-x_) + bet*(1-del)*gmu*xi1 );
 kf = lam*bet*(1-del)*gmu*((alf/del)-xi0);
 rho = -log(bet);
 
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -106,5 +126,11 @@ var a_;
 stderr 1;
 end;
 
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 // stoch_simul (irf = 30, ar=100);
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

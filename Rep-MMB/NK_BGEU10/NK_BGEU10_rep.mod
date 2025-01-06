@@ -1,8 +1,31 @@
+% NK_BGEU10
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // Replication of Blanchard/Gali (2010), Optimal Monetary Policy (EU specification)
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var pi uhat a eta inflation; 
+
+//Define exogenous variables
 varexo a_; 
 
+//Define parameters
 parameters gam alf the bet phi eps lam M gdel ra x u del g B chi bphi alfux gmu xi0 xi1 k0 kl kf rho; 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 x  = 0.25;                                                          
 u  = 0.1;                                                     
@@ -36,6 +59,10 @@ kl = lam*((alf/del)*gmu*(1-del)*(1-x) + bet*(1-del)*gmu*xi1 );
 kf = lam*bet*(1-del)*gmu*((alf/del)-xi0);
 rho = -log(bet);
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
+
 model(linear); 
 pi  =  bet * pi(+1) - k0*uhat + kl*uhat(-1) + kf*uhat(+1) - lam*bphi*gam * a; 
 pi + eta - eta(-1);  
@@ -51,5 +78,12 @@ end;
 
 steady; 
 check; 
-%stoch_simul (irf = 31, ar=100, nograph); 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//%stoch_simul (irf = 31, ar=100, nograph); 
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

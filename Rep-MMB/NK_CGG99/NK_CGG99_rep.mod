@@ -1,3 +1,13 @@
+% NK_CGG99
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //**************************************************************************
 // A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
 //
@@ -21,18 +31,26 @@
 // We use the same parameters as in Rotemberg Woodford (1997) and add a backward looking
 // inflation share of 0.48 and a backward looking part of output of 0.44.
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
+//Define endogenous variables
 var x i pi;
 
 
-
+//Define exogenous variables
 varexo inflation_ demand_;
 
 
-
+//Define parameters
 parameters
 
  theta sigma phi lambda beta;
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 theta  =  0.44;
 lambda =  0.0244;
@@ -40,7 +58,9 @@ phi    =  0.48;
 sigma  = -6.25;
 beta   =  1/(1+0.035/4);
 
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -66,6 +86,11 @@ var inflation_;
 stderr 0.4;
 end;
 
-
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 //stoch_simul(irf = 0, ar=100, noprint);
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

@@ -1,3 +1,13 @@
+% EAUS_NAWMctww
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //**************************************************************************
 // This file has been transformed from its MMB version to be a replication 
 // .mod file in June 2022.
@@ -30,8 +40,11 @@
 
 // Last edited: October 22, 2013 by Elena Afanasyeva
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
-// Initialization of endogenous variables
+//Define endogenous variables
 var EAUS_RER EA_B EA_BF EA_BY EA_C EA_CI EA_CJ EA_CY EA_D EA_EPSILONM EA_FH EA_FI
   EA_FJ EA_FX EA_G EA_GAMMAB EA_GAMMAI EA_GAMMAIDER EA_GAMMAIMC EA_GAMMAIMCDAG
   EA_GAMMAIMI EA_GAMMAIMIDAG EA_GAMMAU EA_GAMMAUDER EA_GAMMAV EA_GAMMAVI
@@ -60,7 +73,7 @@ var EAUS_RER EA_B EA_BF EA_BY EA_C EA_CI EA_CJ EA_CY EA_D EA_EPSILONM EA_FH EA_F
   EA_LABORTAXBASE;
 
 
-// Initialization of exogenous variables
+// Define exogenous variables
 varexo  EA_EPSR EA_EPSRP EA_EPSTAUC EA_EPSTAUD EA_EPSTAUK EA_EPSTAUN
   EA_EPSTAUWF EA_EPSTAUWH EA_EPSTR EA_EPSZ
   US_EPSTAUC US_EPSTAUD US_EPSTAUK
@@ -68,7 +81,7 @@ varexo  EA_EPSR EA_EPSRP EA_EPSTAUC EA_EPSTAUD EA_EPSTAUK EA_EPSTAUN
   EA_EPSBYTARGET US_EPSBYTARGET EA_EPSTTARGET dummy_FR EA_EPSG US_EPSR US_EPSG;
 
 
-// Initialization of parameters
+// Define parameters
 parameters
   EA_ALPHA EA_BETA EA_BFYTARGET EA_CHIH EA_CHII EA_CHIJ EA_CHIX
   EA_DELTA EA_ETA EA_ETAI EA_ETAJ EA_GAMMAB1 EA_GAMMAI1 EA_GAMMAIMC1
@@ -92,6 +105,10 @@ parameters
   US_TAUWFBAR US_TAUWHBAR US_TRYBAR US_YBAR US_ZBAR
   EA_UPSILONT EA_UPSILONTR
   US_UPSILONT US_UPSILONTR US_RER EA_interest_EXOG US_interest_EXOG ;
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 //**************************************************************************
 
@@ -294,6 +311,9 @@ EA_YBAR = 3.59766;
 US_PYBAR = 0.990296;
 US_YBAR = 4.03465;
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 // --------------------------------- //
 //         MODEL EQUATIONS           //
@@ -841,5 +861,11 @@ var	US_EPSTR=0.1;
 var	US_EPSZ=0.1;
 end;
 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order=1, irf = 20, ar=100, nograph, noprint) US_YGAP EA_YGAP;
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(order=1, irf = 20, ar=100, nograph, noprint) US_YGAP EA_YGAP;
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

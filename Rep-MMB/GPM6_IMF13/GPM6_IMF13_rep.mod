@@ -1,3 +1,13 @@
+% GPM6_IMF13
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // Model: GPM6_IMF13
 // GPM6 - The Global Projection Model with 6 Regions
 // Further references:
@@ -10,7 +20,11 @@
 // 6 Regions: EA6(Emerging Asia Countries), EU(Euro Area), JA(Japan),   
 // LA6(Latin America), RC6(Remaining Countries), US(United States)
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
+//Define endogenous variables
 var 
 BLT_BAR_US BLT_US BLT_BAR_EU BLT_EU BLT_BAR_JA BLT_JA  
 DOT_LZ_BAR_EA6 DOT_LZ_BAR_LA6 DOT_LZ_BAR_RC6 
@@ -61,7 +75,7 @@ LRR_US LRR_BAR_US LRR_EU LRR_BAR_EU LRR_JA LRR_BAR_JA
 LRR_EA6 LRR_BAR_EA6 LRR_LA6 LRR_BAR_LA6 LRR_RC6 LRR_BAR_RC6
 LRR_GAP_US LRR_GAP_EU LRR_GAP_JA LRR_GAP_EA6 LRR_GAP_LA6 LRR_GAP_RC6 
 ;
-
+//Define exogenous variables
 varexo 
 RES_DOT_LZ_BAR_EA6 RES_PIETAR_EA6 RES_G_EA6 RES_LGDP_BAR_EA6 RES_LZ_BAR_EA6 RES_PIE_EA6 
 RES_RR_BAR_EA6 RES_RR_DIFF_EA6 RES_RS_EA6 RES_Y_EA6 RES_YY_EA6
@@ -76,7 +90,7 @@ RES_RR_BAR_RC6 RES_RR_DIFF_RC6 RES_RS_RC6 RES_Y_RC6 RES_YY_RC6
 RES_BLT_BAR_US RES_G_US RES_BLT_US RES_LGDP_BAR_US RES_PIE_US RES_RR_BAR_US 
 RES_RS_US RES_UNR_BAR_US RES_UNR_G_US RES_UNR_GAP_US RES_Y_US RES_YY_US  
 ;
-
+//Define parameters
 parameters 
 beta_reergap_EA6 beta_reergap_EU beta_reergap_JA beta_reergap_LA6 beta_reergap_RC6 beta_reergap_US 
 alpha1_EU alpha1_JA alpha1_US alpha2_EU alpha2_JA alpha2_US alpha3_EU alpha3_JA alpha3_US  
@@ -143,6 +157,10 @@ lrrw01_LA6 lrrw04_LA6 lrrw12_LA6 lrrw20_LA6
 lrrw01_RC6 lrrw04_RC6 lrrw12_RC6 lrrw20_RC6
 beta3m_US beta3m_EU beta3m_JA beta3m_EA6 beta3m_LA6 beta3m_RC6
 ;
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 //  Xij (export destination) Data not usedAvg. 1998-07 						
 //		 US 	 		Eu 	 		JA 	 		EA 	 		LA 	 		RC 
@@ -552,6 +570,10 @@ beta3m_JA =1*beta3_JA ;
 beta3m_EA6=1*beta3_EA6;
 beta3m_LA6=1*beta3_LA6;
 beta3m_RC6=1*beta3_RC6;
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model;
           // EA
@@ -1308,6 +1330,9 @@ end;
 // contains nonstationary variables.
 steady(nocheck);
 
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 /*
 stoch_simul(order=1,irf=40,nodisplay,nograph)
  Y_EU Y_JA Y_US Y_EA6 Y_LA6 Y_RC6
@@ -1324,10 +1349,11 @@ stoch_simul(order=1,irf=40,nodisplay,nograph)
 //stoch_simul(order=1,irf=40,irf_shocks=(RES_Y_EA6, RES_PIE_EA6,RES_RS_EA6,RES_YY_EA6))
 //Y_EA6 PIE_EA6 RS_EA6 RR_EA6 LRR_EA6 FACT_EA6 REER_T_EA6 REER_T_GAP_EA6 
 //Y_US Y_EU Y_JA Y_LA6 Y_EA6 Y_RC6 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order=1,irf=40,irf_shocks=(RES_Y_US,RES_Y_EU,RES_Y_JA,RES_Y_LA6,RES_Y_RC6), nograph)
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(order=1,irf=40,irf_shocks=(RES_Y_US,RES_Y_EU,RES_Y_JA,RES_Y_LA6,RES_Y_RC6), nograph)
 //Y_US Y_EU Y_JA Y_LA6 Y_EA6 Y_RC6 
+//***************************
 
-
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 

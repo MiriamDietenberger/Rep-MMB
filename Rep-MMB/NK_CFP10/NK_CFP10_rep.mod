@@ -1,3 +1,14 @@
+% NK_CFP10
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+
 // Replication of
 // Charles T. Carlstrom & Timothy S. Fuerst & Matthias Paustian, 2010.
 // "Optimal Monetary Policy in a Model with Agency Costs" 
@@ -7,7 +18,11 @@
 // Model replication coded by: Philipp Lieberknecht, 
 //                             e_mail: philipp.lieberknecht@gmail.com
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
+//Define endogenous variables
 var 
 y       // output
 yeff    // output without price and credit frictions
@@ -30,6 +45,7 @@ n       // net worth shock
 eps_R   // monetary policy shock
 ;
 
+//Define exogenous variables
 varexo
 eta_a   // technology shock innovation
 eta_pi  // mark-up shock innovation
@@ -37,6 +53,7 @@ eta_n   // net worth shock innovation
 eta_R   // monetary policy shock innovation
 ;
 
+//Define parameters
 parameters
 betta   $\beta$             // discount factor
 sig     $\sigma$            // CRRA utility parameter
@@ -55,6 +72,10 @@ tau     $\tau$              // Taylor rule coefficient inflation
 tau_g   $\tau_g$            // Taylor rule coefficient output gap
 ;
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+
 betta   = 0.99;
 sig     = 0.16;
 thet    = 0.47;
@@ -72,8 +93,10 @@ tau     = 1.5;
 tau_g   = 0.5;
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Model %%%
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
+
 model(linear); 
 
 [name='(A1)']
@@ -125,6 +148,13 @@ end;
 check;
 steady;
 close all;
-%stoch_simul(order=1,irf=21, noprint) pi R y;
-%stoch_simul(order=1,irf=21, noprint, nograph);
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//%stoch_simul(order=1,irf=21, noprint) pi R y;
+//%stoch_simul(order=1,irf=21, noprint, nograph);
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

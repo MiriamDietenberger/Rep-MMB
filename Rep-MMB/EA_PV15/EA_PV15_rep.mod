@@ -1,3 +1,13 @@
+% EA_PV15
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // Model: EA_PV15
 
 // Further references:
@@ -18,6 +28,7 @@
 // 1. Defining variables
 %----------------------------------------------------------------
 
+//Define endogenous variables
 var y_h y_f y_ea 		% output
 	c_h c_f c_ea		% consumption
 	r					% nominal ECB rate
@@ -74,9 +85,11 @@ var y_h y_f y_ea 		% output
     ib_shock_h ib_shock_f		% bank liability shock
     r_shock ;					% ECB monetary policy shock
 
+//Define exogenous variables
 varexo	e_a_h e_g_h e_beta_h  e_a_f e_g_f e_beta_f e_n_h e_n_f e_q_h e_q_f e_rL_h e_rL_f  e_w_h e_w_f e_ib_h e_ib_f %e_pi_h e_pi_f  e_pi  e_ac e_ac_h e_ac_f
         e_a e_g e_beta e_n e_q e_rL e_w e_ib e_r;
 
+//Define parameters
 parameters	beta alpha delta thetap_h thetap_f xi_B xi_I_h xi_I_f GYss 
 			rho_a_h rho_g_h rho_a_f rho_g_f rho_beta_f rho_beta_h rho_n_h rho_n_f rho_q_h rho_q_f rho_L_h rho_L_f rho_W_h rho_W_f rho_B_h rho_B_f
  			u_W_h u_W_f rho_ag_h rho_ag_f
@@ -90,7 +103,7 @@ parameters	beta alpha delta thetap_h thetap_f xi_B xi_I_h xi_I_f GYss
 			;
 
 %----------------------------------------------------------------
-// 2. Calibration
+// 2. Calibration and Estimation
 %----------------------------------------------------------------
 
 // CALIBRATED PARAMETERS
@@ -412,6 +425,13 @@ var e_ib_h;  stderr 2.28;
 //var e_r;  stderr .09;
 
 end;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order=1,irf=24) y_h y_f c_h c_f pic_h pic_f r y_ea ;
-%stoch_simul(order=1,irf=24, noprint, nograph);
+
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(order=1,irf=24) y_h y_f c_h c_f pic_h pic_f r y_ea ;
+//%stoch_simul(order=1,irf=24, noprint, nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
