@@ -1,13 +1,27 @@
-//CMR 2010-Financial Accelerator Model (FAM)
+% US_CMR10fa
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.//CMR 2010-Financial Accelerator Model (FAM)
 
+//**************************************************************************
 // Based on code by Fabio Verona (Original: Christiano web site)
+//**************************************************************************
 
-// Endogenous Variables
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+// Define endogenous variables
 var piU, sU, rkU, iU, uU, omegabarU, RkXU, nU, qU, uzcU, lambdazU, cU, wU,
       hU, kbarU, ReXU, pstarU, wstarU, FpXU, FwXU,YU, PrU,BU
       lambdafU, pitargetU, muupU, gU, muzstarU, gammaU, epsilU, sigmaU, zetacU, zetaiU, tauoU;
 
-// Exogenous Variables
+// Define exogenous Variables
 varexo e_xpU e_lambdafU, e_pitargetU, e_muupU, e_gU, e_muzstarU, e_gammaU, e_epsilU, e_sigmaU,  e_zetaiU, e_tauoU;
 
 // Steady-state values:
@@ -17,8 +31,7 @@ parameters rho1_lambdafU, rho1_pitargetU, rho1_muupU, rho1_gU, rho1_muzstarU, rh
 
 parameters std1_lambdafU, std1_pitargetU, std1_muupU, std1_gU, std1_muzstarU, std1_gammaU, std1_epsilU, std1_sigmaU,  std1_zetaiU, std1_tauoU;
 
-//PARAMETERS
-
+//Define parameters
 parameters lambdawUU, sigmaLXUU, betaUU,xiwUU, bUU,
       psiLXUU, iotaw1UU, iotamuUU, muUU, weUU, bigthetaUU, sigmaaUU, SdouprXUU, zetaUU, 
       upsilUU, alphaUU, deltaUU, xipUU, iota1UU, etagUU,
@@ -26,6 +39,9 @@ parameters lambdawUU, sigmaLXUU, betaUU,xiwUU, bUU,
       phiUU, pibarUU, vlUU;
 
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%--------------------------------------------------------------
 pp=load('ss_parameters_US_FAM.mat');
 %for i=1:M_.param_nbr;
     %name = deblank(M_.param_names(i,:));
@@ -41,18 +57,20 @@ set_param_value(M_.param_names{jj},eval(M_.param_names{jj}));
 end;
 
 
-
 //Annualizing the variables
 //Inflation=(piU-1)*400;
 //Re_an=((ReXU+1)^4-1)*100;
 //Rk_an=((RkXU+1)^4-1)*100;
 
+
+%----------------------------------------------------------------
+% 3. Model
+%---------------------------------------------------------------
 model;
 
 // Welfare
 //Util = zetacU*(log(cU*muzstarU-bUU*cU(-1))-zetaUU*psiLXUU/(1+sigmaLXUU)*(wstarU/wplusU)^((1+sigmaLXUU)*lambdawUU/(lambdawUU-1))*hU^(1+sigmaLXUU)-vUU/(1-sigmaqUU)*((1+taucUU)*piU*cU*muzstarU/(mbU(-1)*mU^(thetaUU*(1-chiiU))*(1-mU)^((1-chiiU)*(1-thetaUU))*dmU(-1)^chiiU))^(1-sigmaqUU)-(exp(sqrt(HdouprXUU/2)*(mU*(1+xU(-1))/mU(-1)-piUU*muzstarUU))+exp(-sqrt(HdouprXUU/2)*(mU*(1+xU(-1))/mU(-1)-piUU*muzstarUU))-2));
 //Welf = Util + nbeta*Welf(+1);
-
 
 // Model equations
 
@@ -96,7 +114,6 @@ uzcU-zetacU*(1+taucUU)*lambdazU;
 //Intertemporal efficiency of time deposit (eq A.24)
 -zetacU*lambdazU+(betaUU*zetacU(+1)*lambdazU(+1)/(muzstarU(+1)*piU(+1)))*(1+(1-taudUU)*ReXU);
 
-
 //Conditions associated with Calvo sticky prices
 //(eq A.3)
 pstarU - ((1-xipUU)*( ( ( (1 - xipUU*(( (pitargetU^iota1UU) * (piU(-1)^(1-iota1UU)) * pibarUU^(1-iota1UU-(1-iota1UU)) )/piU)^(1/(1-lambdafU)) ) / (1-xipUU) ) ) ^ lambdafU ) + xipUU*(((( (pitargetU^iota1UU) * (piU(-1)^(1-iota1UU)) * pibarUU^(1-iota1UU-(1-iota1UU)) )/piU)*pstarU(-1))^( lambdafU / (1-lambdafU) )) )^(1/( lambdafU / (1-lambdafU) ));
@@ -130,7 +147,6 @@ YU-( (pstarU^(lambdafU/(lambdafU-1))) * ( epsilU * vlUU * ( (uU*kbarU(-1)/(muzst
 PrU-( ( normcdf(( (log(omegabarU)+sigmaU(-1)^2/2)/sigmaU(-1) )-sigmaU(-1))+omegabarU*(1-normcdf(( (log(omegabarU)+sigmaU(-1)^2/2)/sigmaU(-1) ))) )-( (1-muUU)*normcdf(( (log(omegabarU)+sigmaU(-1)^2/2)/sigmaU(-1) )-sigmaU(-1))+omegabarU*(1-normcdf(( (log(omegabarU)+sigmaU(-1)^2/2)/sigmaU(-1) ))) ) )*(1+RkXU)*kbarU(-1)*qU(-1)/( kbarU(-1)*qU(-1)-nU(-1));
 //Total Loans
 BU -(kbarU(-1)*qU(-1)-nU(-1));
-
 
 // Shock Equations
 // Equations take the form: x = x_ *(1+e_x) + rho_x*(x(-1) - x_),
@@ -186,6 +202,7 @@ zetaiU = zetaiUU;
 tauoU = tauoUU;
 end;
 
+//Shocks
 shocks;
 //var e_xpU; stderr std1_xpU; //stderr 0;
 var e_xpU = 0.519^2;//
@@ -210,8 +227,20 @@ check;
 steady(solve_algo=4);
 
 //options_.loglinear=1;
-%stoch_simul(order=1,nocorr,nomoments,nograph,irf=20)YU qU cU iU hU ReXU piU nU PrU BU RkXU;// cU iU ReXU piU wU nU qU;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul(order=1,nocorr,nomoments,nograph,irf=20)YU qU cU iU hU ReXU piU nU PrU BU RkXU;// cU iU ReXU piU wU nU qU;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
+
+
+
+
 /*
 figure('color','w') 
 //str=['CMR FA model,transitory technology shock'];

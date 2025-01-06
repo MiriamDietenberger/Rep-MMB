@@ -1,3 +1,13 @@
+% NK_MI14
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //**************************************************************************
 // A Theory of Countercyclical Government Multiplier
 //
@@ -6,28 +16,30 @@
 // AEJ:Macro, 2014
 //**************************************************************************
 
-//**************************************************************************
-//Endogenous variables
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var a c pie l n th R g gendo
-//as in original file.
-//add output as endogenous variable to make it consistent with MMB 
+%as in original file.
+%add output as endogenous variable to make it consistent with MMB 
     y 
-//add other endogenous variables to get rid of hashtags from the original code
+%add other endogenous variables to get rid of hashtags from the original code
     u h w mpl f;
-//Hence, 15 endogenous variables in total
-//**************************************************************************
+%Hence, 15 endogenous variables in total
 
-//**************************************************************************
 //Shocks
 varexo epsa hireg;
-//**************************************************************************
 
-//**************************************************************************
 //Parameters
 parameters phi phipi D s delta r omegah eta alpha omega gamma R_ss rhoa epsilon sigmaa  phir zeta gexo
            th_ss n_ss a_ss l_ss u_ss h_ss w_ss mpl_ss f_ss g_ss y_ss c_ss;
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 alpha=0.66;
 epsilon=11;
 delta=0.999014076834481;
@@ -66,10 +78,11 @@ R_ss=1/delta;
 y_ss = a_ss*(l_ss^alpha);
 c_ss = (y_ss - (r*a_ss*h_ss)/(omegah*th_ss^(-eta)))/(1+(phi/2)*pie^2);
 
-//**************************************************************************
 
 
-//**************************************************************************
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model;
 
 //Job-finding probability
@@ -118,9 +131,8 @@ g=gendo+gexo;
 log(a) = rhoa* log(a(-1))+epsa;
 
 end;
-//**************************************************************************
 
-//**************************************************************************
+
 initval;
 
 n=n_ss;
@@ -142,9 +154,9 @@ mpl=mpl_ss;
 f=f_ss;
 
 end;
-//**************************************************************************
 
-//**************************************************************************
+
+//Shocks
 shocks;
 var epsa;
 %periods 1;
@@ -153,9 +165,17 @@ var hireg;
 %periods 1;
 stderr (valg);
 end;
-//**************************************************************************
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%simul(periods=15000);
+
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//simul(periods=15000);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
 
 
 

@@ -1,18 +1,40 @@
+% US_CFP17exo
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
+//**************************************************************************
 //linearized model
 //7/18/14
 //matches corresponding nonlinear code  
+//**************************************************************************
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+// Define endogenous variab
 var         rn mrs pinw mkw mk gy gi spread g_bonds infl ffr bb2 qnat r10s assets qi m lev muc c L w a r1 r2 rk pin y mp 
             q f d b2 nw k i pk mc ann_pin r10 ann_r2 ann_r1 term_prem r10_nat muinv r_lend u_psi mucf cf r1f pinf pkf mf rkf
             qif r2f Lf wf yf kf if ff nwf term_premf r10f r10_natf qnatf qf b2f ygap levf r10obs PCE_inf y_growth i_growth labor_dist;
 
+//Define exogenous variables
 varexo      eps_a eps_mp eps_i eps_psi eps_mk eps_mkw eps_b2 eps_rn;
 
+//Define parameters
 parameters  alpha b beta delta eta gamma h kappa kappa_i psi_i psi_n zeta tau_p tau_y tau_pi tauy_long taupi_long tau_prem rho_m 
             eps_p eps_w theta_p theta_w i_p i_w kappaw kappapc sigmamk sigmamkw sigmab2 sigmarn sigmaea sigmaeb sigmaeph sigmaer sigmaemu dur
             rhomkw rhomk rhod3 rhod4 rhoi rho_a rho1_b rho2_b rho_phi rho_mu rho_rn rhoi_long Y_ss I_ss C_ss R1ss R2ss b2ss dss nwss xss premss b2n;
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 load parameterfile;
             set_param_value('alpha',alpha);           set_param_value('b',b);                   set_param_value('beta',beta);
             set_param_value('delta',delta);           set_param_value('eta',eta);               set_param_value('gamma',gamma);
@@ -42,6 +64,9 @@ load parameterfile;
 kappa_i = (duration_i-1)/(duration_i);
 
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
 
 %POLICY
@@ -56,12 +81,9 @@ labor_dist = (y-L)-mrs;
 muc  = (beta*h*c(+1) - (1+beta*h^2)*c+h*c(-1))/((1-h*beta)*(1-h)) + rn*(1-h*beta*rho_rn)/((1-h*beta));
 mucf = (beta*h*cf(+1)-(1+beta*h^2)*cf+h*cf(-1))/((1-h*beta)*(1-h)) + rn*(1-h*beta*rho_rn)/((1-h*beta));
 
-
 % (33) Labor Supply:
-
 mrs = eta*L + rn - muc; 
 wf = eta*Lf + rn - mucf;
-
 
 % (34) Fisher Equation:
 r1 - pin(+1) + muc(+1) = muc;
@@ -219,6 +241,7 @@ end;
 steady;
 check;
 
+//Shocks
 shocks;
       var eps_a   = sigmaea ^2;      
       var eps_i   = sigmaemu^2;
@@ -230,8 +253,12 @@ shocks;
       var eps_rn  = sigmarn ^2;
 end;
 
-%stoch_simul(order=1,  irf=100, nograph);
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul(order=1,  irf=100, nograph);
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 //stoch_simul(order=1, irf=20) i y m c term_prem ann_pin r1 w labor_dist; 
 
 
@@ -258,3 +285,6 @@ stoch_simul (AR=100,IRF=0, noprint,nograph);
 //xlswrite('irf.twist.620.xls',IRF_RN,'rn_b2rule','A2:I13');
 //xlswrite('irf.twist.620.xls',IRF_INV,'inv_b2rule','A2:I13');
 //xlswrite('irf.twist.620.xls',IRF_NW,'nw_b2rule','A2:I13');
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+

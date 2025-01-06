@@ -1,25 +1,35 @@
+% US_FMS134
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+//**************************************************************************
 //   Title: A Pitfall with Estimated DSGE-Based Government Spending Multipliers 
 //   Authors: Feve, Patrick, Julien Matheron and Jean-Guillaume Sahuc. 2013. 
 //   Publication: American Economic Journal: Macroeconomics, 5(4): 141-78.  
 //   This file simulates the dynamic response of the model with endogenous government spending 
 //   and allowing for Edgeworth Complementarity, to specific shocks
+//**************************************************************************
 
-%***************************************************************************
-% 1. Variables
-%***************************************************************************
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var dyobs dcobs dxobs dwobs inflobs robs labobs2 dgobs 
 y c x w infl r labor cstar k u kp lambda q rk mc g mrs
 yf cf xf wf rf laborf kf uf kpf lambdaf qf rkf gf cstarf
 ez eb ex ep eg ew;
 
-
+//Define exogenous variables
 varexo zetaz zetab zetax zetap zetaw zetar zetag;
 
-%---------------------------------------------------------------------------
-% 2. Defining parameters
-%---------------------------------------------------------------------------
-
+//Define parameters
 parameters 
 gammaz psiu etak hab omega thetaw thetap gammaw gammap lambdap 
 lambdaw rhoinfl rhoy rhody rhoz rhow rhob rhos rhox rhop rhog 
@@ -27,10 +37,10 @@ consteinfl constelabor conster delta alpha gsy beta alphag phig egamma
 rkbar wbar ksl fsl ysl fsy xsl xsy csy ksy kappa 
 kappaw etau;
 
-//******************************
-// 2.(a) Fixed parameters
-//******************************
-
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+//Fixed parameters
 beta    = 0.99;
 delta   = 0.025;
 %alpha   = 0.33;
@@ -40,10 +50,7 @@ lambdaw = 0.15;
 %omega   = 2;
 phig    = 0.7871;        // endogenous fiscal policy 
 
-//******************************
-// 2.(b) Posterior means of Estimated parameters
-//******************************
-
+//Posterior means of estimated parameters
 alpha    = 0.2037;
 gammaz   = 0.4475;       // q-o-q SS GDP growth rate (drift)
 alphag   = -0.6743;      // allowing for Edgeworth complementarity
@@ -70,10 +77,7 @@ consteinfl  = 0.7341;    // q-o-q SS inflation rate
 constelabor = -0.4306;
 conster     = 1.2285;
 
-//******************************
-// 2.(c) Steady-states
-//******************************
-
+//Steady-states
 egamma = exp(gammaz/100);
 rkbar  = egamma/beta - (1-delta);
 wbar   = (1/(1+lambdap)*(alpha^alpha)*((1-alpha)^(1-alpha))/(rkbar^alpha))^(1/(1-alpha));
@@ -89,17 +93,14 @@ kappa  = (1-beta*thetap)*(1-thetap)/(thetap*(1+beta*gammap));
 kappaw = (1-beta*thetaw)*(1-thetaw)/(thetaw*(1+beta)*(1+omega*(1+1/lambdaw)));
 etau   = (1-psiu)/psiu;
                                             
-//**************************************************************************
 
-%---------------------------------------------------------------------------
-% 4. Model
-%---------------------------------------------------------------------------
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear); 
 
-
 //***********************
-// 5.(a) Flexible block 
+// Flexible block 
 //***********************
 // Effective capital
 kf  = uf + kpf(-1) - ez;
@@ -150,9 +151,8 @@ gf = -phig*(yf-yf(-1)+ez) + eg;
 yf = csy*cf + xsy*xf + gf*gsy + rkbar*ksy*uf;
 
 //*************************************
-// 5.(b) Sticky price/sticky wage block
+// Sticky price/sticky wage block
 //*************************************
-
 // Effective capital
 k  = u + kp(-1) - ez;
 
@@ -214,9 +214,8 @@ y = csy*c + xsy*x + gsy*g + rkbar*ksy*u;
 
 
 //************************
-// 5.(c) Shocks processes 
+// Shocks processes 
 //************************
-
 ez    = rhoz*ez(-1) + zetaz;
 eb    = rhob*eb(-1) + zetab;
 ex    = rhox*ex(-1) + zetax;
@@ -226,9 +225,8 @@ ew    = rhow*ew(-1) + zetaw;
 
 
 //****************************
-// 5.(d) Measurement equations 
+// Measurement equations 
 //****************************
-
 dyobs   = y-y(-1) + gammaz + ez;
 dcobs   = c-c(-1) + gammaz + ez;
 dxobs   = x-x(-1) + gammaz + ez;
@@ -240,11 +238,7 @@ labobs2 = labor + constelabor;
 
 end; 
 
-
-%---------------------------------------------------------------------------
-% 6. Shocks - estimated standard errors
-%---------------------------------------------------------------------------
-
+//Shocks - estimated standard errors
 shocks;
 var zetaz;
 stderr 0.9400;
@@ -264,6 +258,14 @@ end;
 
 //rhog=0.999999;
 
-%stoch_simul(irf=20, noprint, nograph) y c g x; 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-// multy = y_zetag(20)/g_zetag(20)/gsy
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul(irf=20, noprint, nograph) y c g x; 
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//multy = y_zetag(20)/g_zetag(20)/gsy
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
+

@@ -159,12 +159,12 @@ var c_, mstar_ =0;
 var r_, mstar_ =0;
 end;
 
-// Simlation
+
+// Simulation
 
 //***************************
 //The following was commented out for use in Rep-MMB
 //Nov. 2024
-//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 //*****************************
-
-stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=100,IRF=0, noprint,nograph);

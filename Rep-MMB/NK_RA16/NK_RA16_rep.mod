@@ -1,12 +1,29 @@
-% Rannenberg, Ansgar (2016). "Bank Leverage Cycles and the External Finance Premium", 
-%                             Journal of Money, Credit and Banking, Vol. 48, No. 8, pp. 1569-1612
+% NK_RA16
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
-% replicated by Felix Strobel, last edited 21.02.2018
+//**********************************************************************
+// Rannenberg, Ansgar (2016). "Bank Leverage Cycles and the External Finance Premium", 
+// Journal of Money, Credit and Banking, Vol. 48, No. 8, pp. 1569-1612
+//
+// replicated by Felix Strobel, last edited 21.02.2018
+//
+// This code replicates the full model used in figure 1 and 2 of the article. To perfectly match the IRFs 
+// in figure 1 and 2, variable capital utilization is included. The calibration of the respective 
+// parameter is not included in the paper, but was provided by the author.
+//**********************************************************************
 
-% This code replicates the full model used in figure 1 and 2 of the article. To perfectly match the IRFs 
-%   in figure 1 and 2, variable capital utilization is included. The calibration of the respective 
-%   parameter is not included in the paper, but was provided by the author.
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variable
 var 
 Y       % output
 GDP     % GDP
@@ -47,18 +64,24 @@ spread_RbR % spread banks rate/riskless rate
 spread_RkRb % spread capital rate/banks rate
 R4         % annualized riskfree rate
 Pi4        % annualized inflation rate
-%%%flex price counterparts
+//flex price counterparts
 Y_fe  GDP_fe I_fe K_fe l_fe U_fe Cp_fe C_fe Ce_fe Cb_fe varrho_fe R_fe Rk_fe rk_fe Rb_fe Rl_fe w_fe Q_fe Pi_fe mc_fe N_fe V_fe phi_e_fe
 omega_bar_prime_fe L_fe Lr_fe Le_fe Nb_fe phi_b_fe z_fe Lambda_fe outputgap;
 
+//Define exogenous variables
 varexo e_i e_a e_g; %(monetary policy shock, technology shock, government spending shock)
 
+//Define parameters
 parameters beta varphi h alpha delta eta_i epsilon xi_p theta psi_L psi_K sigma mu gamma lambda N_nb  psi_pi psi_y rho_i rho_a sigma_i sigma_a
            G_over_Y brate omega_bar_ss F_ss F1_ss  G_ss G1_ss G11_ss Gamma_ss Gamma1_ss Gamma11_ss rho_g 
            xi_ss spread_RkRb_ss phi_e_ss Pi_ss R_ss Rl_ss Rk_ss Rb_ss X_ss mc_ss Q_ss rk_ss K_over_l w_ss l_ss K_ss Y_ss Gov_ss I_ss 
            omega_bar_prime_ss V_ss N_ss Le_ss Lr_ss L_ss phi_ss Ce_ss phi_b_ss z_ss x_ss eta_ss nu_ss Nb_ss Nb_e_ss Cb_ss C_ss Cp_ss 
            GDP_ss varrho_ss chi gamma_p tr_omega_bar_ss spread_RbR_ss chi_e c_U xi_p_fe;
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 beta = 0.9958;      % households discount factor
 h = 0.6;            % habit formation
 varphi = 0.25;      % inverse of Frisch elasticity      %1.5 in the case of sticky wages
@@ -176,130 +199,137 @@ dphi_eds1=((spread_RkRb_ss*Upsilon_1-psi_1)*domegabards1+Upsilon)/((psi_1-spread
 chi_e=      phi_e_ss/dphi_eds1*(1/spread_RkRb_ss);
 
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
 
-% households 
-%marginal utility of consumption
+//Households 
+
+//marginal utility of consumption
 varrho= 1/((1-h)*(1-beta*h))*(-(C-h*C(-1)) + beta*h * (C(+1)-h*C));
 
-%Euler equation
+//Euler equation
 R + Lambda(+1) - Pi(+1)  =  0;
 
-%SDF
+//SDF
 Lambda  =   varrho-varrho(-1);
 
-%labor supply
+//labor supply
 varphi*l    = varrho + w;
 
-% capital good producers and retailers
-% investment dynamics
+//capital good producers and retailers
+
+//investment dynamics
 I  = 1/(1+beta)*(I(-1)+beta*I(+1)+Q/eta_i);
 
-% capital accumulation
+//capital accumulation
 K = (1-delta)*K(-1)+delta*I;
 
-% production function
+//production function
 Y = alpha*(U+K(-1))+(1-alpha)*(a+l);
 
-% new Keynesian Phillips curve
+//new Keynesian Phillips curve
 Pi = 1/(1+beta*gamma_p)*(beta*Pi(+1) + gamma_p*Pi(-1)+(1-xi_p*beta)*(1-xi_p)/xi_p *mc);
 
-% labor demand
+//labor demand
 w_ss*(1+psi_L*(R_ss-1))*w + w_ss*psi_L*R_ss*R = (1+psi_L*(R_ss-1))*w_ss   *(mc + Y - l);
 
-% capital demand by firms
+//capital demand by firms
 rk/rk_ss+R*psi_K*R_ss/(1+psi_K*(R_ss-1))=   mc+Y-K(-1)-U;
 
-% working capital loans to firms
+//working capital loans to firms
 Lr*Lr_ss=   psi_L*w_ss*l_ss*(w+l)+psi_K*K_ss*rk_ss*(rk/rk_ss+U+K(-1)); %mistake - why not L_r*L_r_ss?
 
-% banks
-% bank leverage 
+
+//banks
+
+//bank leverage 
 phi_b = Le-Nb;
 
-% bank net worth 
+//bank net worth 
 Nb = theta*z_ss*(z + Nb(-1));
 
-% consumption of bankers
+//consumption of bankers
 Cb = z + Nb(-1);
 
-% asset growth
+//asset growth
 z_ss*Pi_ss*(z+Pi) = ((Rb_ss-R_ss)*phi_b(-1) + Rb_ss*Rb-R_ss*R(-1))*phi_b_ss + R_ss*R(-1);
 
-% leverage dynamics
+//leverage dynamics
 phi_b= theta*beta^2*z_ss^2*phi_b(+1)+phi_b_ss*Rb_ss/R_ss*(Rb(+1)-R);   
 
-% entrepreneurs (20-30)
+//entrepreneurs (20-30)
 
-% entrepreneurs' consumption
+//entrepreneurs' consumption
 Ce = V;
 
-% entrepreneur net worth
+//entrepreneur net worth
 N*N_ss = gamma*V*V_ss;
 
-% return to capital
+//return to capital
 Rk_ss*(Rk+Q(-1))=      Rk_ss* Pi+Pi_ss*(rk+Q*(1-delta));
 
-% entrepreneur leverage
+//entrepreneur leverage
 phi_e = Q + K - N;
 
-% entrepreneurs loans
+//entrepreneurs loans
 Le-N=phi_e_ss/(phi_e_ss-1)*phi_e;
 
-% value function of entrepreneur 
+//value function of entrepreneur 
 V = N(-1) + Rk -Pi + phi_e(-1)- Gamma1_ss*omega_bar_ss/(1-Gamma_ss)*(omega_bar_prime(-1)-Rk);
 
-% cost of variable capital utilization
+//cost of variable capital utilization
 rk =   rk_ss*c_U*U;
 
-% spread of return on capital over return on banks rate
+//spread of return on capital over return on banks rate
 Rk(+1)-Rb(+1)=chi_e*phi_e;
 
-% determination of loan rate
+//determination of loan rate
 omega_bar_prime= Rl+1/(phi_e_ss-1)*phi_e;
 
-% condition for optimal contract between entrepreneur and bank
+//condition for optimal contract between entrepreneur and bank
 (Rk_ss*(Gamma_ss-mu*G_ss)-omega_bar_prime_ss*(Gamma1_ss-mu*G1_ss))*Rk+(Gamma1_ss-mu*G1_ss)*omega_bar_prime_ss*omega_bar_prime(-1) = Rb_ss*(phi_e(-1)/phi_e_ss+(phi_e_ss-1)/phi_e_ss*Rb);
 
 
-% further equilibrium conditions (31-40)
-% Taylor rule
+//further equilibrium conditions (31-40)
+
+//Taylor rule
 R*R_ss = (1-rho_i)*(psi_pi*Pi + psi_y*mc) + rho_i*R(-1)*R_ss +e_i;
 
-% aggregate consumption
+//aggregate consumption
 Cp*Cp_ss = C*C_ss+Ce*Ce_ss+Cb*Cb_ss;
 
-% aggregate resource constraint
+//aggregate resource constraint
 Y*Y_ss  = I*I_ss + Cp*Cp_ss + G_over_Y*g + Rk_ss/Pi_ss*K_ss*mu*G_ss*(Rk-Pi+Q(-1)+K(-1)+G1_ss/G_ss*omega_bar_ss*(omega_bar_prime(-1)-Rk))+rk_ss*K_ss*U;
 
-% definition of GDP
+//definition of GDP
 GDP*GDP_ss = Cp*Cp_ss+I*I_ss+G_over_Y*g;
 
-% aggregate loans
+//aggregate loans
 L_ss*L = Le_ss*Le + Lr_ss*Lr;
 
-% TFP shock
+//TFP shock
 a = rho_a*a(-1)-e_a;
 
-% government spending shock
+//government spending shock
 g = rho_g*g(-1)-e_g;
 
-% annualized riskfree rate
+//annualized riskfree rate
 R4 = 4*R;
 
-% annualized inflation rate
+//annualized inflation rate
 Pi4 =4*Pi;
 
-% annualized spreads
+//annualized spreads
 spread_RlR = 4*(Rl - R);
 spread_RkR = 4*(Rk(+1) - R);
 spread_RbR = 4*(Rb(+1) - R);
 spread_RkRb = 4*(Rk(+1) - Rb(+1));
 
 
-%FLEX PRICE EQ
-%FLEX PRICE EQ
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+/////FLEX PRICE EQ/////
+
 varrho_fe= 1/((1-h)*(1-beta*h))*(-(C_fe-h*C_fe(-1)) + beta*h * (C_fe(+1)-h*C_fe));
 R_fe + Lambda_fe(+1) - Pi_fe(+1)  =  0;
 Lambda_fe  =   varrho_fe-varrho_fe(-1);
@@ -335,7 +365,6 @@ outputgap=Y-Y_fe;
 end;
 
 
-    
 initval;
 Y  =   0;
 GDP=   0;
@@ -377,11 +406,20 @@ end;
 %steady;
 %check;
 
+//Shocks
 shocks;
 var e_a = sigma_a^2;
 var e_i = sigma_i^2;
 var e_g = sigma_g^2;
 end;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order=1,irf=40, nograph, nomoments, hp_filter=1600, ar=1) GDP Cp I Q Pi R Le N Nb phi_b spread_RkR spread_RbR spread_RkRb; 
-%stoch_simul(order=1,irf=40) Y Y_fe outputgap;
+
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul(order=1,irf=40, nograph, nomoments, hp_filter=1600, ar=1) GDP Cp I Q Pi R Le N Nb phi_b spread_RkR spread_RbR spread_RkRb; 
+//stoch_simul(order=1,irf=40) Y Y_fe outputgap;
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

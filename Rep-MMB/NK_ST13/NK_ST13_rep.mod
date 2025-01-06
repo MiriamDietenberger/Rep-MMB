@@ -1,21 +1,42 @@
-% Model: NK_S13
+% NK_ST13
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
-% Further Reference: 
-% Stracca, L. 2013. "Inside Money in General Equilibrium: Does it matter for monetary policy?".
-% Macroeconomic Dynamics 17, pp. 563-590.
+//**********************************************************************
+// Further Reference: 
+// Stracca, L. 2013. "Inside Money in General Equilibrium: Does it matter for monetary policy?".
+// Macroeconomic Dynamics 17, pp. 563-590.
+//
+//Created by Felix Strobel (18.10.17)
+//**********************************************************************
 
-% Created by Felix Strobel (18.10.17)
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var c i y n w k delta_k m d b l R Rd Rl lambda xi psi pi rmc yk yn f EFP IMP alpha omega A theta
     c_fe i_fe y_fe n_fe w_fe k_fe delta_k_fe m_fe d_fe b_fe l_fe R_fe Rd_fe Rl_fe lambda_fe xi_fe psi_fe rmc_fe yk_fe yn_fe f_fe EFP_fe IMP_fe
     outputgap;
 
+//Define exogenous variables
 varexo q epsilon_theta j epsilon_r; 
 
+//Define parameters
 parameters phi rho_alpha phi_d beta gamma chi rho_theta phi_p phi_k delta sigma 
  rho rho_pi sigma_r sigma_theta sigma_j sigma_q rho_omega mu
 c_ss i_ss y_ss n_ss w_ss k_ss m_ss d_ss b_ss l_ss R_ss Rd_ss Rl_ss lambda_ss xi_ss psi_ss pi_ss rmc_ss yk_ss yn_ss f_ss EFP_ss IMP_ss alpha_ss omega_ss A_ss theta_ss;
 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 beta 		= 0.995 ;   % discount factor
 phi 		= 3 ;       % weight of disutility of labor
 gamma 		= 0.35 ;    % capital share
@@ -70,29 +91,32 @@ EFP_ss = Rl_ss-R_ss;    % external finance premium
 IMP_ss = R_ss-Rd_ss;    % inside money premium
 
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model;
 
-%Household problem
+//Household problem
 alpha * c = d ;												// Deposit in advance constraint
 1 / c - lambda - xi * alpha = 0 ;							// First order condition c						
 lambda = phi / w ;											// First order condition n
 lambda = beta * R * lambda(+1) / pi(+1) ;					// First order condition b
 beta * lambda(+1) * (R - Rd) / pi(+1) + phi_d * (d - d(-1) / pi) = beta * phi_d / pi(+1) * (d(+1) - d / pi(+1)) + xi ;		// First order condition d (Fehler in paper -xi)
 
-%Firms problem
+//Firms problem
 y = A * k(-1)^gamma * n^(1 - gamma) ;						// Production function
 A = exp(theta) ;											// TFP
-k = i + (1 - delta) * k(-1) ;							// l.o.m. of capital
-yk = gamma * y/k(-1) ;											// Marginal productivity capital
+k = i + (1 - delta) * k(-1) ;						    	// l.o.m. of capital
+yk = gamma * y/k(-1) ;										// Marginal productivity capital
 yn = (1 - gamma) * y / n ;									// Marginal productivity labor
 %rmc = psi(+1) * w * Rl / (yn * pi(+1)) ;					// Real marginal costs
-w = rmc*yn * pi(+1)/ (psi(+1) * Rl) ;							// First order condition n	
+w = rmc*yn * pi(+1)/ (psi(+1) * Rl) ;						// First order condition n	
 Rl(-1) / pi + phi_k * delta_k = rmc*yk + phi_k * psi(+1) * delta_k(+1) + psi(+1) * Rl * (1 - delta) / pi(+1) ;          // First order condition k
 lambda * (pi - 1) * pi = lambda / phi_p * (1 - mu + mu * rmc) + beta * lambda(+1) * (pi(+1) - 1) * pi(+1) * y(+1) / y ;	// NK Philips curve
 l = i + w*n;
 
-%Financial intermediary
-l = b + d ;									// Budget constraint
+//Financial intermediary
+l = b + d ;									            // Budget constraint
 psi(+1) * (Rl - R) / pi(+1) = sigma ;					// First order condition l
 psi(+1) * (R - Rd) / pi(+1) = omega / m ;				// First order condition d
 m = sqrt(omega * d * pi(+1) / (psi(+1) * (R - 1))) ;	// First order condition m
@@ -100,45 +124,46 @@ m = sqrt(omega * d * pi(+1) / (psi(+1) * (R - 1))) ;	// First order condition m
 %Central bank
 R = (1 - rho) * (1 / beta + rho_pi * (pi - 1)) + rho * R(-1) + epsilon_r ;	// Interest rate rule
 
-% Aggregate Resource Constraint
+//Aggregate Resource Constraint
 y = c + i + phi_k / 2 * delta_k^2 + phi_p / 2 * (pi - 1)^2 * y + omega * d / m + sigma * l ; //								
 
-%Definitions:
+//Definitions:
 psi = beta * lambda / lambda(-1) ;	// Stochastic discount factor
 delta_k = k - k(-1) ;				// change of capital
 EFP = Rl - R;                       // External finance premium
 IMP = R - Rd;                       // Inside Money premium
 f = sigma * l + omega * d / m ;	    // costs of financial intermediation
 
-%Shocks
+//Shocks
 alpha = rho_alpha * alpha(-1) + (1 - rho_alpha) * alpha_ss + q ;
 theta = rho_theta * theta(-1) + epsilon_theta ;					
 omega = (1 - rho_omega) * omega_ss + rho_omega * omega(-1) + j ;
 
-%%%Frictionless Eq.%%%%%%%%%%%%%%%%%%%
+
+/////Frictionless Eq./////
 
 alpha * c_fe = d_fe ;												// Deposit in advance constraint
 1 / c_fe - lambda_fe - xi_fe * alpha = 0 ;							// First order condition c						
-lambda_fe = phi/ w_fe ;											// First order condition n
-lambda_fe = beta * R_fe * lambda_fe(+1);					// First order condition b
+lambda_fe = phi/ w_fe ;											    // First order condition n
+lambda_fe = beta * R_fe * lambda_fe(+1);					        // First order condition b
 beta * lambda_fe(+1) * (R_fe - Rd_fe) + phi_d * (d_fe - d_fe(-1)) = beta * phi_d  * (d_fe(+1) - d_fe) + xi_fe ;		// First order condition d (Fehler in paper -xi)
 y_fe = A * k_fe(-1)^gamma * n_fe^(1 - gamma) ;						// Production function
-k_fe = i_fe + (1 - delta) * k_fe(-1) ;							// l.o.m. of capital
-yk_fe = gamma * y_fe/k_fe(-1) ;											// Marginal productivity capital
+k_fe = i_fe + (1 - delta) * k_fe(-1) ;							    // l.o.m. of capital
+yk_fe = gamma * y_fe/k_fe(-1) ;										// Marginal productivity capital
 yn_fe = (1 - gamma) * y_fe / n_fe ;									// Marginal productivity labor
 w_fe = rmc_fe*yn_fe/ (psi_fe(+1) * Rl_fe) ;							// First order condition n	
 Rl_fe(-1) + phi_k * delta_k_fe = rmc_fe*yk_fe + phi_k * psi_fe(+1) * delta_k_fe(+1) + psi_fe(+1) * Rl_fe * (1 - delta) ;          // First order condition k
 l_fe = i_fe + w_fe*n_fe;
-l_fe = b_fe + d_fe ;									// Budget constraint
-psi_fe(+1) * (Rl_fe - R_fe)  = sigma ;					// First order condition l
-psi_fe(+1) * (R_fe - Rd_fe)  = omega / m_fe ;				// First order condition d
-m_fe = sqrt(omega * d_fe / (psi_fe(+1) * (R_fe - 1))) ;	// First order condition m
+l_fe = b_fe + d_fe ;									            // Budget constraint
+psi_fe(+1) * (Rl_fe - R_fe)  = sigma ;					            // First order condition l
+psi_fe(+1) * (R_fe - Rd_fe)  = omega / m_fe ;				        // First order condition d
+m_fe = sqrt(omega * d_fe / (psi_fe(+1) * (R_fe - 1))) ;	            // First order condition m
 y_fe = c_fe + i_fe + phi_k / 2 * delta_k_fe^2 + omega * d_fe / m_fe + sigma * l_fe ; //								
-psi_fe = beta * lambda_fe / lambda_fe(-1) ;	// Stochastic discount factor
-delta_k_fe = k_fe - k_fe(-1) ;				// change of capital
-EFP_fe = Rl_fe - R_fe;                       // External finance premium
-IMP_fe = R_fe - Rd_fe;                       // Inside Money premium
-f_fe = sigma * l_fe + omega * d_fe / m_fe ;	    // costs of financial intermediation
+psi_fe = beta * lambda_fe / lambda_fe(-1) ;	                        // Stochastic discount factor
+delta_k_fe = k_fe - k_fe(-1) ;				                        // change of capital
+EFP_fe = Rl_fe - R_fe;                                              // External finance premium
+IMP_fe = R_fe - Rd_fe;                                              // Inside Money premium
+f_fe = sigma * l_fe + omega * d_fe / m_fe ;	                        // costs of financial intermediation
 rmc_fe=rmc_ss;
 
 outputgap = y-y_fe;
@@ -203,12 +228,20 @@ end ;
 steady ;
 check ;
 
+//Shocks
 shocks ;
-
 var q = sigma_q^2 ;
 var epsilon_theta = sigma_theta^2 ;
 var j= sigma_j^2 ;
 var epsilon_r = sigma_r^2 ;
 end ;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order = 1, irf = 25) c i y pi R m d IMP;
+
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul(order = 1, irf = 25) c i y pi R m d IMP;
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

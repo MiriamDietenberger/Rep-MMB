@@ -1,17 +1,27 @@
-// US_IN10 model
+% US_IN10
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.// US_IN10 model
 
+
+//**************************************************************************
 // Reference: Iacoviello, Matteo and Stefano Neri (2010). 
 // "Housing Market Spillovers: Evidence from an Estimated DSGE Model"
 // American Economic Journal: Macroeconomics 2 (April 2010): 125 - 164
-
+//
 // The original code was downloaded from Matteo Iacoviello website: https://www2.bc.edu/~iacoviel/
-
+//
 // Last edited by: M. Lalik and A. Mazany, August 2012
 // Note: In order to define the output gap, we added a code for flexible prices and flexible wages
 // scenario. This was done by setting the price mark-up and wage mark-ups to their stead-state level
 // in the part of the ccode referring to flexible economy. This new code is added above 
 // the original model block.
-
+//
 // Authors' comments:
 //%------------------------------------------------------------
 //% Notation and formulas as in Appendix A of our paper
@@ -23,12 +33,13 @@
 //% Note:
 //% 1) NU,NU1 here is NU=-CSI in the main text
 //%------------------------------------------------------------
+//**************************************************************************
 
 
-//%------------------------------------------------------------
-//% Declare endogenous and exogenous variables
-//%------------------------------------------------------------
-
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var
 a_c a_h a_j a_k a_s a_t a_z b c c1
 data_CC data_DP data_IH data_IK data_NC data_NH data_QQ data_RR data_WC data_WH
@@ -38,12 +49,10 @@ bf cf c1f
 hf h1f If kcf khf lmf ncf nc1f nhf nh1f qf rf rkcf rkhf
 ucf uc1f wcf wc1f whf wh1f Yf zkcf zkhf;
 
+//Define exogenous variables
 varexo eps_c eps_e eps_h eps_j eps_k eps_p eps_s eps_t eps_z  ;
 
-//%-----------------------------------------------------------------------
-//% Declare model parameters
-//%------------------------------------------------------------------------
-
+//Define parameters
 parameters BETA BETA1 M JEI MUC MUH DKC DKH DH ETA ETA1 EC EC1 FIKC FIKH ALPHA 
 TETA TAYLOR_R TAYLOR_Y TAYLOR_P X_SS LAGP 
 RHO_AC RHO_AH RHO_AJ RHO_AK RHO_AM RHO_AT RHO_AZ RHO_AS
@@ -52,7 +61,11 @@ TREND_AC TREND_AH TREND_AK MUBB  Xf xwcf xwc1f xwhf xwh1f dpf;
 //% local model parameters: IKC_SS IKH_SS TRENDY TRENDK  TRENDH ; 
 //% local model parameters: NC_SS NH_SS CC_SS IH_SS IK_SS QQ_SS
 
-//% Calibrated parameters
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+// Calibrated parameters
 X_SS = 1.15 ;
 XW_SS = 1.15 ;
 BETA = 0.9925 ;
@@ -74,7 +87,7 @@ xwc1f = log(XW_SS);
 xwhf = log(XW_SS);
 xwh1f = log(XW_SS);
 
-//% Estimated parameters (mean)
+// Estimated parameters (mean)
 ALPHA	=	0.79343	;
 EC	=	0.31423	;
 EC1	=	0.56897	;
@@ -98,7 +111,7 @@ TREND_AH	=	0.0008	;
 TREND_AK	=	0.00275	;
 ZETAKC	=	0.70394	;
 
-//% 2 - Shocks parameters (mean)
+// 2 - Shocks parameters (mean)
 RHO_AC	=	0.94265	;
 RHO_AH	=	0.99713	;
 RHO_AJ	=	0.95875	;
@@ -116,10 +129,9 @@ STDERR_AT	=	0.0252	;
 STDERR_AZ	=	0.01711	;
 
 
-//%------------------------------------------------------------
-//% Model equations
-//%------------------------------------------------------------
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model ;
 
 # TRENDK = TREND_AC + 1/(1-MUC)*TREND_AK ;
@@ -468,16 +480,12 @@ a_z = RHO_AZ * a_z(-1) + eps_z ;
 
 end ;
 
-//%------------------------------------------------------------
-//% Call steady state
-//%------------------------------------------------------------
 
+//Call steady state
 steady;
 
-//%------------------------------------------------------------
-//% Declare shocks
-//%------------------------------------------------------------
 
+//Shocks
 shocks;
 var eps_c ; stderr STDERR_AC  ;
 var eps_h ; stderr STDERR_AH  ;
@@ -490,9 +498,14 @@ var eps_p ; stderr STDERR_AP  ;
 var eps_s ; stderr STDERR_AS  ;
 end;
 
-//%------------------------------------------------------------
-//% TO SEE PROPERTIES OF MODEL
-//%------------------------------------------------------------
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order=1,irf=20) data_CC data_IK data_IH data_QQ zata_GDP data_RR ;
-// stoch_simul(order=1,nograph);
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul(order=1,irf=20) data_CC data_IK data_IH data_QQ zata_GDP data_RR ;
+//stoch_simul(order=1,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
+

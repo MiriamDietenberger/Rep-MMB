@@ -1,36 +1,41 @@
+% NK_RW06
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
-//**************************************************************************
-// A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
-//
-// Volker Wieland, Tobias Cwik, Gernot J. Mueller, Sebastian Schmidt and
-// Maik Wolters
-//
-// Working Paper, 2009
-//**************************************************************************
-
-// Model: NK_RW06
-
+//**********************************************************************
 // Further references:
 // Ravenna, Federico and Walsh, Carl, E. (2006). Optimal monetary policy with the cost channel
 // Journal of Monetary Economics 53, 199-216.
-
+//
 //The parameter values are calibrated as described in section 4; p.212-213.
-
+//
 // Last edited: 30/07/11 by M. Jancokova
+//**********************************************************************
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var x pi R;
 
-
-
+//Define exogenous variables
 varexo u;
 
-
-
+//Define parameters
 parameters
-
 sigma eta beta omega kappa phipi phix;
 
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 sigma=1.5;
 eta=1;
 beta=0.99;
@@ -40,7 +45,9 @@ phipi = 1.1;
 phix = 1;
 
 
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
 
 // Policy Rule
@@ -55,9 +62,17 @@ pi=beta*pi(+1)+kappa*(sigma+eta)*x+kappa*R;
 end;
 
 
-
+//Shocks
 shocks;
 var u =1;
 //var interest_ =1;
 end;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

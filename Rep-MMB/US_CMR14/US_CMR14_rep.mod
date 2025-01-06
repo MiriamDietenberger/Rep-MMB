@@ -1,3 +1,19 @@
+% US_CMR14
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+// Define endogenous variable
 var c consumption_obs credit_obs epsil Fp Fw g gamma gdp_obs h hours_obs i inflation_obs investment_obs
     kbar lambdaf lambdaz muup muzstar n networth_obs omegabar phi pi pinvest_obs pitarget premium_obs
     pstar q Re Re_obs RealRe_obs rL rk Rk RL s sigma xi0 xi1 xi2 xi3 xi4 xi5 xi6 xi7 xi8 Spread1_obs
@@ -5,10 +21,11 @@ var c consumption_obs credit_obs epsil Fp Fw g gamma gdp_obs h hours_obs i infla
     log_zetac  log_lambdaz log_term log_pi log_muzstar
     log_xi0 log_xi1 log_xi2 log_xi3 log_xi4 log_xi5 log_xi6 log_xi7 log_xi8;
 
+//Define exogenous variables
 varexo e_epsil e_g e_gamma e_lambdaf e_muup e_muzstar e_pitarget e_sigma e_xi1 e_xi2 e_xi3 e_xi4 e_xi5
        e_xi6 e_xi7 e_xi8 e_term e_zetac e_zetai e_xp; 
 
-
+//Define parameters
 parameters actil_p adptil_p adytil_p alpha_p aptil_p aytil_p b_p beta_p bigtheta_p c_p delta_p epsil_p etag_p 
            Fomegabar_p g_p gamma_p i_p iota_p iotamu_p iotaw_p lambdaf_p lambdaw_p mu_p muup_p muzstar_p signal_corr_p
            pi_p pibar_p pitarget_p psik_p psil_p psiL_p Re_p rhoepsil_p rhog_p rhogamma_p rholambdaf_p rhomuup_p rhomuzstar_p
@@ -16,9 +33,12 @@ parameters actil_p adptil_p adytil_p alpha_p aptil_p aytil_p b_p beta_p bigtheta
            stdg_p stdgamma_p stdlambdaf_p stdmuup_p stdmuzstar_p stdpitarget_p stdsigma1_p stdterm_p stdxp_p stdzetac_p
            stdzetai_p stdsigma2_p tauc_p taud_p tauk_p taul_p tauo_p term_p upsil_p we_p xip_p xiw_p zeta_p zetac_p zetai_p;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 2. Set parameters
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%--------------------------------------------------------------
+% Set parameters
+
 % when stopshock = 1, then non-risk shocks are all turned off
 @# define stopshock = 0
 
@@ -69,7 +89,6 @@ stdsigma2_p    =   0.0282985295279650 ;
 stdsigma1_p    =   0.0700061676650730 ;	 
 	
 		 
-
 // Calibrated parameters.
 actil_p           = 0;
 adptil_p          = 0;
@@ -112,9 +131,11 @@ zeta_p            = 1;
 zetac_p           = 1;
 zetai_p           = 1;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model;
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -582,6 +603,9 @@ end;
 steady(maxit=1000, solve_algo=1);
 steady;
 check;
+
+
+//Shocks
 shocks; 
 var e_xp;       stderr 1;//stdxp_p;
 var e_lambdaf;  stderr stdlambdaf_p;
@@ -604,5 +628,14 @@ var e_xi3;      stderr 1-@{stopsignal};
 var e_xi2;      stderr 1-@{stopsignal};
 var e_xi1;      stderr 1-@{stopsignal};  
 end;
-%stoch_simul(order=1, irf=40,nograph);
+
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul(order=1, irf=40,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
 stoch_simul (AR=100,IRF=0, noprint,nograph);

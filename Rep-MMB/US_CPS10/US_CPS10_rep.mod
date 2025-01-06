@@ -1,43 +1,45 @@
-% Cogley, Primiceri & Sargent (2010)
+% US_CPS10
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
 %
-% Balint Tatar
-% Frankfurt am Main, 2016
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+//************************************************************************** 
+//Cogley, Primiceri & Sargent (2010)
+//
+//Balint Tatar
+//Frankfurt am Main, 2016
+//************************************************************************** 
+
+
 
 %----------------------------------------------------------------
-% 0. Housekeeping (close all graphic windows)
+% 1. Defining variables
 %----------------------------------------------------------------
-
-close all;
-
-%----------------------------------------------------------------
-% 1. Defining variables and parameters
-%----------------------------------------------------------------
-
-
+// Define endogenous variables
 var p y lambdda w R z lambddap pit b ystar lambddastar wstar Rstar inflgap realR outpgap;
 
+// Define exogenous variables
 varexo Rs zs lambddaps pits bs;
 
+// Define parameters
 parameters niu lambddapss iotap rhopit gamma100 pss100 Fbeta hparam xip fp fy rhoR rhoz rholambddap rhob sdr sdz sdlambddap sdpit sdb gamma betta rss rss100 expg;
 
 
-
 %----------------------------------------------------------------
-% 2. Calibration
+% 2. Calibration and Estimation
 %----------------------------------------------------------------
-
-
-%Calibrated parameters
+//Calibrated parameters
 niu=2;
 lambddapss=0.1;
 iotap=0;
 rhopit=0.995; 
 
-%Estimated parameters
-
-
-
-
+//Estimated parameters
 %Values from page 60 for the period 1960-1979
 gamma100=0.468;	
 pss100=0.501;	
@@ -99,11 +101,7 @@ sdb=2.429;
 */
 
 
-
-
-
-
-%Steady state values:
+//Steady state values:
 gamma=gamma100/100;
 betta=100/(Fbeta+100);
 rss=exp(gamma)/betta-1;
@@ -116,9 +114,7 @@ expg=exp(gamma);
 %----------------------------------------------------------------
 % 3. Model
 %----------------------------------------------------------------
-
 model (linear); 
-
 
 % eq 1, Phillips Curve (p)
 p -betta/(1+iotap*betta)*p(+1) -lambddap -((1-betta*xip)*(1-xip)/((1+iotap*betta)*xip*(1+niu*(1+1/lambddapss))))*w=iotap/(1+iotap*betta)*p(-1); 
@@ -129,40 +125,29 @@ wstar=0;
 % eq 2, marginal utility of consumption
 (expg-hparam*betta)*(expg-hparam)*lambdda -(expg-hparam*betta*rhob)*(expg-hparam)*b -(betta*hparam*expg*rhoz-hparam*expg)*z +(expg^2+betta*hparam^2)*y -betta*hparam*expg*y(+1)=expg*hparam*y(-1);
 
-
 % eq 2b
 (expg-hparam*betta)*(expg-hparam)*lambddastar -(expg-hparam*betta*rhob)*(expg-hparam)*b -(betta*hparam*expg*rhoz-hparam*expg)*z + (expg^2+betta*hparam^2)* ystar -betta*hparam*expg*ystar(+1)=expg*hparam*ystar(-1);
-
 
 % eq 3, euler equation
 lambdda-R-lambdda(+1)+p(+1)+rhoz*z=0;
 
-
 % eq 3b
 lambddastar-Rstar-lambddastar(+1)+rhoz*z=0;
-
 
 % eq 4, labor supply equation
 w-b-niu*y+lambdda=0;
 
-
 % eq 4b
 wstar-b-niu*ystar+lambddastar=0;
 
-
-
 % eq 5, MP rule
 R -(1-rhoR)*fp/4*p +(1-rhoR)*(fp)*pit -(1-rhoR)*fy*y +(1-rhoR)*fy*ystar = rhoR*R(-1) +(1-rhoR)*fp/4*p(-1) +(1-rhoR)*fp/4*p(-2) +(1-rhoR)*fp/4*p(-3)+Rs;
-
-
 
 % eq 6 - 9, exogenous shocks
 z=rhoz*z(-1)+zs;
 lambddap=rholambddap*lambddap(-1)+lambddaps;
 pit=rhopit*pit(-1)+pits;
 b=rhob*b(-1)+bs;
-
-
 
 %definition of inflation gap
 inflgap=p-pit;
@@ -175,13 +160,11 @@ outpgap=y-ystar;
 
 end;
 
-%----------------------------------------------------------------
-% 4. Computation
-%----------------------------------------------------------------
-
+//Computation
 steady;
 resid(1);
 
+//Shocks
 shocks;
 %var Rs = sdr^2; 
 %var Rs = 1; 
@@ -192,9 +175,16 @@ var pits = 1;
 %var bs = sdb^2;
 end;
 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//
+//stoch_simul(order=1,irf=17,solve_algo=1) inflgap realR;
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
-%stoch_simul(order=1,irf=17,solve_algo=1) inflgap realR;
 
 
 

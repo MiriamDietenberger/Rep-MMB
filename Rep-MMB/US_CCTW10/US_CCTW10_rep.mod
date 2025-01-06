@@ -1,10 +1,26 @@
-// Title: Shocks and Frictions in US Business Cycles: A Bayesian DSGE-Approach
+% US_CCTW10
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.// Title: Shocks and Frictions in US Business Cycles: A Bayesian DSGE-Approach
+
+
+//**********************************************************************
 // Authors: Smets, Frank and Raf Wouters
 // Publication: The American Economic Review, June 2007, 97(3), 586-606.
-
-
+//
 // This file simulates the dynamic response of the model to specific shocks
+//**********************************************************************
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var labobs robs pinfobs dy dc dinve dw ewma epinfma zcapf rkf kf pkf cf invef 
     yf labf wf rrf mc zcap rk k pk c inve y lab pinf w r a  b g qs  ms  spinf 
     sw kpf kp pinf4 c_lc c_nlc debt t c_lcf c_nlcf debtf tf
@@ -14,33 +30,37 @@ var labobs robs pinfobs dy dc dinve dw ewma epinfma zcapf rkf kf pkf cf invef
         interest inflation inflationq outputgap output pinflag1 pinflag2 dlab realinterest mcf pinfobs4 gry  robs4; //      
 //**************************************************************************
 
+//Define exogenous variables
 varexo ea eb  eqs em epinf ew  %eg
 
 //**************************************************************************
 // Modelbase Shocks                                                    
   fiscal_ dummy_MP ;       //interest_    dummy_G                                       
 //**************************************************************************
- 
+
+//Define parameters
 parameters curvw cgy curvp constelab constepinf constebeta cmaw cmap calfa 
            czcap cbeta csadjcost ctou csigma chabb ccs cinvs cfc cindw cprobw 
            cindp cprobp csigl clandaw crdpi crpi crdy cry crr crhoa crhob 
            crhog crhoqs crhoms crhopinf crhow ctrend cg cgamma clandap cbetabar 
            cr cpie crk cw cikbar cik clk cky ciy ccy crkky cwhlc cwly conster rstar 
            phi_b phi_g omega
+
 //************************************************************************** 
-// Modelbase Parameters                                                  
-                                                                    
+// Modelbase Parameters                                                                                                               
         cofintintb1 cofintintb2 cofintintb3 cofintintb4              
         cofintinf0 cofintinfb1 cofintinfb2 cofintinfb3 cofintinfb4      
         cofintinff1 cofintinff2 cofintinff3 cofintinff4                  
         cofintout cofintoutb1 cofintoutb2 cofintoutb3 cofintoutb4        
         cofintoutf1 cofintoutf2 cofintoutf3 cofintoutf4           
-        std_r_ std_r_quart;                                            
-                                                                                                             
+        std_r_ std_r_quart;                                                                                                                                 
 //**************************************************************************
 
 
-// fixed parameters
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+// Fixed parameters
 ctou=.025; //depreciation rate
 clandaw=1.5; // SS markup labor market
 cg=0.18; //exogenous spending GDP-ratio
@@ -51,9 +71,7 @@ curvw=10; //curvature Kimball aggregator labor market
 //rstar=0.762576;// target quarterly real interest rate
 //rstar=0.5;// target quarterly gross real interest rate
 
-
-
-// estimated parameters initialisation (mean)
+// Estimated parameters initialisation (mean)
 crhoa=    0.9602;
 crhob=    0.2222;
 crhog=    0.9776;
@@ -88,8 +106,6 @@ calfa=0.1914; //labor share in production
 omega=0.2651;
 phi_b=0.0531;
 phi_g=0.1242;
-
-
 
 // derived from steady state
 cpie=1+constepinf/100;
@@ -127,11 +143,14 @@ std_r_ = 1;
 //std_r_ = 1;
 
 
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model; 
 
 //**************************************************************************
 // Definition of Modelbase Variables in Terms of Original Model Variables //*
-
 interest   = r*4;                                                        //*
 inflation  = pinf4;                                                 	 //*
 inflationq = 4*pinf;                                                 	 //*
@@ -142,20 +161,19 @@ output     = y;                                                          //*
 
 //**************************************************************************                                                                    
 // Policy Rule     
-interest =   dummy_MP*0+(1-dummy_MP)*(cofintintb1*interest(-1)                                    //* 
+interest =   dummy_MP*0+(1-dummy_MP)*(cofintintb1*interest(-1)          //* 
            + cofintinf0*inflation                                       //* 
            + cofintinfb1*inflation(-1)                                  //* 
-           + cofintout*outputgap 	                                     //* 
+           + cofintout*outputgap 	                                //* 
            + cofintoutb1*outputgap(-1));  
-     
 //**************************************************************************
+
 
 // Original Model Code:
 
 //usmodel_stst;
 
 // flexible economy
-
 	      0*(1-calfa)*a + 1*a =  calfa*rkf+(1-calfa)*(wf)  ;
 	      zcapf =  (1/(czcap/(1-czcap)))* rkf  ;
 	      rkf =  (wf)+labf-kf ;
@@ -180,7 +198,6 @@ interest =   dummy_MP*0+(1-dummy_MP)*(cofintintb1*interest(-1)                  
           debtf=cr*(1/cpie*debtf(-1)+g-tf);
           //fiscal rule
           tf=phi_b*debtf(-1)+phi_g*g;
-
 
 // sticky price - wage economy
           //marginal cost
@@ -265,6 +282,7 @@ end;
 
 //steady;
 
+//Shocks
 shocks;
 var fiscal_;
 // fiscal package, numbers 20/02/09  
@@ -276,4 +294,7 @@ var dummy_MP;
 periods 1:4;
 values 1;
 end;
+
+//Simulation
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 

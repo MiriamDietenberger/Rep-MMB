@@ -1,5 +1,14 @@
-// Model: US_PV15
+% US_PV15
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
+//**********************************************************************
 // Further references:
 // Poutineau, J. C., & Vermandel, G. (2015). Financial frictions and the extensive margin of activity.
 // Research in Economics, 69(4), 525-554.
@@ -10,28 +19,34 @@
 
 // The model with financial frictions
 // Flexible counterpart of the model (necessary to produce the output gap) has been added 
+//**********************************************************************
 
-close all;
 
 %----------------------------------------------------------------
 % 1. Defining variables
 %----------------------------------------------------------------
 
+//Define endogenous variables
 var uh uc w r rr pi v d de n ne mk mc Psi pic p c y yd h he hc z k i q u Phiu ku rK rL l nn s omega mcL eta w_sup w_inf mut_w wh pi_w mut_p mut_L
 	s_a s_g s_b s_i s_l s_n s_p s_w s_e s_r	
 	ln_yd ln_y ln_c ln_n ln_r ln_pi ln_i ln_ne ln_rL ln_l ln_p ln_v
 	y_obs c_obs i_obs pi_obs r_obs w_obs h_obs ne_obs rL_obs l_obs
     uhn ucn wn rrn vn dn den nnn nen  mcn pn cn yn ydn hn hen hcn zn kn in qn un Phiun kun rKn rLn lnn nnnn sn omegan mcLn etan w_supn w_infn mut_wn whn pi_wn mut_Ln ln_yn;
+
+//Define exogenous variables
 varexo e_a e_g e_b e_i e_l e_n e_p e_w e_e e_r;
 
+//Define parameters
 parameters	beta alpha delta mu sigmaL chi Fe kappa_P xi_P epsilon gy hh chi_I chi_E psi rho phi_pi phi_pic phi_y phi_dy
 			L_QK R eta_d H RL sigmaC obsFactor theta gamma wmin ka TT phi N_K varkappa kappa_L mu_B mu_L mu_P mu_W kappa_W xi_W u_p u_w 
 			rho_a rho_g rho_b rho_i rho_l rho_n rho_p rho_w rho_e rho_r rho_ag  mkn Psin rn pin picn mut_pn;
 
+
 %----------------------------------------------------------------
-% 2. Calibration
+% 2. Calibration and Estimation
 %----------------------------------------------------------------
 % Paper calibrated in the parameter (see page 538)
+//Calibrated parameter values
 beta 		= 0.992; 				% Discount Factor
 delta 		= 0.025;				% Exit rate
 epsilon 	= 3.8; 					% Substitution goods
@@ -58,8 +73,7 @@ pin=1;
 picn=1;
 mut_pn=mu_P;
 
-%%%%%%%%%%%%% Estimated Parameters %%%%%%%%%%%%%%%%%
-
+//Estimated parameter values
 % AR(1) root value
 rho_a		= 0.989438995688241;
 rho_g		= 0.964501329345530;
@@ -93,10 +107,10 @@ phi_y		= 0.107573728902499;		% MPR output gap
 psi			= 0.865371316948408;		% Utilization elasticity
 chi_E 		= 0.911043517537755;		% Free entry cost
 
+
 %----------------------------------------------------------------
 % 3. Model
 %----------------------------------------------------------------
-
 steady_state_model;
 	q 		= 1;	%	Steady state Tobin's q normalized to one
 	r 		= R-1;	%	nominal rate
@@ -492,7 +506,7 @@ model;
 
 end;
 
-
+//Shocks
 shocks;
 	var e_a;  stderr 0.96;
 	var e_g;  stderr 2.32;
@@ -510,5 +524,13 @@ resid(1);
 %steady;
 check;
 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order=1,irf=25, nograph) ln_yd ln_c ln_i ln_pi ln_y ln_n ln_v ln_r;
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul(order=1,irf=25, nograph) ln_yd ln_c ln_i ln_pi ln_y ln_n ln_v ln_r;
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
+

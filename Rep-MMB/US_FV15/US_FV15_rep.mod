@@ -1,14 +1,29 @@
-/*
- * This file replicates the New Keynesian DSGE model with Time-Varying Volatility by Fern�ndez-Villaverde (2015).
- * 
- * It is based on the implementation of Fern�ndez-Villaverde (2010) by Benjamin Born and Johannes Pfeifer 
- * available as part of Dynare. Please note that the following copyright notice applies to the Dynare 
- * implementation of the Fern�ndez-Villaverde (2010) model.
- * Copyright (C) 2013-2016 Dynare Team
- *
- * The replication was written by Philipp Lieberknecht, philipp.lieberknecht@gmail.com
-*/
+% US_FV15
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
+
+//**************************************************************************
+// This file replicates the New Keynesian DSGE model with Time-Varying Volatility by Fern�ndez-Villaverde (2015).
+// 
+// It is based on the implementation of Fern�ndez-Villaverde (2010) by Benjamin Born and Johannes Pfeifer 
+// available as part of Dynare. Please note that the following copyright notice applies to the Dynare 
+// implementation of the Fern�ndez-Villaverde (2010) model.
+// Copyright (C) 2013-2016 Dynare Team
+// The replication was written by Philipp Lieberknecht, philipp.lieberknecht@gmail.com
+//**************************************************************************
+
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var d           //preference shock
     c           //consumption
     mu_z        //trend growth rate of the economy (from neutral and investment specific technology)
@@ -46,11 +61,13 @@ var d           //preference shock
     gammayt     //drift of feedback coefficient to output growth deviation in monetary policy rule
     yg          // output growth
 ;     
-    
+
+//Define exogenous variables
 varexo epsd epsphi epsmu_I epsA epsm ud uphi umu uA um epspi epsy;
 
 predetermined_variables k;
 
+//Define parameters
 parameters h            //consumption habits
            betta        //discount factor
            gammma1      //capital utilization, linear term
@@ -100,6 +117,9 @@ parameters h            //consumption habits
            sigma_y      //standard deviation output response drift shock
 ;     
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 //Fixed parameters, taken from FV(2015), Table 5.1, p. 225
 delta       = 0.025;  
 epsilon     = 10;   
@@ -153,6 +173,10 @@ eta_A       = 0.7720;
 eta_m       = 0.5732;
 sigma_pi    = 0.145;
 
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model; 
 //1. FOC consumption
 d*(c-h*c(-1)*mu_z^(-1))^(-1)-h*betta*d(+1)*(c(+1)*mu_z(+1)-h*c)^(-1)=lambda;
@@ -227,6 +251,7 @@ log(gammayt)    = rhogammay*log(gammayt(-1)) + (1-rhogammay^2)^(1/2)*sigma_y*eps
 yg = (yd/yd(-1)*mu_z)/exp(LambdaYd);
 end;
 
+//Shocks
 shocks;
 var epsd;       stderr 1;
 var epsphi;     stderr 1;
@@ -244,5 +269,12 @@ end;
 
 steady;
 check;
-%stoch_simul(order=1,irf=21, noprint, nograph) yd yg c R PI;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul(order=1,irf=21, noprint, nograph) yd yg c R PI;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

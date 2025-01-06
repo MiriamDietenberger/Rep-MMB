@@ -1,20 +1,38 @@
-//**************Public Debt and Changing Inflation Targets**********************
+% NK_KM16
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
+
+//Public Debt and Changing Inflation Targets
 //FLEXIBLE PRICE
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var yn $output$,cn,hn,wn,mn,Dn,Dnewn,i_Dn,i_Dnewn,in,Rn,pin,lamdan,mun,taun,Dbs,taun_obs,PIESTARn,Dn_obs,DG, 
 y,c,h,w,m,D,Dnew,i_D,i_Dnew,i,R,pi,lamda,mu,tau,PIESTAR,pistar,MC,G,D_obs,tau_obs,i_obs,pi_obs,y_obs,yn_obs,
 Disp,Z1,Z2,epsi_R,
 c_obs,w_obs,h_obs,Dnew_obs,m_obs,Rrate,mu_obs,i_Dnew_obs,G_obs,i_D_obs;
 
+//Define exogenous variables
 varexo epsi_D, eta_PIESTAR,eta_r,epsi_G;
 
+//Define parameters
 parameters sigmac,sigmam,sigmah,theta,epsi,markup, betta,alphaa,rho_tau,phi_tau_D,rho_D,rho_pi,phi, rho_i,
 phipi,phiy, rho_r,rho_G,xi;
 
-//***********stractural parameters************
-//********************************************
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+//structural parameters
 betta=0.99;
 theta=0.75 ; //price stickiness phi
 sigmac=1.5;
@@ -28,13 +46,11 @@ phi=35.4634381498;     //35.4635; //9325;      //42.556125;         //35.4635; /
 
 
 //shock persistence 
- 
 rho_D=0.00; //persistence of a debt shock
 rho_pi=0.99; //persistence of the AR(1) inflation target shock 
 rho_G=0;//persistence of a govern.spending shock
 
 //tax rule
-
 rho_tau=0.5; //persistence of tax rule
 phi_tau_D=0.0037; // 0.035; // response of tax on debt
 
@@ -44,11 +60,14 @@ phipi=1.5; //response of i on inflation
 phiy=0.5; // response of i on y
 rho_r=0.01;//persistence of interest rate shock
 
-//*********************************************
-//**********Natural Block**********************
-//*********************************************
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
+//Natural Block
 
 model;
+
 Rn=(1+in)/pin(+1); //gross
 wn=1/markup;
 yn=hn;
@@ -76,9 +95,8 @@ Dbs=rho_D*Dbs(-1)+ epsi_D;
 //DG=0.2*yn;
 //k=(1/phi*(1/markup)*cn^(-sigmac)*(1-taun))^(1/sigmah);
 
-//*****************************************************************
-//****************************STICKY MODEL*************************
-//*****************************************************************
+
+/////STICKY MODEL/////
 
 R=(1+i)/pi(+1);
 w=MC;
@@ -98,9 +116,6 @@ tau_obs= rho_tau*(tau_obs(-1))+ phi_tau_D*(D_obs);
 
 i_obs/4=(1-rho_i)*(PIESTAR+phipi*(pi_obs/4-PIESTAR)+phiy*(y_obs-yn_obs))+rho_i*i_obs(-1)/4-epsi_R;
 
-
-
-
 epsi_R=rho_r*epsi_R(-1)+eta_r;
 PIESTAR=rho_pi*PIESTAR(-1)+eta_PIESTAR;
 pistar=STEADY_STATE(pistar)*exp(PIESTAR/100);
@@ -117,11 +132,10 @@ Disp=(theta)*Disp(-1)*(pi/pistar)^(epsi)+(1-theta)*(epsi/(epsi-1)*Z1/Z2)^(-epsi)
 //G=0.2*y;
 
 
-//**********************observable variables*******************
+//observable variables
 
-pi_obs =100*(pi-STEADY_STATE(pi))*4; //100*log(pi/STEADY_STATE(pi))*4;
+pi_obs =100*(pi-STEADY_STATE(pi))*4;  //100*log(pi/STEADY_STATE(pi))*4;
  
-        
 i_obs = 100*(i-STEADY_STATE(i))*4;
 y_obs = 100*log(y/STEADY_STATE(y));
 yn_obs = 100*log(yn/STEADY_STATE(yn));
@@ -157,8 +171,9 @@ stderr 0; //0.17;
 var epsi_G=0;
 end;
 
-//***********************STEADY STATE MODEL*********************
-//**************************************************************
+
+/////STEADY STATE MODEL/////
+
 steady_state_model;
 
 wn=1/markup;
@@ -184,7 +199,9 @@ taun=(DG+(alphaa+i_Dn)*Dn/pin-Dnewn-mn+mn/pin)/(wn*hn);
 taun_obs=0;
 Dn_obs=0;
 
-//*************************Sticky STEADY STATE******************
+
+//Sticky STEADY STATE
+
 w=1/1.2; //1/markup;
 h=0.33;
 MC=w;
@@ -236,19 +253,23 @@ steady;
 check;
 
 
-
-
-
-
+//Simulation
 Fig2= 1;
 
 if Fig2 == 1
-    
     // Plots figure 2
     steady;
     warning('OFF');
+
+
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
    //stoch_simul(order = 1, irf = 80, noprint,graph)D_obs,Dnew_obs,pi_obs,pi,PIESTAR,pistar,i_obs,y_obs,Rrate,w_obs,tau_obs,G,c_obs,i_Dnew,i_Dnew_obs,i;
-    stoch_simul(order = 1, irf = 80, noprint,graph)D_obs,y_obs,pi_obs,i_obs,i_D_obs,i_Dnew_obs;
+   //stoch_simul(order = 1, irf = 80, noprint,graph)D_obs,y_obs,pi_obs,i_obs,i_D_obs,i_Dnew_obs;
+//*****************************
+   stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
 
    /* extension =['Baseline'];
     save_irf;*/

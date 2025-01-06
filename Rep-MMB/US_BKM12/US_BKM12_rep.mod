@@ -1,20 +1,36 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% This program simulates Smets and Wouters (AER) from steady state for 12100 periods 	%
-% Parameter values are set for a bimonthly model and reflect estimates based on         %
-% 	modern (89-09) sample and sector-specific (rather than GDP) deflators 		%
-%				 							%
-%											%
-% BAM 6/15/11, this version 8/11/11							%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% US_BKM12
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
 
+//**********************************************************************
+// This program simulates Smets and Wouters (AER) from steady state for 12100 periods 	
+// Parameter values are set for a bimonthly model and reflect estimates based on         
+// modern (89-09) sample and sector-specific (rather than GDP) deflators 						 							
+//										
+// BAM 6/15/11, this version 8/11/11							
+//**********************************************************************
+
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var   labobs robs pinfobs dy dc dinve dw  
 	ewma epinfma
 	zcapf rkf kf pkf cf invef yf labf wf rrf kpf
 	mc zcap rk k pk c inve y lab pinf w r kp 
 	a b g qs ms spinf sw;
 
+//Define exogenous variables
 varexo ea eb eg eqs em epinf ew  ;
 
+//Define parameters
 parameters curvw cgy curvp constelab constepinf constebeta cmaw cmap calfa
  czcap cbeta csadjcost ctou csigma chabb cfc
  cindw cprobw cindp cprobp csigl clandaw
@@ -23,7 +39,11 @@ parameters curvw cgy curvp constelab constepinf constebeta cmaw cmap calfa
  ctrend
  conster cg cgamma clandap cbetabar cr cpie crk cw cikbar cik clk cky ciy ccy crkky cwhlc cwly ;
 
-// fixed parameters
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+// Fixed parameters
 ctou=.017; 
 clandaw= 1.5;
 cg=0.18;
@@ -31,7 +51,6 @@ curvp=10;
 curvw=10;
 
 // Estimated parameters (from usmodel_bimonth_est_err.mod)
-
 crhoa=    0.953;
 crhob=    0.968;
 crhog=    0.966;
@@ -63,7 +82,7 @@ constelab = -2.792;
 ctrend = 0.233;    
 calfa=.209;
 
-% derived parameters - shares - etc
+// derived parameters - shares - etc
 cpie=1+constepinf/100;
 cgamma=1+ctrend/100 ;
 cbeta=1/(1+constebeta/100);
@@ -85,10 +104,13 @@ cwly=1-crk*cky;
 
 conster=(cr-1)*100;
 
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
 
 // flexible economy
-
 	      0*(1-calfa)*a + 1*a =  calfa*rkf+(1-calfa)*(wf)  ;
 	      zcapf =  (1/(czcap/(1-czcap)))* rkf  ;
 	      rkf =  (wf)+labf-kf ;
@@ -102,7 +124,6 @@ model(linear);
 	      kpf =  (1-cikbar)*kpf(-1)+(cikbar)*invef + (cikbar)*(cgamma^2*csadjcost)*qs ;
 
 // sticky price - wage economy
-
 	      mc =  calfa*rk+(1-calfa)*(w) - 1*a - 0*(1-calfa)*a ;
 	      zcap =  (1/(czcap/(1-czcap)))* rk ;
 	      rk =  w+lab-k ;
@@ -145,7 +166,6 @@ model(linear);
 	      kp =  (1-cikbar)*kp(-1)+cikbar*inve + cikbar*cgamma^2*csadjcost*qs ;
 
 // measurment equations
-
 	dy=y-y(-1)+ctrend;
 	dc=c-c(-1)+ctrend;
 	dinve=inve-inve(-1)+ctrend;
@@ -230,7 +250,15 @@ end;
 
 
 steady;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-// The execution command we run is:
-%stoch_simul(order = 1, noprint, IRF=0, periods = 12102, drop = 200);
-%stoch_simul(order = 1, noprint, IRF=100, periods = 12102, drop = 200) r w mc y c inve lab pinf wf yf cf invef; %construct impulse responses;
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//The execution command we run is:
+//stoch_simul(order = 1, noprint, IRF=0, periods = 12102, drop = 200);
+//stoch_simul(order = 1, noprint, IRF=100, periods = 12102, drop = 200) r w mc y c inve lab pinf wf yf cf invef; %construct impulse responses;
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+

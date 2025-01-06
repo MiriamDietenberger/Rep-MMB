@@ -1,35 +1,54 @@
+% US_CCF12
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+
+//**********************************************************************
 //Chen et al (2012)
 //The macroeconomic effects of LSAPPs (The Economic Journal)
 //linearized model
 //27.12.2017
 //by Alina T�nzer, March 2018
- 
+ //**********************************************************************
 
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+//Define endogenous variables
 var         marc rk r rL wz Kz Kz_eff L Yz Xpnu Xpnr Xpdu Xpdr Xwnu 
             Xwnr Xwdu Xwdr pi u Iz mu z psi lambda_ms bu br 
             Xiu Xir q Czu Czr zeta_h Bz BzL Gz Tz  
             shock_zeta BLMVz BTotMVz slope rLEH RP rr rLr rLEHr 
             Yz_growth pi_ann r_ann rL_ann dy y infl FFR bondrate riskprem y_level;
             
-                   
+//Define exogenous variables                 
 varexo      eps_z eps_phi eps_lambda eps_mu eps_zeta eps_m eps_bu eps_br eps_Gz eps_T eps_B;     
 
+//Define parameters
 parameters  alpha betau betar beta_av delta gamma kappa lambdaw lambdaf zeta zetap zetaw chi_pu chi_wu 
             omegau omegar S_dp a_dp zeta_prime RL phi_T phi_pi phi_y qu h sigmau sigmar nu rho_bu rho_br 
             rho_B rho_zeta rho_Gz rho_r rho_z rho_phi rho_mu rk_SS r_SS Bz_SS C_ratio Czu_SS Czr_SS BzL_SS 
             Gz_SS Iz_SS Yz_SS Tz_SS Pi_SS Kz_eff_SS Kz_SS X_ratio sigma_z sigma_lambda sigma_mu sigma_b 
             sigma_phi sigma_B sigma_T sigma_m sigma_zeta sigma_g BLMVB BLB BLMVz_SS kappaEH BondDuration;
-            //
-
-//CALIBRATED PARAMETERS
+            
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+//Calibrated Parameters
 alpha       = 0.33;             //share of capital in production    
 lambdaw     = 0.15;                //steady state wage markup 
 lambdaf     = 0.15;                //steady state price markup 
 delta       = 0.025;            //capital depreciation rate
 Gz_SS       = 0.2;
 
-
-//ESTIMATED PARAMETERS FROM POSTERIOR DISTRIBUTION - TRANSFORMED
+//Estimated Parameters from Posterior Distribution - Transformed
 gamma       = 0.005;            //check: vorher 0.5
 betau       = 0.9988;           //discount factor for unconstrained HH
 pi_SS       = 0.0053;             //quarterly SS inflation *100 in percent, annualized about 2%
@@ -37,7 +56,7 @@ zeta        = 0.001242;          //transaction costs (SS spread between 10-year 
 zeta_prime  = 0.003274;         //elasticity of risk premium to changes in in market value of long-term debt 
 BondDuration = 30;
 
-//ESTIMATED PARAMETERS FROM POSTERIOR DISTRIBUTION
+//Estimated Parameters from Posterior Distribution
 BLMVB       = 0.8533; 
 zetap       = 0.9288;            //price rigidity parameter
 zetaw       = 0.7342;            //wage rigidity parameter
@@ -76,7 +95,6 @@ sigma_zeta      = 0.2592;
 sigma_g         = 0.3429;
 
 //Parameters derived from SS:
-
 C_ratio     = 0.9760;             //Ratio of consumption of unconstrained and constrained HH
 Yz_SS       = 1; 
 X_ratio     = 1.7030;             //ratio of unconstrained and constrained marginal utility
@@ -103,7 +121,9 @@ Czr_SS      = (1-Iz_SS-Gz_SS)/(omegau*C_ratio+omegar);              //from C.16
 Czu_SS      = C_ratio*Czr_SS;                                       //from C.17
 
 
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 model(linear);
  
 //INTERMEDIATE GOODS PRODUCERS:
@@ -127,6 +147,7 @@ Xpdr = (1-betar*zetap)*(Xir + Yz) + betar*zetap*(-1/lambdaf*pi(+1) + Xpdr(+1));
 //Law of motion of prices (D.6)
 pi = (1-zetap)/zetap*(chi_pu*Xpnu + (1-chi_pu)*Xpnr - chi_pu*Xpdu -(1-chi_pu)*Xpdr);
 
+
 //CAPITAL PRODUCERS:
 
 //Effective Capital (D.7)
@@ -144,6 +165,7 @@ q = beta_av*exp(-gamma)*(rk_SS*rk(+1)+(1-delta)*q(+1))-z(+1)+ qu*((1+zeta)
 
 //Investment decision (D.11)
 0 = q + mu - exp(2*gamma)*S_dp*(z + Iz - Iz(-1))+ beta_av*exp(2*gamma)*S_dp*(z(+1) + Iz(+1)-Iz);
+
 
 //HOUSEHOLDS:
 
@@ -172,6 +194,7 @@ Xwdr = (1-zetaw*betar)*(Xir+L+(1+lambdaw)/lambdaw*wz) + zetaw*betar*(1/lambdaw*(
 
 //Law of motion of real wages (D.18)
 wz=(1-zetaw)/(1+(1+lambdaw)/lambdaw*nu)*(chi_wu*(Xwnu-Xwdu)+(1-chi_wu)*(Xwnr-Xwdr))+ zetaw*(wz(-1)-pi-z); 
+
 
 //GOVERNMENT DEBT:
 
@@ -206,6 +229,7 @@ r = rho_r*r(-1) + (1-rho_r)*(phi_pi*pi + phi_y*(Yz - Yz(-4) + z + z(-1) + z(-2) 
 //Aggregate Resource constraint (D.24)
 Yz*Yz_SS = omegau*Czu_SS*Czu + omegar*Czr_SS*Czr + Iz_SS*Iz + Gz_SS*Gz + exp(-gamma)*rk_SS*Kz_SS*u;
 
+
 //ADDITIONAL EXOGENOUS PROCESSES:
 
 //technology process
@@ -229,7 +253,6 @@ Gz = rho_Gz*Gz(-1) + eps_Gz;
 
 
 //ADDITIONAL DEFINITIONS REQUIRED FOR PLOTTING:
-
     slope = rL - r;
     //EE unconstrained, under expectation hypothesis (EH)
     Xiu = r_SS/(r_SS-kappaEH)*rLEH + Xiu(+1)-z(+1)-pi(+1)-kappaEH/(r_SS-kappaEH)*rLEH(+1);
@@ -239,8 +262,8 @@ Gz = rho_Gz*Gz(-1) + eps_Gz;
     rLr = rL - pi(+1);
     rLEHr = rLEH - pi(+1);
 
-//DEFINE ANNUAL RATES
 
+//DEFINE ANNUAL RATES
 Yz_growth        = 4*(Yz - Yz(-1));                     //annualized percentage rate
 y_level          = Yz;                                //percentage deviation from trend, not annualized
 pi_ann           = pi; //(pi + pi(-1) + pi(-2) + pi(-3));   //annualized percentage rate
@@ -248,8 +271,8 @@ r_ann            = 4*r;                                 //annualized percentage 
 rL_ann           = 4*rL;                                //annualized percentage rate
 riskprem         = RP;                      
 
-//REDEFINE VARIABLED FOR IRF GRAPHS
 
+//REDEFINE VARIABLED FOR IRF GRAPHS
 dy      = Yz_growth;
 y       = Yz;
 infl    = pi_ann;
@@ -259,8 +282,8 @@ bondrate    = rL_ann;
 
 end;
 
+//Shocks
 shocks;
-
 //technology shock
  %       var eps_z = sigma_z^2; 
 //intratemporal preference shock
@@ -282,13 +305,19 @@ shocks;
        % var eps_T = sigma_T^2;
 //long-term bond supply shock
         %var eps_B = sigma_B^2;
-
 end;
 
 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 //not the correct variables to be plotted, just a try
-%stoch_simul(order=1,  irf=24, nograph)    dy y infl FFR bondrate riskprem; 
+//stoch_simul(order=1,  irf=24, nograph)    dy y infl FFR bondrate riskprem; 
+//*****************************
+stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+
 
 
 
