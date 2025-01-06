@@ -1,3 +1,13 @@
+% CA_ToTEM10
+%
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //**************************************************************************
 // This file has been transformed from its MMB version to be a replication 
 // .mod file in June 2022.
@@ -22,7 +32,11 @@
 	// This file simulates the dynamic response of Bank of Canada's ToTEM model
 	// to specific shocks. 
 	
-	
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 	var cbal,cbal_cor,defn_yn,defn_yn_ss,den_w,deprk,dr1rown,gbn_cor,gbn_yn,gbn_yn_ss,
 	    gn_yn_ss,inff,infprow,infq,infq2,infq_pg,infq_row,infrow,infrow2,infrow_ss,gn_yn_cor
 	    la,la0_cor,la5_cor,la9_cor,ladotrow,la_inv,la_tot,lc,lc0_cor,lc995_cor,lcfl,lchm,lckl,
@@ -44,15 +58,11 @@
 	    ug,uinv,usact,usum,utotal,ux,w_inf;
 	
 	
-
-	
-	
+//Define exogenous variables
 	varexo lyrow_shk,lpcomrow_shk,lxdc_shk,lforexn_shk,lc_shk,la_shk,gn_yn_shk;%
 	
 	
-  
-	
-	     
+//Define parameters	     
 	parameters 
 	           alpha_c,alpha_c2,alpha_com,alpha_g,alpha_hawc,alpha_hawcom,alpha_hawg,alpha_hawinv,alpha_hawx,
 	           alpha_inv,alpha_x,a_cbal,a_gbn,a_k,a_ladotus,a_lc,a_lc2,a_lforexn,a_lg,a_linv,a_lm,a_lpcomrow,a_lprow,
@@ -71,7 +81,10 @@
 	           lxdx_shk,lxf_shk,lxw_shk,ly_res_shk,linv_shk,lx_shk,lm_shk,r1n_tran_shk,rh_prem_shk,
 	           rf_prem_shk,lk_shk,transf_r_shk,tdn_shk,rgbn_shk,tinc_shk,cbal_shk,nfa_shk;
 	
-	
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 	///////
 	//  Parameters for monetary policy rule
 	r1n_ss_ss = 1.25599099e-02;
@@ -264,18 +277,18 @@
 	nfa_shk=0.00000000e+00;
 	
 
-	
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------		
 	
 	model;
-	
-
 	
 	
 	// Original Model Code:
 	
-	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
 	//% Consumption goods production sector %
-	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
 	
 	 exp(lckl) = (delta^(1/sigma)*(exp(la_tot)*exp(llc))^((sigma-1)/sigma)+(1-delta)^(1/sigma)*(u*exp(lk))^((sigma-1)/sigma))^(sigma/(sigma-1)) ;
 	 exp(lcklc) = (delta_c^(1/sigma_com)*exp(lckl)^((sigma_com-1)/sigma_com)+(1-delta_c)^(1/sigma_com)*exp(lcomdc)^((sigma_com-1)/sigma_com))^(sigma_com/(sigma_com-1)) ;
@@ -294,9 +307,9 @@
 	 exp(lq_r)-exp(lpinv_r) = exp(lmc_r)*(chi_k*(exp(linvc-lk)-4*(exp(ladot)+deprk-1))+chi/2*(exp(linvc-linv_cor-linvc(-1))-exp(ladot))^2+exp(linvc-linv_cor-linvc(-1))*chi*(exp(linvc-linv_cor-linvc(-1))-exp(ladot)))-1/(1+rkn)*exp(lmc_r(1)+infq(1))*exp(linvc(1)-linvc-linv_cor)^2*chi*(exp(linvc(1)-linvc-linv_cor)-exp(ladot)) ;
 	 infq = dyn_pcpix/(1+beta*dyn_pcpix)*infq(-1)+beta/(1+beta*dyn_pcpix)*infq(1)+(1-dyn_pcpix)*(1-beta)/(1+beta*dyn_pcpix)*pertarget+xi*(1-calvo_pcpix)*(1-beta*calvo_pcpix)/((1+beta*dyn_pcpix)*calvo_pcpix)*lmc_r+lxdc_cor_tot ;
 	 
-	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
 	//% Investment goods production sector  %
-	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
 	
 	 exp(linvkl) = (delta^(1/sigma)*(exp(la_tot)*exp(llinv))^((sigma-1)/sigma)+(1-delta)^(1/sigma)*(uinv*exp(lkinv))^((sigma-1)/sigma))^(sigma/(sigma-1)) ;
 	 exp(linvklc) = (delta_c^(1/sigma_com)*exp(linvkl)^((sigma_com-1)/sigma_com)+(1-delta_c)^(1/sigma_com)*exp(lcomdinv)^((sigma_com-1)/sigma_com))^(sigma_com/(sigma_com-1)) ;
@@ -314,9 +327,9 @@
 	 exp(lqinv_r)-exp(lpinv_r) = exp(lmcinv_r)*(chi_k*(exp(linvinv-lkinv)-4*(exp(ladot)+deprk-1))+chi/2*(exp(linvinv-linv_cor-linvinv(-1))-exp(ladot))^2+exp(linvinv-linv_cor-linvinv(-1))*chi*(exp(linvinv-linv_cor-linvinv(-1))-exp(ladot)))-1/(1+rkn)*exp(lmcinv_r(1)+infq(1))*exp(linvinv(1)-linvinv-linv_cor)^2*chi*(exp(linvinv(1)-linvinv-linv_cor)-exp(ladot)) ;
 	 lpinv_r-lpinv_r(-1)+infq = dyn_pinv/(1+beta*dyn_pinv)*(lpinv_r(-1)+infq(-1)-lpinv_r(-2))+beta/(1+beta*dyn_pinv)*(lpinv_r(1)+infq(1)-lpinv_r)+(1-dyn_pinv)*(1-beta)/(1+beta*dyn_pinv)*pertarget+xi*(1-calvo_pinv)*(1-beta*calvo_pinv)/((1+beta*dyn_pinv)*calvo_pinv)*(lmcinv_r-lpinv_r)+lxdinv_cor ;
 	 
-	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
 	//% Government goods production sector  %
-	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
 	
 	 exp(lgkl) = (delta^(1/sigma)*(exp(la_tot)*exp(llg))^((sigma-1)/sigma)+(1-delta)^(1/sigma)*(ug*exp(lkg))^((sigma-1)/sigma))^(sigma/(sigma-1)) ;
 	 exp(lgklc) = (delta_c^(1/sigma_com)*exp(lgkl)^((sigma_com-1)/sigma_com)+(1-delta_c)^(1/sigma_com)*exp(lcomdg)^((sigma_com-1)/sigma_com))^(sigma_com/(sigma_com-1)) ;
@@ -334,9 +347,9 @@
 	 exp(lqg_r)-exp(lpinv_r) = exp(lmcg_r)*(chi_k*(exp(linvg-lkg)-4*(exp(ladot)+deprk-1))+chi/2*(exp(linvg-linv_cor-linvg(-1))-exp(ladot))^2+exp(linvg-linv_cor-linvg(-1))*chi*(exp(linvg-linv_cor-linvg(-1))-exp(ladot)))-1/(1+rkn)*exp(lmcg_r(1)+infq(1))*exp(linvg(1)-linvg-linv_cor)^2*chi*(exp(linvg(1)-linvg-linv_cor)-exp(ladot)) ;
 	 infq_pg = dyn_pg/(1+beta*dyn_pg)*infq_pg(-1)+beta/(1+beta*dyn_pg)*infq_pg(1)+(1-dyn_pg)*(1-beta)/(1+beta*dyn_pg)*pertarget+xi*(1-calvo_pg)*(1-beta*calvo_pg)/((1+beta*dyn_pg)*calvo_pg)*(lmcg_r-lpg_r)+lxdg_cor ;
 	 
-	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
 	//%  Export goods production sector %
-	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
 	
 	 exp(lxkl) = (delta^(1/sigma)*(exp(la_tot)*exp(llx))^((sigma-1)/sigma)+(1-delta)^(1/sigma)*(ux*exp(lkx))^((sigma-1)/sigma))^(sigma/(sigma-1)) ;
 	 exp(lxklc) = (delta_c^(1/sigma_com)*exp(lxkl)^((sigma_com-1)/sigma_com)+(1-delta_c)^(1/sigma_com)*exp(lcomdx)^((sigma_com-1)/sigma_com))^(sigma_com/(sigma_com-1)) ;
@@ -355,9 +368,9 @@
 	 lpmanx_r+infq-lpmanx_r(-1) = dyn_px/(1+beta*dyn_px)*(lpmanx_r(-1)+infq(-1)-lpmanx_r(-2))+beta/(1+beta*dyn_px)*(lpmanx_r(1)+infq(1)-lpmanx_r)+(1-dyn_px)*(1-beta)/(1+beta*dyn_px)*pertarget+xi*(1-calvo_px)*(1-beta*calvo_px)/((1+beta*dyn_px)*calvo_px)*(lmcx_r-lpmanx_r)+lxdx_cor ;
 	 lmanx = log(omega)+gf*(lprow2_r-lpfx_r)+lyrow+gf2*lyrow_gap+lx_cor ;
 	
-	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
 	//% Commodity goods production sector %
-	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
 	
 	 exp(lykl) = (delta^(1/sigma)*(exp(la_tot)*exp(llcom))^((sigma-1)/sigma)+(1-delta)^(1/sigma)*exp(log(ucom)+lkcom)^((sigma-1)/sigma))^(sigma/(sigma-1)) ;
 	 exp(lcomy)^((theta_com-1)/theta_com) = alpha_com^(1/theta_com)*exp(lykl)^((theta_com-1)/theta_com)+(1-alpha_com)^(1/theta_com)*(exp(la_tot)*land)^((theta_com-1)/theta_com) ;
@@ -372,26 +385,26 @@
 	 exp(lqcom_r)-exp(lpinv_r) = exp(lpcom_r)*(chi_k*(exp(linvcom-lkcom)-4*(exp(ladot)+deprk-1))+chi/2*(exp(linvcom-linv_cor-linvcom(-1))-exp(ladot))^2+exp(linvcom-linv_cor-linvcom(-1))*chi*(exp(linvcom-linv_cor-linvcom(-1))-exp(ladot)))-1/(1+rkn)*exp(lpcom_r(1)+infq(1))*exp(linvcom(1)-linvcom-linv_cor)*chi*(exp(linvcom(1)-linvcom-linv_cor)-exp(ladot)) ;
 	 lpcomd_r+infq-lpcomd_r(-1) = dyn_pcomd/(1+beta*dyn_pcomd)*(lpcomd_r(-1)+infq(-1)-lpcomd_r(-2))+beta/(1+beta*dyn_pcomd)*(lpcomd_r(1)+infq(1)-lpcomd_r)+(1-dyn_pcomd)*(1-beta)/(1+beta*dyn_pcomd)*pertarget+(1-calvo_pcomd)*(1-beta*calvo_pcomd)/((1+beta*dyn_pcomd)*calvo_pcomd)*(lpcom_r-lpcomd_r) ;
 	 
-	//%%%%%%%%%%%%%%%%%
+	
 	//% Import sector %
-	//%%%%%%%%%%%%%%%%%
+	
 	 lpm_fit_r+infq-lpm_fit_r(-1) = dyn_pm/(1+beta*dyn_pm)*(lpm_fit_r(-1)+infq(-1)-lpm_fit_r(-2))+beta/(1+beta*dyn_pm)*(lpm_fit_r(1)-lpm_fit_r+infq(1))+(1-dyn_pm)*(1-beta)/(1+beta*dyn_pm)*pertarget+(1-calvo_pm)*(1-beta*calvo_pm)/((1+beta*dyn_pm)*calvo_pm)*(lmcm_r-lpm_fit_r) ;
 	 exp(lmcm_r) = exp(lpm_r) ;
 	 lpm_r = lpxrow_r+lp_r+lforex+lxf_cor ;
 	
-	//%%%%%%%%%%%%%%%%%%%%%%%%
+	
 	//% Foreign import price %
-	//%%%%%%%%%%%%%%%%%%%%%%%%
+	
 	 lpfx_r+infq_row-lpfx_r(-1) = dyn_pfx/(1+beta*dyn_pfx)*(lpfx_r(-1)+infq_row(-1)-lpfx_r(-2))+beta/(1+beta*dyn_pfx)*(lpfx_r(1)+infq_row(1)-lpfx_r)+(1-calvo_pfx)*(1-beta*calvo_pfx)/((1+beta*dyn_pfx)*calvo_pfx)*(lpmanx_r-lforex-lp_r-lpfx_r) ;
 	
-	//%%%%%%%
+	
 	//% UIP %
-	//%%%%%%%
+	
 	 lforex = z_lag*(lforex(-1)+infq_row+lp_r(-1)-lp_r-infq+2*(pertarget-infrow_ss))+(1-z_lag)*(lforex(1)-infq_row(1)+lp_r(1)-lp_r+infq(1))+log(1+r1rown)+log(1+risk)-log(1+r1n)-log(1+r1row_ss)-log(1+risk_ss)+log(1+r1_ss) ;
 	 
-	//%%%%%%%%%%%%%%
+	
 	//% Households %
-	//%%%%%%%%%%%%%%
+	
 	 lxw_r-lwn_r = sub2/(e_w+sub2)*(log(sub3*e_w/(e_w-1))+num_w-den_w) ;
 	 exp(lwn_r) = ((1-calvo_w)*exp(lxw_r)^(1-e_w)+calvo_w*exp(lwn_r(-1)-infq+lindex_w)^(1-e_w))^(1/(1-e_w))*exp(lxw_cor_tot) ;
 	 lindex_w = dyn_w*(lwn_r(-1)+infq(-1)-lwn_r(-2))+(1-dyn_w)*(ladot+pertarget) ;
@@ -403,18 +416,18 @@
 	 lcomc = log(1-alpha_c2)-theta_c2*(lpcomd_r-lpc_r)+lc ;
 	 exp(lpc_r) = (alpha_c2*exp(lpc_cor)^(1-theta_c2)+(1-alpha_c2)*exp(lpcomd_r)^(1-theta_c2))^(1/(1-theta_c2)) ;
 	 
-	//%%%%%%%%%%%%%%%%%%%
+	
 	//% Current Account %
-	//%%%%%%%%%%%%%%%%%%%
+	
 	 cbal = exp(lforex(1)-infq_row(1)+lp_r(1)+infq(1)-lforex-lp_r)*(1+risk)*(r1rown*nfa(-1)*4*exp(lp_r(-1)-infq+ly(-1))/exp(lp_r+ly)+(1+r1rown)*(exp(lpx_r+lx)-exp(lpm_r+lm))/exp(lp_r+ly))+cbal_cor ;
 	 nfa = exp(lforex(1)-infq_row(1)+infq(1)+lp_r(1)-lforex-lp_r)*(1+risk)*nfa(-1)*exp(lp_r(-1)-infq+ly(-1))/exp(lp_r+ly)+0.25*cbal+nfa_shk ;
 	 risk = risk_ss+risk_dyn ;
 	 risk_dyn = tau2*(exp(-(nfa-nfa_ss))-1)+lforexn_cor_tot+risk_cor ;
 	 risk_ss = tau*(exp(-nfa_ss)-1) ;
 	 
-	//%%%%%%%%%%%%%%
+	
 	//% Government %
-	//%%%%%%%%%%%%%%
+	
 	 lg = fiscal4*(ladot+lg(-1))+(1-fiscal4)*(log(gn_yn_ss)-lpg_r+lp_r+ly)+gn_yn_cor ;%
 	 lgbn_r = log((1+rgbn)^0.25*exp(lgbn_r(-1)-infq)+(exp(lg+lpg_r)+exp(ltransf_r)-exp(ltdnr_r)-exp(ltincr_r))/4)+gbn_cor ;
 	 gbn_yn = exp(lgbn_r)/exp(ly+lp_r) ;
@@ -429,9 +442,9 @@
 	 tinc_ss = tincr_yn_ss/lcshare_sreq ;
 	 exp(ltincr_r) = tinc*exp(lpc_r+lc) ;
 	
-	//%%%%%%%%%%%%%%%
+	
 	//% Definitions %
-	//%%%%%%%%%%%%%%%
+	
 	 lcshare = exp(lc+lpc_r)/exp(ly+lp_r) ;
 	 lcshare_sreq = lcshare_sreq(-1)+lcshare_add ;
 	 lcshare_add = lrelc_pcom*lpcomrow_prow_shk+lrelc_a*la_shk+lrelc_yrow*lyrow_sreq_shk+lrelc_lyres*ly_res_shk+lrelc_lk*lk_shk+lrelc_nfa*nfa_shk+lrelc_nfa_ss*nfa_ss_shk+lrelc_gbn_yn_ss*gbn_yn_ss_shk ;
@@ -468,9 +481,9 @@
 	 lw = lwn_r-lp_r ;
 	 profit = 1-exp(lwn_r+lhaw-lp_r-ly) ;
 	
-	//%%%%%%%%%%%%%%%%%%%
+	
 	//% Market clearing %
-	//%%%%%%%%%%%%%%%%%%%
+	
 	 exp(ly+lp_r) = exp(lpc_r+lc)+exp(lpinv_r+linv)+exp(lpx_r+lx)-exp(lpm_r+lm)+exp(lpg_r+lg)-lp_res_shk ;
 	 exp(ly) = exp(ly(-1))*((exp(lpc_r(-1))*exp(lc)+exp(lpinv_r(-1))*exp(linv)+exp(lpx_r(-1))*exp(lx)-exp(lpm_r(-1))*exp(lm)+exp(lpg_r(-1))*exp(lg))/(exp(lpc_r(-1))*exp(lc(-1))+exp(lpinv_r(-1))*exp(linv(-1))+exp(lpx_r(-1))*exp(lx(-1))-exp(lpm_r(-1))*exp(lm(-1))+exp(lpg_r(-1))*exp(lg(-1)))*(exp(lpc_r)*exp(lc)+exp(lpinv_r)*exp(linv)+exp(lpx_r)*exp(lx)-exp(lpm_r)*exp(lm)+exp(lpg_r)*exp(lg))/(exp(lpc_r)*exp(lc(-1))+exp(lpinv_r)*exp(linv(-1))+exp(lpx_r)*exp(lx(-1))-exp(lpm_r)*exp(lm(-1))+exp(lpg_r)*exp(lg(-1))))^0.5*exp(ly_res_shk) ;
 	 exp(lc) = exp(lcfl)+exp(lchm) ;
@@ -487,9 +500,9 @@
 	 exp(lktotal) = exp(lk)+exp(lkinv)+exp(lkg)+exp(lkx)+exp(lkcom) ;
 	 
 	 
-	//%%%%%%%%%%%%%%%%%%%%%%%
+	
 	//% Exogenous Processes %
-	//%%%%%%%%%%%%%%%%%%%%%%%
+	
 	 la = la(-1)+ladot+la_shk+a_ladotus*lyrow_sreq_shk ;
 	 la_tot = la+la0_cor+la5_cor+la9_cor ;
 	 la0_cor = la0_shk ;
@@ -544,9 +557,9 @@
 	 deprk = deprk(-1)+deprk_shk ;
 	 usact = usact(-1)+usact_shk ;
 	
-	//%%%%%%%%%%%%%%%%%
+	
 	//% Foreign Block %
-	//%%%%%%%%%%%%%%%%%
+	
 	lpcomrow_prow-log(pcomrow_prow_ss) = a_lpcomrow*(lpcomrow_prow(-1)-log(pcomrow_prow_ss))+lpcomrow_shk+exog_lpcomrow_prow1_shk ;
 	log(pcomrow_prow_ss) = 1.29832*log(pcomrow_prow_ss(-1))-0.29832*log(pcomrow_prow_ss(-2))+lpcomrow_prow_shk ;
 	lyrow = lyrow_sreq+lyrow_gap ;
@@ -572,6 +585,7 @@
 	infrow_ss = infrow_ss(-1)+infrow_shk ;
 	end;
 
+//Shocks
 	%resid;
 	options_.solve_tolf=1e-5;
 	steady(maxit=1000);
@@ -585,5 +599,12 @@
 	var gn_yn_shk; stderr 0.02*100;
 	end;
 	options_.Schur_vec_tol = 1e-6;
-	
-	stoch_simul (irf = 0,AR=100, noprint, nograph);
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//	stoch_simul (irf = 0,AR=100, noprint, nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

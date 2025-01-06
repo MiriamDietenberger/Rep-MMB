@@ -1,3 +1,13 @@
+% EA_VI16gk
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 % Financial frictions in the Euro Area and the United States: a Bayesian assessment
 % Macroeconomic Dynamics, 20 (05), p. 1313-1340, 2016
 % Stefania Villa
@@ -13,19 +23,30 @@
 % note 4: In eq 19, capital is forward looking in the original code [k(+1)]. 
 % Here, I have changed this is changed to a static variable [k] to make the notation consistent with the rest of the code 
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var 
 y  i   ext_pr  c  lev  q  Lambda  l  d  v  rk  x  z  nn  mu  n  ne  k  u  w  r  zk  rn pi 
 yf i_f ext_prf cf levf qf Lambdaf lf df vf rkf xf zf nnf muf nf nef kf uf wf rf zkf
 a g eps_p eps_w eps_k eps_r eps_x
 emp robs piobs dy dc dfi dw; 
 
+//Define exogenous variables
 varexo e_x e_r e_k e_g e_a e_w e_p;
 
+//Define parameters
 parameters 
 beta phi chi alpha delta epsilon epsilon_w G_Y h lambda theta zeta ksi sig_p sig_pi sig_w sig_wi sig_E M  
 rho_r rho_ri rho_PI rho_Y rho_A rho_G rho_X rho_k rho_W rho_P THETA  rho_DY 
 RK constelab picbar trend;
- 
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+
 alpha       = 0.33;       %capital share
 beta        = 0.99;       %Discount rate
 delta       = 0.025;      %Steady state depreciation rate
@@ -66,7 +87,11 @@ RK          = 1.013860066271978;
 constelab   = 0;
 picbar      = 0.63; 
 trend       = 0.3;
- 
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
+
 model (linear);
 
 %%%%%%transformed parameters%%%%%
@@ -260,7 +285,13 @@ options_.plot_priors=0;
 % lik_init=2,prefilter=0,conf_sig=0.95,mh_replic=0,load_mh_file,mh_nblocks=2,mh_jscale=0.35,
 % mh_drop=0.25,moments_varendo) y i c pi rn ext_pr n;
 
-%it gives IRF and variance decomposition,,conditional_variance_decomposition=[1 4 8 40 80]
-%stoch_simul(irf=20, nograph) y i pi n ext_pr;
-%stoch_simul(irf=20) y i pi c robs q n ext_pr;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//%it gives IRF and variance decomposition,,conditional_variance_decomposition=[1 4 8 40 80]
+//%stoch_simul(irf=20, nograph) y i pi n ext_pr;
+//%stoch_simul(irf=20) y i pi c robs q n ext_pr;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

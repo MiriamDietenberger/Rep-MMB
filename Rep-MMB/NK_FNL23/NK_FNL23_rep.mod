@@ -1,3 +1,13 @@
+% NK_FNL23
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%Ferrari and Nispi Landi (IJCB 2023)%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -10,7 +20,12 @@ warning off
 @#define ela =  0
 tfp_stand=0.017;  %0.017
 mon_stand=0.000;
-%%%%%%%%%%%%%%%%%%%%%%%Endogenous Variables %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var
 lam
 c 
@@ -67,8 +82,8 @@ yGlog
 Xealog
 Xlog
 ;
-%%
-%%%%%%%%%%%%%%%%%%%%%%%Exogenous Variables%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+//Define exogenous variables
 varexo 
 va   % TFP shocks
 vm   % monetary shochks
@@ -76,9 +91,7 @@ vi   % investment specific shocks
 vg
 ;  
     
-%%
-%%%%%%%%%%%%%%%%%%%%%%%Parameters%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+//Define parameters
 parameters
 
 betta 
@@ -138,6 +151,10 @@ for jj=1:length(M_.param_names)-7
 set_param_value(M_.param_names{jj},eval(M_.param_names{jj})); 
 end;
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+
 rhoa=0.92;
 rhoi=0.95;
 rhog=0.95;
@@ -148,9 +165,9 @@ standg=0.00;
 
 
 
-
-%%
-%%%%%%%%%%%%%%%%%%%%%%%Non-Linear Model%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model;
 %Households
@@ -290,29 +307,34 @@ var vm; stderr standm;
 var vg; stderr standg;  
 end;
 
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 %% IRFs
-stoch_simul(irf=100,order=1, hp_filter=1600,noprint,ar=1,nograph)
-ylog clog ilog pi elog piA hlog klog Xealog Xlog yGlog  
+// stoch_simul(irf=100,order=1, hp_filter=1600,noprint,ar=1,nograph)
+// ylog clog ilog pi elog piA hlog klog Xealog Xlog yGlog  
 
 ;
 
-sym=oo_.var(1,1)^0.5;
-scm=oo_.var(2,2)^0.5;
-sim=oo_.var(3,3)^0.5;
-spim=oo_.var(4,4)^0.5;
-scM=scm/sym;
-siM=sim/sym;
-spiM=spim/sym;
-rhoycM=oo_.var(1,2)/(sym*scm);
-rhoyiM=oo_.var(1,3)/(sym*sim);
-rhoypiM=oo_.var(1,4)/(sym*spim);
-rhoy1M=oo_.autocorr{1,1}(1,1);
-rhoc1M=oo_.autocorr{1,1}(2,2);
-rhoi1M=oo_.autocorr{1,1}(3,3);
-rhopi1M=oo_.autocorr{1,1}(4,4);
+// sym=oo_.var(1,1)^0.5;
+// scm=oo_.var(2,2)^0.5;
+// sim=oo_.var(3,3)^0.5;
+// spim=oo_.var(4,4)^0.5;
+// scM=scm/sym;
+// siM=sim/sym;
+// spiM=spim/sym;
+// rhoycM=oo_.var(1,2)/(sym*scm);
+// rhoyiM=oo_.var(1,3)/(sym*sim);
+// rhoypiM=oo_.var(1,4)/(sym*spim);
+// rhoy1M=oo_.autocorr{1,1}(1,1);
+// rhoc1M=oo_.autocorr{1,1}(2,2);
+// rhoi1M=oo_.autocorr{1,1}(3,3);
+// rhopi1M=oo_.autocorr{1,1}(4,4);
 
-MD=[100*sym,100*scm,100*sim,100*spim;1,scM,siM,spiM;1,rhoycM,rhoyiM,rhoypiM;rhoy1M,rhoc1M,rhoi1M,rhopi1M];
-load stat
+//MD=[100*sym,100*scm,100*sim,100*spim;1,scM,siM,spiM;1,rhoycM,rhoyiM,rhoypiM;rhoy1M,rhoc1M,rhoi1M,rhopi1M];
+//load stat
 
-SS=[HP(1,:);MD(1,:);HP(2,:);MD(2,:);HP(3,:);MD(3,:);HP(4,:);MD(4,:)];
+//SS=[HP(1,:);MD(1,:);HP(2,:);MD(2,:);HP(3,:);MD(3,:);HP(4,:);MD(4,:)];
+//***************************
 
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

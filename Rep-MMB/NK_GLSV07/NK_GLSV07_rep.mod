@@ -1,3 +1,13 @@
+% NK_GLSV07
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // Model: NK_GLSV07_iclm
 
 // Title: Understanding the effects of government spending on consumption
@@ -14,14 +24,25 @@
 
 // Variables
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var n c pi k b g y w t i; 
 predetermined_variables k, b ;
+
+//Define exogenous variables
 varexo e_g;
 
+//Define parameters
 //Parameters
 
 parameters alpha beta gamma_c gamma_c_bar gamma_g delta eta theta theta_n theta_tau lambda lambda_p my_p rho rho_g sigma_bar phi_b phi_g phi_pi omega psi phicap;
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 //Calibration
 
 alpha=0.33;             %Elasticity of output with respect to capital
@@ -51,6 +72,10 @@ sigma_bar= 1/((1-lambda)*phicap*gamma_c*my_p);
 omega= eta*(1-beta*(1-delta))*(1-gamma_c_bar)  ;
 theta_tau= lambda*phicap*my_p ;
 theta_n= lambda*phicap*(1-alpha)*(1+psi) ;
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model;
 
@@ -109,5 +134,11 @@ shocks;
 var e_g=1;
 end;
 
-%stoch_simul(irf=20, noprint, nograph) ;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//%stoch_simul(irf=20, noprint, nograph) ;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

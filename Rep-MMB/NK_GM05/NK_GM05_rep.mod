@@ -1,3 +1,14 @@
+% NK_GM05
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+
 // Model: NK_GM05
 
 // Further references:
@@ -38,7 +49,11 @@
 //                    (15)foreign inflation
 
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
+//Define endogenous variables
 var pih x y ynat rnat r s pi p ph e ystar a pistar;
                                       // endogenous variables, 
                                       // r = interst rate / policy rule ((DITR / CITR / PEG))
@@ -50,13 +65,17 @@ var pih x y ynat rnat r s pi p ph e ystar a pistar;
                                       // ystar  = world output,                  a = productivity in SOE         
                                       // pi_stsr= world inflation,
 
-
+//Define exogenous variables
 varexo ystar_ a_;                     // exogenous variables (innovations)
                                       // a_ = shocks in productivity in SOE
                                       // ystar_ = shocks in world output
 
+//Define parameters
 parameters sigma rho tau alpha theta xi beta kappa omega phipi rhoa rhoy;
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 sigma = 1;
 rho  = 0.0101;
@@ -71,6 +90,9 @@ phipi = 1.5;
 rhoa = 0.66;                                                                  //parameter of AR(1) for a, 
 rhoy = 0.86;                                                                  //parameter of AR(1) for y_star
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -104,6 +126,12 @@ var ystar_ = 0.0078^2;                                                          
 var a_, ystar_ = 0.3*0.0071*0.0078;                                                 
 end;
 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 
-%stoch_simul(noprint, nograph) y pih pi r s ;
+//%stoch_simul(noprint, nograph) y pih pi r s ;
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

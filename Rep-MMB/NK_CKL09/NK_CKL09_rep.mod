@@ -1,3 +1,13 @@
+% NK_CKL09
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //**************************************************************************
 // New Keynesian model with search and matching frictions in the labor market.
 // Calibrated to the euro area in Christoffel, Kuester, Linzert (EER, 2009)
@@ -13,7 +23,11 @@
 //
 // Last edited: 2011/05/11 by K. Kuester
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
+//Define endogenous variables
 var ct deltaFt deltaWt Deltastart ht Jstart
     lambdat mct mt nt Pit Piannt  qt
     Rt st ut vt wstart wt xLt yt
@@ -27,12 +41,12 @@ var ct deltaFt deltaWt Deltastart ht Jstart
 
     
 
-
+//Define exogenous variables
 varexo inno_ebargaint inno_ekappat inno_esept inno_ebt
        inno_eCt  inno_zt interest_ g_;
 
 
-
+//Define parameters
 parameters
 
            bet epsilon habit sig vphi
@@ -51,6 +65,9 @@ parameters
            // steady-state value flex-price economy
            deltaWflexbar;
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 // ***** parameter values
 gamma_R     = 0.85;	// interest rate smoothing
@@ -151,7 +168,9 @@ lambdabar   = (cbar*(1-habit))^(-sig);
 kappaL      = mrsbar*lambdabar/hbar^vphi;
 
 
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -345,5 +364,11 @@ var inno_eCt   = 1;
 end;
 
 //check;
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 //stoch_simul (irf = 0, ar=100, noprint);
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

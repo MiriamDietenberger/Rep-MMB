@@ -1,3 +1,14 @@
+% NK_GK09lin
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+
 // Replication file NK_GK09
 
 // prepared by Tong Wang and Xiaobei He, Goethe University Frankfurt
@@ -5,15 +16,22 @@
 
 // revised according to Karadi's appendix
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var 
 nu rk r uc eta x z phi n ne nn q k delta u l y i c pmn pi
 rn epsilon a pm efp lambda erk psi phic f f1 pistar ym mc d in//s  ia 
 ;
 
+//Define exogenous variables
 varexo
 e_rn e_a e_epsilon e_n
 ;
 
+//Define parameters
 parameters
 theta beta divert omega alpha deltac b zeta chi etai vphi rhoa rhoeps rhoi 
 kappa_pi kappa_mc gamma gammap PMss veps h
@@ -21,6 +39,10 @@ Iss PIss RNss Gss PHIss EFPss Rss ETAss NUss Zss Xss RKss DELTAss YKss
 IKss CKss KLss Lss Kss Yss Nss NEss NNss Css PMNss  LAMBDAss 
  PSIss upsilon UCss IYss Dss Fss F1ss
 ;
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 beta = 0.99;
 alpha = 0.33;
@@ -78,6 +100,10 @@ Fss = Yss*PMss/(1-beta*gamma);
 F1ss = Yss/(1-beta*gamma);
 Dss=1;
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
+
 model(linear);
 NUss*nu = (1-theta)*beta*(RKss*rk(1)-Rss*r) + (1-theta)*beta*(RKss-Rss)*lambda(1) + beta*theta*Xss*NUss*(lambda(1)+x(1)+nu(1));
 ETAss*eta = (1-theta)*beta*LAMBDAss*Rss*(lambda(+1)+r)+beta*theta*Zss*ETAss*(lambda(1)+z(1)+eta(1));    
@@ -130,11 +156,17 @@ steady;
 
 check;
 
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 //stoch_simul(order=1,irf=40, nograph, noprint);  
-%stoch_simul(order=1,irf=40) epsilon r efp phi y c i k l q n pi rn erk rk psi phic; 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(order=1,irf=40) epsilon r efp phi y c i k l q n pi rn erk rk psi phic; 
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 //upsilon=1000;
 //stoch_simul(order=1,irf=40) epsilon r efp phi y c i k l q n pi rn erk rk psi phic; 
 
 //upsilon=10000; 
 //stoch_simul(order=1,irf=40) epsilon r efp phi y c i k l q n pi rn erk rk psi phic; 
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

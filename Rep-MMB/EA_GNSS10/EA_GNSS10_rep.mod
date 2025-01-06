@@ -1,3 +1,13 @@
+% EA_GNSS10
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // EA_GNSS10 model
 
 // Reference: Gerali, A., S. Neri, L. Sessa, F. Signoretti. (2010). 
@@ -26,8 +36,11 @@
 // Banking profits are defined in the model code at time (t) - All equations in exp form
 // This is the full version (monop. competitive banking sector & BANK capital � la Gerali with sticky rates) 
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
-
+//Define endogenous variables
 var 
 c_p       // 1  PATIENT   HHs
 h_p       // 2  PATIENT   HHs
@@ -102,11 +115,11 @@ spr_b     // 67 average bank spread (active-passive)
         interestPol interestH interestF inflation loansH loansF output consumption investment deposits interestDep bankcapital;
 //**************************************************************************
 
-
+//Define exogenous variables
 varexo e_A_e e_eps_K_b e_j e_l e_me e_mi e_mk_be e_mk_bh e_mk_d e_r_ib e_qk e_y e_z;  //13 varexo
 
 
-
+//Define parameters
 parameters  
             beta_p j phi beta_i m_i_ss beta_e m_e_ss alpha eksi_1 eksi_2    // HOUSEHOLDS & ENTREPRENEURS
             h a_i a_p a_e gamma_p gamma_i gamma_e    ni                     // HOUSEHOLDS & ENTREPRENEURS
@@ -122,11 +135,14 @@ parameters
             rho_ee_z rho_A_e rho_ee_j rho_mi rho_me rho_eps_y               // SHOCKS
             rho_mk_d rho_mk_be rho_mk_bh rho_ee_qk rho_eps_l rho_eps_K_b    // SHOCKS
             ;
-            
 
-% *********************			
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------            
+
+		
 % CALIBRATED PARAMETERS
-% *********************
+
 
 beta_p       = 0.9943;                                                     % discount factor patient households
 beta_i       = 0.975;                                                      % discount factor impatient households     
@@ -174,9 +190,9 @@ ind_bh       = 0.0;                   % indexation rates on loans to households
 
 
 
-% *****************************************************************
+
 % LOADING MEDIAN OF POSTERIOR: USES EXTRACT_MEDIAN_FROM_POSTERIOR.m (dummy way)
-% *****************************************************************
+
 
 load median_values.txt;
 coeffs = median_values;
@@ -209,10 +225,9 @@ a_i	        =	coeffs(25); % 0.867003766306404	;
 a_e         =   0.0     ;   % degree of habit formation: entrepreneurs
 a_p         =   0.0     ;   % degree of habit formation: patient households
 
-            
-//%------------------------------------------------------------
-//% Model equations
-//%------------------------------------------------------------
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model;
 
@@ -492,6 +507,12 @@ var e_eps_K_b   = 0.050^2;
 
 end;
 
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 // stoch_simul(order=1, irf=20, noprint, nograph) interestPol interestH interestF inflation loansH loansF output consumption investment deposits interestDep bankcapital;
-%stoch_simul(order=1, irf=20, irf_shocks=(e_j) );
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(order=1, irf=20, irf_shocks=(e_j) );
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

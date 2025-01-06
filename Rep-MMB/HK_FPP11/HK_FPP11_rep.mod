@@ -1,3 +1,14 @@
+% HK_FPP11
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+
 //**************************************************************************
 // This file has been transformed from its MMB version to be a replication 
 // .mod file in June 2022.
@@ -29,17 +40,17 @@
 
 // Last edited: Aug. 19, 2011
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
+//Define endogenous variables
 var x q_dach r rr pi_H a y_stern pi s e y y_n shock_eta;
 
-
-
-
+//Define exogenous variables
 varexo epsa epsy mu_p epseta;
 
-
-
-
+//Define parameters
 parameters
 
 klein_omega gamma alpha gross_theta sigma_alpha psi gross_gamma_a
@@ -50,6 +61,9 @@ tau zeta eta phi2;
 
 // all parameter are calibrated according to the original paper, see p723
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 rho_eta = 0.775;
 klein_omega = 0.33;
@@ -84,7 +98,9 @@ kappa_alpha = lambda * (sigma_alpha + phi);
 phi_pi = 1.5;
 phi_x = 0;
 
-
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -147,5 +163,11 @@ var epseta; stderr 2.9396;
 var mu_p; stderr 0.9667;
 end;
 
-%stoch_simul (irf = 0, ar=100);
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//%stoch_simul (irf = 0, ar=100);
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

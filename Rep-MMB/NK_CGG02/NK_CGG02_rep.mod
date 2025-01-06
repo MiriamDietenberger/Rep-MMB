@@ -1,3 +1,13 @@
+% NK_CGG02
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //**************************************************************************
 // A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
 //
@@ -20,21 +30,28 @@
 // This file simulates the dynamic response of the model of Clarida et. al (2002)
 // to specific shocks. Parameter values are taken from Gali and Monacelli (2005).
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
+//Define endogenous variables
 var ytilde ybar y infl r rr u a ytildestar ybarstar ystar infstar rstar rrstar ustar astar;
 
 
 
-
+//Define exogenous variables
 varexo inf_ a_ infstar_ ystar_ astar_ rstar_  interest_;%
 
 
 
-
+//Define parameters
 parameters
 
 sigma0 beta lambda rhoa rhou sigma kappa0 delta1 kappa phi theta gamma1;
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 beta=0.99;
 rhoa=0.9;
@@ -49,6 +66,9 @@ sigma0=sigma-kappa0;
 delta1=((1-theta)*(1-beta*theta))/theta;
 lambda=delta1*kappa;
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -88,5 +108,11 @@ var rstar_ = 0.1;
 var astar_ = 0.1;
 end;
 
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 //stoch_simul (irf = 0, ar=100, noprint);
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

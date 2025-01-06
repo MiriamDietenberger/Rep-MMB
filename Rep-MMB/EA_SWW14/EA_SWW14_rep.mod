@@ -1,3 +1,18 @@
+% EA_SWW14
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var     
         c           // consumption
         r           // nominal interest rate
@@ -32,6 +47,7 @@ var
         ryear piyear
 
 ;
+//Define exogenous variables
 varexo  
         etab        // risk-premium shock
         etaq        // investment-specific technology shock
@@ -43,6 +59,7 @@ varexo
         etar        // monetary policy shock
 
 ;
+//Define parameters
 parameters 
         ch          // habit parameter
         ctau        // trend growth rate
@@ -79,6 +96,10 @@ parameters
         crhob crhoq crhog crhoa crhoga crhop cmup crhos crhow cmuw crhor
 
 ;
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
+
 // parameter declaration 
 // calibrated
 cdelta  = 0.025 ; 
@@ -161,6 +182,10 @@ w1      = ((1-cthetaw*cbeta)*(1-cthetaw))/(cthetaw*(1+comega*cepsw));
 k1      =(1-cdelta)/ctau;
 k2      =(ctau+cdelta-1)*(1+cbeta)*ctau*cphi;
 e1      = ((1-cthetae*cbeta)*(1-cthetae))/cthetae;
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -276,5 +301,12 @@ stderr 0.354961 ;
 var etas;
 stderr 1.012299 ; 
 end;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(periods = 1000, irf = 21) y piyear ryear e u ygap;
+
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(periods = 1000, irf = 21) y piyear ryear e u ygap;
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

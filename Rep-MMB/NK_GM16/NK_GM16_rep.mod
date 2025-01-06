@@ -1,3 +1,14 @@
+% NK_GM16
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+
 // Model: NK_GM16
 
 // Further references:
@@ -11,7 +22,12 @@
 
 // World economy exogenous
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
 // variables are in log deviations from respective steady states
+//Define endogenous variables
 var 
 y         // output
 c         // consumtion
@@ -52,11 +68,15 @@ sgraph ;
 
 
                                         
-// exogenous variables
+//Define exogenous variables
 varexo ez ea ezx1 ezx2 et ;
                                      
-                                   
+//Define parameters                                   
 parameters bet phi epsp alf epsw thep thew phiy nu lamw lamp  rhoa rhoz rhot rhozx1 rhozx2;
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 thep = 0.8 ;       % constant price calvo parameter
 thew = 0.8;
@@ -83,6 +103,9 @@ rhozx1 =  0.9 ;
 rhozx2 =  0.9 ;      
 rhot =  0.9 ;   
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -151,5 +174,11 @@ shocks;
 var et = (0.01)^2;
 end;
 
-%stoch_simul(irf=25) ngraph igraph rgraph sgraph ;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//%stoch_simul(irf=25) ngraph igraph rgraph sgraph ;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

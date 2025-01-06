@@ -1,3 +1,13 @@
+% EAUS_NAWM08
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //**************************************************************************
 // A New Comparative Approach to Macroeconomic Modeling and Policy Analysis
 //
@@ -18,6 +28,11 @@
 
 // Last edited: 10/02/11 by M. Burgert
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var EAUS_RER EA_B EA_BF EA_BY EA_C EA_CI EA_CJ EA_CY EA_D EA_EPSILONM EA_FH EA_FI 
   EA_FJ EA_FX EA_G EA_GAMMAB EA_GAMMAI EA_GAMMAIDER EA_GAMMAIMC EA_GAMMAIMCDAG 
   EA_GAMMAIMI EA_GAMMAIMIDAG EA_GAMMAU EA_GAMMAUDER EA_GAMMAV EA_GAMMAVI 
@@ -50,7 +65,8 @@ var EAUS_RER EA_B EA_BF EA_BY EA_C EA_CI EA_CJ EA_CY EA_D EA_EPSILONM EA_FH EA_F
 
 //**************************************************************************
 
- 
+
+//Define exogenous variables 
 varexo EA_EPSG EA_EPSR EA_EPSRP EA_EPSTAUC EA_EPSTAUD EA_EPSTAUK EA_EPSTAUN 
   EA_EPSTAUWF EA_EPSTAUWH EA_EPSTR EA_EPSZ  
   US_EPSG US_EPSR US_EPSTAUC US_EPSTAUD US_EPSTAUK 
@@ -62,7 +78,7 @@ varexo EA_EPSG EA_EPSR EA_EPSRP EA_EPSTAUC EA_EPSTAUD EA_EPSTAUK EA_EPSTAUN
 //**************************************************************************
 
 
-
+//Define parameters
 parameters EA_ALPHA EA_BETA EA_BFYTARGET EA_BYTARGET EA_CHIH EA_CHII EA_CHIJ EA_CHIX 
   EA_DELTA EA_ETA EA_ETAI EA_ETAJ EA_GAMMAB1 EA_GAMMAI1 EA_GAMMAIMC1 
   EA_GAMMAIMI1 EA_GAMMAU2 EA_GAMMAV1 EA_GAMMAV2 EA_KAPPA EA_MUC EA_MUI EA_NUC 
@@ -101,6 +117,10 @@ parameters EA_ALPHA EA_BETA EA_BFYTARGET EA_BYTARGET EA_CHIH EA_CHII EA_CHIJ EA_
 //      coffispol;                                                       //*
                                                                          //*
 //**************************************************************************
+
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 // --------------------------- //
 // PARAMETER VALUES: EURO AREA //
@@ -385,6 +405,10 @@ US_RER=1;
 // Definition of Discretionary Fiscal Policy Parameter                   //*
 //coffispol = 1/(EA_PYBAR);                                                //*
 //**************************************************************************
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model;
 
@@ -1010,6 +1034,12 @@ var	US_EPSTR=1;
 var	US_EPSZ=1;
 end;
 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
 
-%stoch_simul (order=1, irf = 20, ar=100, nograph, noprint);
+//%stoch_simul (order=1, irf = 20, ar=100, nograph, noprint);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

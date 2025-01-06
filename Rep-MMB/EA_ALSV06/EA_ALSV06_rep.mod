@@ -1,3 +1,13 @@
+% EA_ALSV06
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 //**************************************************************************
 // This file has been transformed from its mmb-rep-master version to be 
 // working without a surrounding .m matlab script that supplies parameter values
@@ -17,15 +27,25 @@
 // "Money in an estimated business cycle model of the Euro area"
 // Working Paper 0121, Banco de Espa�a, 2001.
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
+
+//Define endogenous variables
 var y m r mu pi mc a e z ;
 //output interest inflation moneygrowth;
 
+//Define exogenous variables
 varexo epsa epse epsz epsr;
 
+//Define parameters
 parameters rhoa rhor rhoy rhopi rhomu 
            gammaf gammab lambda chi rhoe rhoz beta rss
            sigmaa sigmae sigmaz sigmar phi1 phi2 h sigma delta;
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 // model with separable preferences and habits
 beta = 0.9876;
@@ -54,6 +74,9 @@ sigmae = 0.0047;
 sigmaz = 0.0046;
 sigmar = 0.0018;
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model(linear);
 
@@ -155,9 +178,12 @@ var epsz; stderr 100*sigmaz;
 //var epsr; stderr 100*sigmar;
 end;
 
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//%stoch_simul(order=1, irf=20, nograph, noprint) y r pi mu;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
 
-%stoch_simul(order=1, irf=20, nograph, noprint) y r pi mu;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-
-
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 

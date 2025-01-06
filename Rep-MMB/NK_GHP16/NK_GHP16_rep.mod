@@ -1,13 +1,32 @@
+% NK_GHP16
+% 
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // Replication of Gnocchi, Hauser, Pappa, 2016 : "Housework and fiscal expansions"
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
+//Define endogenous variables
 var C C_m C_n K K_m K_n I W h_m h_n r_k r lambda infl inflstar x_1 x_2 RMC G g Y D;
 
+//Define exogenous variables
 varexo e_g;
 
+//Define parameters
 parameters g_ratio taup b_1 alpha_1 alpha_2 alpha_3 delta xi b beta sigma eps theta tau G_ss rho_g phi_infl
             RMC_ss h_n_ss h_m_ss kn_y_ss km_y_ss i_ratio_ss r_k_ss Y_ss C_m_ss C_n_ss G_ss W_ss h_ss l_ss;
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
  %% fixed parameters:
 beta	=	0.99;
@@ -55,6 +74,9 @@ b           =   ((1-alpha_2)*C_m_ss+W_ss*h_n_ss)/((1-alpha_2)*(W_ss*l_ss+C_m_ss)
 C_ss        =   (alpha_1*C_m_ss^b_1+(1-alpha_1)*C_n_ss^b_1)^(1/b_1);
 I_ss        =    i_ratio_ss*(kn_y_ss+km_y_ss)*Y_ss;
 
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model;
 // Households:
@@ -167,5 +189,11 @@ shocks;
 var e_g=(Y_ss/G_ss)^2;
 end;
 
-stoch_simul (AR=100,IRF=0, noprint,nograph);
-%stoch_simul(order=1, irf=40, nograph);
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(order=1, irf=40, nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

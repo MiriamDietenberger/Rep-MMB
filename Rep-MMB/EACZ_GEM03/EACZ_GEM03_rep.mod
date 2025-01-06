@@ -1,3 +1,13 @@
+% EACZ_GEM03
+%
+% Rep-MMB of the Macroeconomic Model Data Base (MMB)
+% https://www.macromodelbase.com/rep-mmb
+%
+% This is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
 // Replicates the 2nd row of Table 4 in Laxton, D., and P. Pesenti, 2003,
 // "Monetary Policy Rules for Small, Open, Emerging Economies." Journal 
 //  of Monetary Economics 50, July, pp. 1109-1146.
@@ -8,7 +18,11 @@
 // Notice that the OSR-section is uncommented, however the policy parameters
 // XR1H, XR2H and XR3H are set equal to their OSR values of the original file.
 
+%----------------------------------------------------------------
+% 1. Defining variables
+%----------------------------------------------------------------
 
+//Define endogenous variables
 var AF AH BIGGAMF BIGGAMH BIGGAMIMPF BIGGAMIMPH BIGGAMMF BIGGAMMH BIGGAMNF 
     BIGGAMNH BIGGAMQF BIGGAMQH BIGGAM_MONF BIGGAM_MONH BIGGAM_MOTF BIGGAM_MOTH 
     BIGGAM_O_NF BIGGAM_O_NH BIGGAM_O_TF BIGGAM_O_TH CAPAF CAPAH CF CF_NAT CH 
@@ -39,7 +53,9 @@ var AF AH BIGGAMF BIGGAMH BIGGAMIMPF BIGGAMIMPH BIGGAMMF BIGGAMMH BIGGAMNF
 // Modelbase Variables                                                   //*                      
     interest inflation inflationq outputgap output;                      //*
 //**************************************************************************
- 
+
+
+//Define exogenous variables
 varexo E_ZBH E_ZUH E_ZUF E_ZEYEH E_ZEYEF E_GAMMAH E_GAMMAF E_LANDH E_LANDF E_GAF 
        E_CAPAH E_CAPAF
 
@@ -48,7 +64,8 @@ varexo E_ZBH E_ZUH E_ZUF E_ZEYEH E_ZEYEF E_GAMMAH E_GAMMAF E_LANDH E_LANDF E_GAF
         interest_ fiscal_;                                               //*
 //************************************************************************** 
 
- 
+
+//Define parameters
 parameters COSTLF COSTLH EPSF EPSH EPSQMF EPSQMH GLAMBDAF GLAMBDAH SIGMAF SIGMAH 
            SSF SSH XR1F XR1H XR2F XR2H XR3F XR3H XR4F XR4H ALPHANF ALPHANH ALPHATF 
            ALPHATH ALPHA_OF ALPHA_OH A_ONEF A_ONEH A_ZEROF A_ZEROH B0F B0H B1F 
@@ -73,6 +90,9 @@ parameters COSTLF COSTLH EPSF EPSH EPSQMF EPSQMH GLAMBDAF GLAMBDAH SIGMAF SIGMAH
 // not needed for replication
 //**************************************************************************
 
+%----------------------------------------------------------------
+% 2. Calibration and Estimation
+%----------------------------------------------------------------
 
 COSTLF=5;
 COSTLH=5;
@@ -222,6 +242,10 @@ PIE4F_EXOG=1.125;
 interest_EXOG=PIE4F_EXOG^0.25/BET;
 PIE4NF_EXOG=1.02988357195356^4;
 PIEBAR4QF_EXOG=1.02988357195356^4;
+
+%----------------------------------------------------------------
+% 3. Model
+%----------------------------------------------------------------
 
 model; 
 //**************************************************************************
@@ -847,11 +871,19 @@ end;
 
 //end;
 
+
+//Simulation
+//***************************
+//The following was commented out for use in Rep-MMB
+//Nov. 2024
 //osr_params XR1H XR2H XR3H;
 
 //osr(IRF=0);
 
 //stoch_simul(order=1) ZZ_GDPH ZZ_CH ZZ_EYEH ZZ_GH ZZ_EXPORTSH ZZ_IMPORTSH ZZ_XBALH_TOT_RAT ZZ_CURBALH_RAT ZZ_PIE4H ZZ_DPIE4H ZZ_RNOMH ZZ_DRNOMH ZZ_GDPF ZZ_CF ZZ_EYEF ZZ_GF ZZ_EXPORTSF ZZ_IMPORTSF ZZ_XBALF_TOT_RAT ZZ_CURBALF_RAT ZZ_PIE4F ZZ_DPIE4F ZZ_RNOMF ZZ_DRNOMF ZZ_REALEX ;
              
-%stoch_simul(order=1, nograph) ZZ_PIE4H ZZ_DRNOMH GDPGAPH;
-stoch_simul (AR=100,IRF=0, noprint,nograph);
+//%stoch_simul(order=1, nograph) ZZ_PIE4H ZZ_DRNOMH GDPGAPH;
+//stoch_simul (AR=100,IRF=0, noprint,nograph);
+//***************************
+
+stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
