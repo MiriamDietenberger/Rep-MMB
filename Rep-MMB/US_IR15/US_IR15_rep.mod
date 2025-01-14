@@ -168,6 +168,6 @@ end;
 //stoch_simul (AR=100,IRF=0, noprint,nograph);
 //stoch_simul(order=1, irf=20,irf_shocks=(epsilon_r),nograph) output y_4_a P_y_4_a inflation y_8_a P_y_8_a r_a y_12_a P_y_12_a v y_16_a P_y_16_a tau y_20_a P_y_20_a;   
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 

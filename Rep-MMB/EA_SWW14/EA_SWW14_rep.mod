@@ -309,4 +309,4 @@ end;
 //%stoch_simul(periods = 1000, irf = 21) y piyear ryear e u ygap;
 //***************************
 
-stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

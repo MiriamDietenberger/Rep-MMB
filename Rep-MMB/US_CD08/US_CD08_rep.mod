@@ -142,4 +142,4 @@ end;
 //stoch_simul(irf=10, noprint, nograph)y i h r;
 // ar order of autocorrelation coefficients to compute and to print
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

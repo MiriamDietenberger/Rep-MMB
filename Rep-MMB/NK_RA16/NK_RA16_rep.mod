@@ -422,4 +422,4 @@ end;
 //stoch_simul(order=1,irf=40, nograph, nomoments, hp_filter=1600, ar=1) GDP Cp I Q Pi R Le N Nb phi_b spread_RkR spread_RbR spread_RkRb; 
 //stoch_simul(order=1,irf=40) Y Y_fe outputgap;
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

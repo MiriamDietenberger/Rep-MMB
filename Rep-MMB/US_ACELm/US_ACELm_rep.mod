@@ -444,4 +444,4 @@ end;
 //stoch_simul (AR=100,IRF=0, noprint,nograph);
 //stoch_simul(irf = 20, noprint, nograph) mgrowth interest ytilde_t inflationq h_t i_t c_tpred wtilde_tpred; 
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

@@ -695,4 +695,4 @@ end;
 //stoch_simul(order=2,irf=0) welf_cor welf_per welf_emu;
 //***************************
 
-stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

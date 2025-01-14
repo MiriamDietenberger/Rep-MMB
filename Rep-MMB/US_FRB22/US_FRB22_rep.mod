@@ -1758,5 +1758,5 @@ end;
 //Nov. 2024
 //stoch_simul(nograph,noprint,nofunctions,nocorr,drop=0,irf=0,order=1,periods=50);
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 

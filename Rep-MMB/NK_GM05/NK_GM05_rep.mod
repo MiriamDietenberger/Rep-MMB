@@ -134,4 +134,4 @@ end;
 //%stoch_simul(noprint, nograph) y pih pi r s ;
 //***************************
 
-stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

@@ -347,7 +347,7 @@ end;
 //options_.pruning=1;
 //stoch_simul(order=2,replic = 50,irf = 40,noprint,nograph,hp_filter = 1600);
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 
 

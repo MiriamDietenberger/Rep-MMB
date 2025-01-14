@@ -192,7 +192,7 @@ steady;
 //stoch_simul (AR=100,IRF=0, noprint,nograph);
 //stoch_simul(hp_filter = 1600, order = 1, irf = 100);
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 
 

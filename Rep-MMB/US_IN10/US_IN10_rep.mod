@@ -506,6 +506,6 @@ end;
 //stoch_simul(order=1,irf=20) data_CC data_IK data_IH data_QQ zata_GDP data_RR ;
 //stoch_simul(order=1,nograph);
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 

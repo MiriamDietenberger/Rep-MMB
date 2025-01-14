@@ -142,4 +142,4 @@ end;
 //%stoch_simul(order=1,pruning,irf = 20,ar = 4,nograph,noprint,periods=50000);
 //***************************
 
-stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

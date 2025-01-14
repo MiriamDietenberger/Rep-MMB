@@ -286,4 +286,4 @@ end;
 //%stoch_simul (irf = 41, ar=0, nograph, noprint) inflation outputgap interest;
 //***************************
 
-stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

@@ -241,6 +241,6 @@ end;
 //stoch_simul(irf=20, nograph, noprint) Rhat pihat qhat Yhat;
 //stoch_simul (AR=100,IRF=0, noprint,nograph);
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 

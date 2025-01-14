@@ -1354,6 +1354,6 @@ stoch_simul(order=1,irf=40,nodisplay,nograph)
 //Y_US Y_EU Y_JA Y_LA6 Y_EA6 Y_RC6 
 //***************************
 
-stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 

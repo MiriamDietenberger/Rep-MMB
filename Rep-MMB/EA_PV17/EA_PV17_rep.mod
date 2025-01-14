@@ -1052,4 +1052,4 @@ simul (periods=600);
 %rplot ea_tby;
 %rplot ea_inom;
 
-stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

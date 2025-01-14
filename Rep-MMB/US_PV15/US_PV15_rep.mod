@@ -531,6 +531,6 @@ check;
 //stoch_simul (AR=100,IRF=0, noprint,nograph);
 //stoch_simul(order=1,irf=25, nograph) ln_yd ln_c ln_i ln_pi ln_y ln_n ln_v ln_r;
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 

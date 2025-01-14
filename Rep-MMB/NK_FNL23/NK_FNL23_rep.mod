@@ -337,4 +337,4 @@ end;
 //SS=[HP(1,:);MD(1,:);HP(2,:);MD(2,:);HP(3,:);MD(3,:);HP(4,:);MD(4,:)];
 //***************************
 
-stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
