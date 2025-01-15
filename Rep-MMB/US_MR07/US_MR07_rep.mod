@@ -261,6 +261,6 @@ end;
 //stoch_simul (IRF=0, noprint,nograph);
 //stoch_simul(periods = 2100, nograph, noprint) x pi l;
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 

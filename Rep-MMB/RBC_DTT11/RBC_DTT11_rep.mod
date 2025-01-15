@@ -141,5 +141,5 @@ end;
 //stoch_simul(order=1,irf=12) a_t mu_t gam_t std_t y_t ni_t c_t omeg_t del_t pi_t z_t zbar_t fo_t CapG_t co_t n_t r_t; 
 //close all
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 

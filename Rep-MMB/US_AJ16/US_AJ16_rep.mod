@@ -514,6 +514,6 @@ steady(maxit=1000, solve_algo=1);
 //stoch_simul (AR=100,IRF=0, noprint,nograph);
 //stoch_simul(periods=0, IRF=30, order = 1, conditional_variance_decomposition=[6]) GDP_t Ihat chat what_t pi_t i_t l Spread_t FGS ;
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 

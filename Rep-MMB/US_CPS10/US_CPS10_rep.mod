@@ -183,7 +183,7 @@ end;
 //
 //stoch_simul(order=1,irf=17,solve_algo=1) inflgap realR;
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 
 

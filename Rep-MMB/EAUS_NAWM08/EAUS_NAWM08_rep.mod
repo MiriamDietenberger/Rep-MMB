@@ -1042,4 +1042,4 @@ end;
 //%stoch_simul (order=1, irf = 20, ar=100, nograph, noprint);
 //***************************
 
-stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

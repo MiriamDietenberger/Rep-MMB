@@ -151,7 +151,7 @@ end;
 //stoch_simul(order=1,nomoments,noprint, nograph, irf=32);
 //stoch_simul(order=1,noprint,nograph,irf=32);
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 //differenceSIGE
 //Comment on legend for the IRFs: R09 corresponds to replicated IRFs from Reis (2009), while VW14 refers to replicated IRFs using Verona and Wolters (2014) approximation (truncating lagged expectations)  

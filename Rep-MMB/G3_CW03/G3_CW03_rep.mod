@@ -207,4 +207,4 @@ end;
 //%stoch_simul (order=1, irf = 28, ar=0, nograph, noprint) is_eu pi4_eu q_eu is_ja pi4_ja q_ja is_us pi4_us q_us;
 //***************************
 
-stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

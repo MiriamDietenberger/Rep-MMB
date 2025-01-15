@@ -169,4 +169,4 @@ check;
 //stoch_simul(order=1,irf=40) epsilon r efp phi y c i k l q n pi rn erk rk psi phic; 
 //***************************
 
-stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

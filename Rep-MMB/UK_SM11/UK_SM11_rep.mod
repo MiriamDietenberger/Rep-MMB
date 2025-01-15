@@ -358,7 +358,7 @@ end;
 // stoch_simul(irf=21) pcdot4 contpp contpu contpq h inv pdot4 encost4 pmcost4 wcost4 profits rcw nomw rga s cn dfrgap va c wdot4 vaf q;
 //stoch_simul(irf=21) pcdot4 s rcw rga va c;
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 
 

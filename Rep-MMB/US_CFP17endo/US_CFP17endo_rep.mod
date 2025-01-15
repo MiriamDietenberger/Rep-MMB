@@ -282,5 +282,5 @@ end;
 //xlswrite('irf.twist.620.xls',IRF_INV,'inv_b2rule','A2:I13');
 //xlswrite('irf.twist.620.xls',IRF_NW,'nw_b2rule','A2:I13');
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 

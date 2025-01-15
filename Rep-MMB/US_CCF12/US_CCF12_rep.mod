@@ -316,7 +316,7 @@ end;
 //not the correct variables to be plotted, just a try
 //stoch_simul(order=1,  irf=24, nograph)    dy y infl FFR bondrate riskprem; 
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 
 

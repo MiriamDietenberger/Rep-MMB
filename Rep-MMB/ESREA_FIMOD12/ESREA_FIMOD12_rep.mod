@@ -1491,5 +1491,5 @@ end;
 //Nov. 2024
 //stoch_simul(order = 1, irf_shocks=(epsii),irf=20) dRECBt Consumption dmOutput dmInflation Ytot;
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 

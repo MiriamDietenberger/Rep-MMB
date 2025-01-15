@@ -268,7 +268,7 @@ if Fig2 == 1
    //stoch_simul(order = 1, irf = 80, noprint,graph)D_obs,Dnew_obs,pi_obs,pi,PIESTAR,pistar,i_obs,y_obs,Rrate,w_obs,tau_obs,G,c_obs,i_Dnew,i_Dnew_obs,i;
    //stoch_simul(order = 1, irf = 80, noprint,graph)D_obs,y_obs,pi_obs,i_obs,i_D_obs,i_Dnew_obs;
 //*****************************
-   stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+   stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 
    /* extension =['Baseline'];

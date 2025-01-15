@@ -260,5 +260,5 @@ steady;
 //stoch_simul(order = 1, noprint, IRF=0, periods = 12102, drop = 200);
 //stoch_simul(order = 1, noprint, IRF=100, periods = 12102, drop = 200) r w mc y c inve lab pinf wf yf cf invef; %construct impulse responses;
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 

@@ -222,4 +222,4 @@ end;
 //%stoch_simul(irf=21,nograph) y i pi n ext_pr  ;                           % All shocks without a chart 
 //***************************
 
-stoch_simul (order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);

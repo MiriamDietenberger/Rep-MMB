@@ -235,7 +235,7 @@ steady(solve_algo=4);
 //stoch_simul(order=1,nocorr,nomoments,nograph,irf=20)YU qU cU iU hU ReXU piU nU PrU BU RkXU;// cU iU ReXU piU wU nU qU;
 //stoch_simul (AR=100,IRF=0, noprint,nograph);
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 
 

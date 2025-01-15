@@ -194,7 +194,7 @@ check;
 //stoch_simul (AR=100,IRF=0, noprint,nograph);
 //stoch_simul( irf=300,order = 1, nograph,nomoments, noprint)lp, I, c, y, w, k, tax,Rb, R, b, tau_w, tau_k, tax_rev_tauw, tax_rev_tauk, cg, GDP;
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
 
 

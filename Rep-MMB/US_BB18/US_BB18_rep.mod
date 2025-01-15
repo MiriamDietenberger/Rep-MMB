@@ -821,4 +821,4 @@ end;
 //stoch_simul(order = 1,k_order_solver,print,nograph,irf=0);
 //stoch_simul(order = 1,irf_shocks=(vR),irf=50) yf R pi;
 //*****************************
-stoch_simul(order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
