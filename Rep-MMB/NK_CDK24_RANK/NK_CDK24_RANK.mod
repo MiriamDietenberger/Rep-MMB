@@ -889,7 +889,7 @@ end;
 %   set_param_value('alppha_uec',0.05)  
     set_param_value('alppha_uec',0.000001)  
 
-    stoch_simul(order=1,irf=2000,nograph,periods=10000); 
+    stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary); 
     oo_RANK_Ramsey_=oo_;
     M_RANK_Ramsey_=M_;
     evaluate_planner_objective;
@@ -903,7 +903,7 @@ end;
     set_param_value('omega',0.000001) 
 %    set_param_value('alppha_uec',0.05)  
     set_param_value('alppha_uec',0.000001)  
-    stoch_simul(order=1,irf=2000, nograph, periods=10000); 
+    stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
     oo_RANK_Taylor_=oo_;
     M_RANK_Taylor_=M_;
 @#endif
