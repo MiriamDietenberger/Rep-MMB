@@ -909,13 +909,13 @@ end;
     stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
     oo_TANK_Ramsey_=oo_;
     M_TANK_Ramsey_=M_;
-    evaluate_planner_objective;
-@#else
-    initval;
-    R_nom = Pistar/cbeta;
-    end;
-    steady;
-    check;
+    //evaluate_planner_objective;
+//@#else
+    //initval;
+    //R_nom = Pistar/cbeta;
+    //end;
+    //steady;
+    //check;
     %TANK case
     %set_param_value('omega',0.7) % 30% unconstrained HHs, 70% constrained HHs
     %set_param_value('omega',0.5) % 30% unconstrained HHs, 70% constrained HHs
