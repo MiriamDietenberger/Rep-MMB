@@ -906,7 +906,7 @@ end;
     ramsey_model(instruments=(R_nom),planner_discount=cbeta); 
 
     //conduct stochastic simulations of the Ramsey problem
-    stoch_simul(order=1,irf=2000,nograph,periods=10000); 
+    stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
     oo_TANK_Ramsey_=oo_;
     M_TANK_Ramsey_=M_;
     evaluate_planner_objective;
@@ -919,7 +919,7 @@ end;
     %TANK case
     %set_param_value('omega',0.7) % 30% unconstrained HHs, 70% constrained HHs
     %set_param_value('omega',0.5) % 30% unconstrained HHs, 70% constrained HHs
-    stoch_simul(order=1,irf=2000,nograph,periods=10000); 
+    stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
     oo_TANK_Taylor_=oo_;
     M_TANK_Taylor_=M_;
 @#endif
