@@ -892,13 +892,13 @@ end;
     stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary); 
     oo_RANK_Ramsey_=oo_;
     M_RANK_Ramsey_=M_;
-    evaluate_planner_objective;
-@#else
-    initval;
-    R_nom = Pistar/cbeta;
-    end;
-    steady;
-    check;
+    //evaluate_planner_objective;
+//@#else
+    //initval;
+    //R_nom = Pistar/cbeta;
+    //end;
+    //steady;
+    //check;
     %RANK case
     set_param_value('omega',0.000001) 
 %    set_param_value('alppha_uec',0.05)  
