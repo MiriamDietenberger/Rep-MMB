@@ -54,7 +54,7 @@
 	    lxklc,lxklcm,lxm,lxw0_cor,lxw_cor,lxw_cor_tot,lxw_r,lx_cor,ly,lykl,lyrow,lyrow_cor,lyrow_gap,lyrow_sreq,
 	    ly_gap,nfa,nfa_ss,num_w,pcomrow_prow_ss,pertarget,pertran,profit,r1,r1n,r1n_ss,r1n_tran,r1row,r1rown,
 	    r1rown_des,r1row_ss,rfn,rf_prem,rgb,rgbn,rgbn_cor,rgbn_ss,rgb_ss,rhn,rh_prem,risk,risk_cor,risk_dyn,risk_ss,
-	    rkn,target,tdn,tdn_cor,tdn_ss,tinc,tincr_yn_ss,tinc_cor,tinc_ss,transf_r_cor,transf_yn,transf_yn_ss,u,ucom,
+	    rkn,ttarget,tdn,tdn_cor,tdn_ss,tinc,tincr_yn_ss,tinc_cor,tinc_ss,transf_r_cor,transf_yn,transf_yn_ss,u,ucom,
 	    ug,uinv,usact,usum,utotal,ux,w_inf;
 	
 	
@@ -521,7 +521,7 @@
 	 lxw_cor = a_xw*lxw_cor(-1)+lxw_shk ;
 	 lxw0_cor = lxw0_shk ;
 	 pertarget = pertarget(-1) - pertarget_shk ;
-	 target = target(-1)+target_shk ;
+	 ttarget = ttarget(-1)+target_shk ;
 	 pertran = a_r1n*pertran(-1)+pertran_shk ;
 	 r1n_tran = a_r1n*r1n_tran(-1)+r1n_tran_shk ;
 	 rh_prem = a_rh_prem*rh_prem(-1)+rh_prem_shk ;
