@@ -454,7 +454,7 @@ end;
     
 steady(solve_algo = 1);
 check;
-resid(1);
+%resid(1);
 
 shocks;
 %var	epsZETAEUR; 	stderr seepsZETAEUR; 
