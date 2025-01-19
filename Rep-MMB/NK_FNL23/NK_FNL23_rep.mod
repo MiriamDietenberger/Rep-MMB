@@ -314,7 +314,7 @@ end;
 // stoch_simul(irf=100,order=1, hp_filter=1600,noprint,ar=1,nograph)
 // ylog clog ilog pi elog piA hlog klog Xealog Xlog yGlog  
 
-;
+
 
 // sym=oo_.var(1,1)^0.5;
 // scm=oo_.var(2,2)^0.5;
