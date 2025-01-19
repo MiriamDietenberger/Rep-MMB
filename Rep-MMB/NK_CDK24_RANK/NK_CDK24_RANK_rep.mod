@@ -835,8 +835,8 @@ dlnMarkup_Z_effective  = 100*(log(markup_Z_effective/markup_Z_effective(-1)));
 
 end;
 
-%steady;
-%check;
+steady;
+check;
 
 
 //Shocks
