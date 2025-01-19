@@ -162,7 +162,7 @@ end;
 
 //Computation
 steady;
-resid(1);
+%resid(1);
 
 //Shocks
 shocks;
