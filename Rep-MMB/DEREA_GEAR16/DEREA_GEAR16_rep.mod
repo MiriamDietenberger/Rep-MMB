@@ -764,7 +764,7 @@ end;
 
 // Calculate steady state
  
-resid(1);
+resid;
 steady;
 
 

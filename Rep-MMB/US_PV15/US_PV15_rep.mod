@@ -520,8 +520,8 @@ shocks;
 	var e_r;  stderr 0.09;
 end;
 
-resid(1);
-%steady;
+resid;
+steady;
 check;
 
 //Simulation
