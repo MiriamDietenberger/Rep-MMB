@@ -865,7 +865,8 @@ end;
 
 
 //SOLUTION, STOCHASTIC SIMULATION, IRFs
-
+    stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary); 
+/*
 %%---------------------------
 %% TANK Case
 @#if ramsey_yes == 1
@@ -923,7 +924,7 @@ end;
     oo_TANK_Taylor_=oo_;
     M_TANK_Taylor_=M_;
 @#endif
-
+*/
 
 
 

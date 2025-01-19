@@ -30,7 +30,7 @@
 
 % do Ramsey
 @#ifndef Ramsey
-    @#define ramsey_yes = 1
+    @#define ramsey_yes = 0
 @#endif 
 
 % do Taylor
@@ -850,6 +850,9 @@ end;
 
 
 //SOLUTION, STOCHASTIC SIMULATION, IRFs
+
+    stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary); 
+/*
 %%---------------------------
 %% TANK Case
 @#if ramsey_yes == 1
@@ -903,20 +906,14 @@ end;
     set_param_value('omega',0.000001) 
 %    set_param_value('alppha_uec',0.05)  
     set_param_value('alppha_uec',0.000001)  
-    stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
+    stoch_simul(AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
     oo_RANK_Taylor_=oo_;
     M_RANK_Taylor_=M_;
 @#endif
 
 %MODEL_DIAGNOSTICS;
 %model_diagnostics(M_,options_,oo_);
-write_latex_dynamic_model;
-write_latex_static_model;
-write_latex_definitions;
-options_.TeX=1;
-write_latex_dynamic_model;
-write_latex_parameter_table;
-
+*/
 
 
 
