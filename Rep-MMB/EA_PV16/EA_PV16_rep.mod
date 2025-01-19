@@ -1027,7 +1027,7 @@ values 1;
 
 end;
 
-simul (periods=600);
+%simul (periods=600);
 
 stoch_simul (AR=0, IRF=0, order=1, noprint, nograph, nocorr, nodecomposition, nofunctions, nomoments, nomodelsummary);
 
