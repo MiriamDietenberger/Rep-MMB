@@ -59,7 +59,7 @@ varexo eps_ah, eps_ys, eps_prsF, eps_yF, eps_iF, eps_piF, eps_sh_w,
     eps_sh_c, eps_sh_i, eps_prfF, eps_proF, eps_st, eps_sh_m, eps_gex;
 
 //Define parameters
-    sigma_L, h, phi_L, xi_L, eta_C, theta_I, S_I, phi_Hd, xi_Hd,
+parameters sigma_L, h, phi_L, xi_L, eta_C, theta_I, S_I, phi_Hd, xi_Hd,
     phi_Hf, xi_Hf, phi_F, xi_F, omega_C, omega_H, mvarphi_i1, mvarphi_pi1,
     mvarphi_y1, mvarphi_rer1, mvarphi_i2, mvarphi_pi2, mvarphi_y2, eta_F,
     mvarrho, rho_ah, rho_ys, rho_yF, rho_iF, rho_piF, rho_sh_w, rho_sh_c,
