@@ -1045,7 +1045,7 @@ values 1;
 
 end;
 
-simul (periods=600);
+%simul (periods=600);
 
 %rplot ea_y;
 %rplot ea_py;
