@@ -30,13 +30,12 @@ addpath([YourPath '\..\Utilities'])
 % %     mmbline = fgetl(fileID);    
 % % end    
 
-%--------------------------------------
+% Create Excel-File with actual Models
 Github_Rep_Information = webread('https://api.github.com/repos/MiriamDietenberger/Rep-MMB/contents/Rep-MMB?ref=main');
 model_name = {Github_Rep_Information.name}';
 model_folder_exists = ones(numel(model_name),1);
 Table_Excel = table(model_name, model_folder_exists);
 writetable(Table_Excel, 'overview_out.xlsx');
-%-------------------------------------
 
 ot = readtable('overview_out.xlsx');
 mmb_vec= ot.model_name(logical(ot.model_folder_exists));
