@@ -6,7 +6,7 @@
  
 
 run_time_reps=2;
-addpath('C:\dynare\5.1\matlab')
+addpath('C:\dynare\6.2\matlab')
 [~, ~, ~] = mkdir('Results');
 
 YourPath=pwd;
