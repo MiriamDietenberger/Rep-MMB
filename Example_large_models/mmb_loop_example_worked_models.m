@@ -15,14 +15,14 @@ addpath(pwd)
 
 addpath([YourPath '\..\Utilities'])
 
-% MTCHANGE: replaced the code below to produce cell array of character
+% MTCHANGE: replace the code below to produce cell array of character
 % vectors mmb_vec by the two lines below of that, table 'overview_out.xlsx'
 % replaces the 'mmb_names.txt' file
 
 % % %fileID = fopen('mmb_test.txt','r');
 % % fileID = fopen('mmb_names.txt','r');
 % % mmbline = fgetl(fileID);        
-% % %geht hier vielleicht auch besser (ff. 5 Zeilen von mathworks-website)
+% % % maybe it works better here (ff. 5 lines from the mathworks-website)
 % % mmb_vec = cell(0,1);            
 % % while ischar(mmbline)           
 % %     mmb_vec{end+1,1} = mmbline; 
@@ -69,7 +69,7 @@ try
     %AMG_Results(1,:,loop_k)=[M_.nstatic, M_.nfwrd, M_.npred, M_.nboth, M_.nsfwrd, M_.nspred, M_.ndynamic];
     
     
-    %%%%%%%%%%%%%Users can put your files for your exercise here%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%As Users you can put your files for your exercise here%%%%%%%%%%%%%%%%%%%%%
     %%%%we want to document models which have more than 10 variable
     
     
@@ -96,6 +96,6 @@ ot = movevars(ot,"error","After","copyexitstatus");
 ot = movevars(ot,"error_flag","After","error");
 ot = movevars(ot,"big_model","After","error_flag");
 writetable(ot,'Results\Result_worked_models_example.xlsx','Sheet','Info');
-% MTCHANGE: save results outside of the foor loop
+% MTCHANGE: save results outside of the for loop
 clearvars -except AMG_Results YourPath mmb_vec run_time_reps newton_options
 save([YourPath '\Results\Large_Models_Results'])
