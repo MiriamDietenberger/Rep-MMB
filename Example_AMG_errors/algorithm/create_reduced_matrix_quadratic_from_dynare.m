@@ -100,17 +100,17 @@ exo_nbr = M_.exo_nbr;
 
 aa= jacobia_(:,reorder_jacobian_columns);
 % clear B
-% A = aa(:,index_m);  % Jacobain matrix for lagged endogeneous variables
-% %B(:,cols_b) = aa(:,index_c);  % Jacobian matrix for contemporaneous endogeneous variables
-% B = aa(:,index_c);  % Jacobian matrix for contemporaneous endogeneous variables
-% C = aa(:,index_p);  % Jacobain matrix for led endogeneous variables
+% A = aa(:,index_m);  % Jacobian matrix for lagged endogenous variables
+% %B(:,cols_b) = aa(:,index_c);  % Jacobian matrix for contemporaneous endogenous variables
+% B = aa(:,index_c);  % Jacobian matrix for contemporaneous endogenous variables
+% C = aa(:,index_p);  % Jacobian matrix for led endogenous variables
 % 
 
 % if full
-%     A = aa(:,index_m);  % Jacobain matrix for lagged endogeneous variables
-%     %B(:,cols_b) = aa(:,index_c);  % Jacobian matrix for contemporaneous endogeneous variables
-%     B = aa(:,index_c);  % Jacobian matrix for contemporaneous endogeneous variables
-%     C = aa(:,index_p);  % Jacobain matrix for led endogeneous variables
+%     A = aa(:,index_m);  % Jacobian matrix for lagged endogenous variables
+%     %B(:,cols_b) = aa(:,index_c);  % Jacobian matrix for contemporaneous endogenous variables
+%     B = aa(:,index_c);  % Jacobian matrix for contemporaneous endogenous variables
+%     C = aa(:,index_p);  % Jacobian matrix for led endogenous variables
 %     matrix_quadratic.A_full=[zeros(n,npred+nstatic) C];
 %     matrix_quadratic.B_full=B;
 %     matrix_quadratic.C_full=[zeros(n,nstatic) A zeros(n,nfwrd)];
@@ -128,10 +128,10 @@ if nstatic > 0
 end
 
 
-A = aa(:,index_m);  % Jacobain matrix for lagged endogeneous variables
-B(:,cols_b) = aa(:,index_c);  % Jacobian matrix for contemporaneous endogeneous variables
-%B = aa(:,index_c);  % Jacobian matrix for contemporaneous endogeneous variables
-C = aa(:,index_p);  % Jacobain matrix for led endogeneous variables
+A = aa(:,index_m);  % Jacobian matrix for lagged endogenous variables
+B(:,cols_b) = aa(:,index_c);  % Jacobian matrix for contemporaneous endogenous variables
+%B = aa(:,index_c);  % Jacobian matrix for contemporaneous endogenous variables
+C = aa(:,index_p);  % Jacobian matrix for led endogenous variables
 
 %matrix_quadratic.C= [aa(row_indx,index_m ) zeros(ndynamic,nfwrd)];
 %matrix_quadratic.B= [aa(row_indx,index_0m) aa(row_indx,index_0p) ];
